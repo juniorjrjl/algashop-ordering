@@ -1,0 +1,38 @@
+package com.algaworks.algashop.ordering.domain.valueobject;
+
+import com.algaworks.algashop.ordering.domain.utility.CustomFaker;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.FieldSource;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+
+class EmailTest {
+
+    private static final CustomFaker faker = new CustomFaker();
+
+    @Test
+    void shouldCreateEmail(){
+        final var value = faker.internet().safeEmailAddress();
+        final var email = new Email(value);
+        assertThat(email.toString()).hasToString(value);
+    }
+
+    private static final List<Arguments> shouldNotCreateEmail =
+            List.of(
+                    Arguments.of(faker.lorem().word(), IllegalArgumentException.class),
+                    Arguments.of(null, NullPointerException.class)
+            );
+
+    @ParameterizedTest
+    @FieldSource
+    void shouldNotCreateEmail(final String value, final Class<? extends Exception> expectedException) {
+        assertThatExceptionOfType(expectedException)
+                .isThrownBy(() -> new Email(value));
+    }
+
+}

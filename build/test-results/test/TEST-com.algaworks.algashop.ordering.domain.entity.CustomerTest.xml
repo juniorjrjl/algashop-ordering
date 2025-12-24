@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.algaworks.algashop.ordering.domain.entity.CustomerTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2025-12-21T22:52:06.196Z" hostname="MacBook-Pro-do-Junior.local" time="0.193">
+  <properties/>
+  <testcase name="givenBrandNewCustomerWhenAddInvalidLoyaltyPointsShouldSumPoints()" classname="com.algaworks.algashop.ordering.domain.entity.CustomerTest" time="0.154"/>
+  <testcase name="givenBrandNewCustomerWhenAddValidLoyaltyPointsShouldSumPoints()" classname="com.algaworks.algashop.ordering.domain.entity.CustomerTest" time="0.002"/>
+  <testcase name="givenUnarchivedCustomerWhenArchiveShouldAnonymize()" classname="com.algaworks.algashop.ordering.domain.entity.CustomerTest" time="0.006"/>
+  <testcase name="[1] changeCustomer = com.algaworks.algashop.ordering.domain.entity.CustomerTest$$Lambda/0x00001c000117ac98@38c460e8" classname="com.algaworks.algashop.ordering.domain.entity.CustomerTest" time="0.005"/>
+  <testcase name="[2] changeCustomer = com.algaworks.algashop.ordering.domain.entity.CustomerTest$$Lambda/0x00001c000117b308@5a7b6b75" classname="com.algaworks.algashop.ordering.domain.entity.CustomerTest" time="0.003"/>
+  <testcase name="[3] changeCustomer = com.algaworks.algashop.ordering.domain.entity.CustomerTest$$Lambda/0x00001c000117b540@3855d9b2" classname="com.algaworks.algashop.ordering.domain.entity.CustomerTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

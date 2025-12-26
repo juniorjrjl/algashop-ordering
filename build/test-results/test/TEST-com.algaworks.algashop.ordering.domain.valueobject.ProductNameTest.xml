@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.algaworks.algashop.ordering.domain.valueobject.ProductNameTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2025-12-26T19:02:54.049Z" hostname="MacBook-Pro-do-Junior.local" time="0.002">
+  <properties/>
+  <testcase name="[1] value = &quot;odit&quot;" classname="com.algaworks.algashop.ordering.domain.valueobject.ProductNameTest" time="0.0"/>
+  <testcase name="[2] value = &quot; omnis&quot;" classname="com.algaworks.algashop.ordering.domain.valueobject.ProductNameTest" time="0.0"/>
+  <testcase name="[3] value = &quot;laboriosam &quot;" classname="com.algaworks.algashop.ordering.domain.valueobject.ProductNameTest" time="0.0"/>
+  <testcase name="[1] value = &quot;&quot;, expectedException = class java.lang.IllegalArgumentException" classname="com.algaworks.algashop.ordering.domain.valueobject.ProductNameTest" time="0.0"/>
+  <testcase name="[2] value = &quot; &quot;, expectedException = class java.lang.IllegalArgumentException" classname="com.algaworks.algashop.ordering.domain.valueobject.ProductNameTest" time="0.0"/>
+  <testcase name="[3] value = null, expectedException = class java.lang.NullPointerException" classname="com.algaworks.algashop.ordering.domain.valueobject.ProductNameTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

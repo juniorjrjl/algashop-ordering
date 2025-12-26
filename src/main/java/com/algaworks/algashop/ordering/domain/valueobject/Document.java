@@ -2,16 +2,14 @@ package com.algaworks.algashop.ordering.domain.valueobject;
 
 import org.jspecify.annotations.NonNull;
 
-import static java.util.Objects.requireNonNull;
+import static com.algaworks.algashop.ordering.domain.utility.validator.FieldValidations.requiresNonBlank;
 
 public record Document(String value) {
 
     public static final Document ANONYMOUS = new Document("000-00-0000");
 
     public Document{
-        if (requireNonNull(value).isBlank()) {
-            throw new IllegalArgumentException();
-        }
+        requiresNonBlank(value);
     }
 
     @Override

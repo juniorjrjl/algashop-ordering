@@ -3,7 +3,7 @@ package com.algaworks.algashop.ordering.domain.entity;
 import com.algaworks.algashop.ordering.domain.exception.CustomerArchivedException;
 import com.algaworks.algashop.ordering.domain.valueobject.Address;
 import com.algaworks.algashop.ordering.domain.valueobject.BirthDate;
-import com.algaworks.algashop.ordering.domain.valueobject.CustomerId;
+import com.algaworks.algashop.ordering.domain.valueobject.id.CustomerId;
 import com.algaworks.algashop.ordering.domain.valueobject.Document;
 import com.algaworks.algashop.ordering.domain.valueobject.Email;
 import com.algaworks.algashop.ordering.domain.valueobject.FullName;
@@ -47,18 +47,18 @@ public class Customer {
                     final LoyaltyPoints loyaltyPoints,
                     final Address address,
                     final Boolean archived) {
-        setId(id);
-        setFullName(fullName);
-        setBirthDate(birthDate);
-        setEmail(email);
-        setPhone(phone);
-        setDocument(document);
-        setPromotionNotificationsAllowed(promotionNotificationsAllowed);
-        setRegisteredAt(registeredAt);
-        setArchivedAt(archivedAt);
-        setLoyaltyPoints(loyaltyPoints);
-        setAddress(address);
-        setArchived(archived);
+        this.setId(id);
+        this.setFullName(fullName);
+        this.setBirthDate(birthDate);
+        this.setEmail(email);
+        this.setPhone(phone);
+        this.setDocument(document);
+        this.setPromotionNotificationsAllowed(promotionNotificationsAllowed);
+        this.setRegisteredAt(registeredAt);
+        this.setArchivedAt(archivedAt);
+        this.setLoyaltyPoints(loyaltyPoints);
+        this.setAddress(address);
+        this.setArchived(archived);
     }
 
     @Builder(builderClassName = "BrandNewCustomerBuilder", builderMethodName = "brandNew")
@@ -134,51 +134,51 @@ public class Customer {
     }
 
     public void addLoyaltyPoints(final LoyaltyPoints loyaltyPointsAdded) {
-        verifyIfChangeable();
+        this.verifyIfChangeable();
         if (isNull(loyaltyPointsAdded) || loyaltyPointsAdded.value() <= 0){
             throw new IllegalArgumentException();
         }
-        setLoyaltyPoints(loyaltyPoints().add(loyaltyPointsAdded));
+        this.setLoyaltyPoints(loyaltyPoints().add(loyaltyPointsAdded));
     }
 
     public void archive(){
-        verifyIfChangeable();
-        setArchivedAt(OffsetDateTime.now());
-        setFullName(FullName.ANONYMOUS);
-        setPhone(Phone.ANONYMOUS);
-        setDocument(Document.ANONYMOUS);
-        setEmail(Email.ANONYMOUS);
-        setBirthDate(null);
-        setPromotionNotificationsAllowed(false);
+        this.verifyIfChangeable();
+        this.setArchivedAt(OffsetDateTime.now());
+        this.setFullName(FullName.ANONYMOUS);
+        this.setPhone(Phone.ANONYMOUS);
+        this.setDocument(Document.ANONYMOUS);
+        this.setEmail(Email.ANONYMOUS);
+        this.setBirthDate(null);
+        this.setPromotionNotificationsAllowed(false);
         this.setAddress(address().toBuilder()
                         .number("Anonymous")
                         .complement(null)
                 .build());
-        setArchived(true);
+        this.setArchived(true);
     }
 
     public void enablePromotionNotifications(){
-        setPromotionNotificationsAllowed(true);
+        this.setPromotionNotificationsAllowed(true);
     }
 
     public void disablePromotionNotifications(){
-        setPromotionNotificationsAllowed(false);
+        this.setPromotionNotificationsAllowed(false);
     }
 
     public void changeFullName(final FullName fullName) {
-        setFullName(fullName);
+        this.setFullName(fullName);
     }
 
     public void changeEmail(final Email email) {
-        setEmail(email);
+        this.setEmail(email);
     }
 
     public void changePhone(final Phone phone) {
-        setPhone(phone);
+        this.setPhone(phone);
     }
 
     public void changeAddress(final Address address) {
-        setAddress(address);
+        this.setAddress(address);
     }
 
     @Override
@@ -193,12 +193,12 @@ public class Customer {
     }
 
     private void setId(final CustomerId id) {
-        verifyIfChangeable();
+        this.verifyIfChangeable();
         this.id = requireNonNull(id);
     }
 
     private void setFullName(final FullName fullName) {
-        verifyIfChangeable();
+        this.verifyIfChangeable();
         if (isNull(fullName)){
             throw new IllegalArgumentException(VALIDATION_ERROR_FULL_NAME_IS_NULL_OR_BLANK);
         }
@@ -206,7 +206,7 @@ public class Customer {
     }
 
     private void setBirthDate(final BirthDate birthDate) {
-        verifyIfChangeable();
+        this.verifyIfChangeable();
         if (isNull(birthDate)) {
             this.birthDate = null;
             return;
@@ -215,52 +215,52 @@ public class Customer {
     }
 
     private void setEmail(final Email email) {
-        verifyIfChangeable();
+        this.verifyIfChangeable();
         this.email = email;
     }
 
     private void setPhone(final Phone phone) {
-        verifyIfChangeable();
+        this.verifyIfChangeable();
         this.phone = requireNonNull(phone);
     }
 
     private void setDocument(final Document document) {
-        verifyIfChangeable();
+        this.verifyIfChangeable();
         this.document = requireNonNull(document);
     }
 
     private void setPromotionNotificationsAllowed(final Boolean promotionNotificationsAllowed) {
-        verifyIfChangeable();
+        this.verifyIfChangeable();
         this.promotionNotificationsAllowed = requireNonNull(promotionNotificationsAllowed);
     }
 
     private void setArchived(final Boolean archived) {
-        verifyIfChangeable();
+        this.verifyIfChangeable();
         this.archived = requireNonNull(archived);
     }
 
     private void setRegisteredAt(final OffsetDateTime registeredAt) {
-        verifyIfChangeable();
+        this.verifyIfChangeable();
         this.registeredAt = requireNonNull(registeredAt);
     }
 
     public void setArchivedAt(final OffsetDateTime archivedAt) {
-        verifyIfChangeable();
+        this.verifyIfChangeable();
         this.archivedAt = archivedAt;
     }
 
     private void setLoyaltyPoints(final LoyaltyPoints loyaltyPoints) {
-        verifyIfChangeable();
+        this.verifyIfChangeable();
         this.loyaltyPoints = requireNonNull(loyaltyPoints);
     }
 
     private void setAddress(final Address address) {
-        verifyIfChangeable();
+        this.verifyIfChangeable();
         this.address = address;
     }
 
     private void verifyIfChangeable() {
-        if (nonNull(isArchived()) && isArchived()) {
+        if (nonNull(this.isArchived()) && this.isArchived()) {
             throw new CustomerArchivedException();
         }
     }

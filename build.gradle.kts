@@ -29,6 +29,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
 	implementation("com.fasterxml.uuid:java-uuid-generator:5.2.0")
 	implementation("commons-validator:commons-validator:1.10.1")
+	implementation("io.hypersistence:hypersistence-tsid:2.1.4")
 
 	compileOnly("org.projectlombok:lombok")
 

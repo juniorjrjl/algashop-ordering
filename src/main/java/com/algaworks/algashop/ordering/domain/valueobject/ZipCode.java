@@ -2,12 +2,13 @@ package com.algaworks.algashop.ordering.domain.valueobject;
 
 import org.jspecify.annotations.NonNull;
 
-import static java.util.Objects.requireNonNull;
+import static com.algaworks.algashop.ordering.domain.utility.validator.FieldValidations.requiresNonBlank;
 
 public record ZipCode(String value) {
 
     public ZipCode{
-        if (requireNonNull(value).isBlank() || value.length() != 5) {
+        requiresNonBlank(value);
+        if (value.length() != 5) {
             throw new IllegalArgumentException();
         }
     }

@@ -14,26 +14,26 @@ import static org.assertj.core.api.Assertions.assertWith;
 
 class AddressTest {
 
-    private static final CustomFaker faker = new CustomFaker();
+    private static final CustomFaker customFaker = new CustomFaker();
 
     private static final List<Arguments> shouldCreateAddress = List.of(
             Arguments.of(
-                    faker.address().streetAddress(),
+                    customFaker.address().streetAddress(),
                     null,
-                    faker.lorem().word(),
-                    faker.address().streetAddressNumber(),
-                    faker.address().city(),
-                    faker.address().state(),
-                    faker.valueObject().zipCode()
+                    customFaker.lorem().word(),
+                    customFaker.address().streetAddressNumber(),
+                    customFaker.address().city(),
+                    customFaker.address().state(),
+                    customFaker.valueObject().zipCode()
             ),
             Arguments.of(
-                    faker.address().streetAddress(),
-                    faker.address().buildingNumber(),
-                    faker.lorem().word(),
-                    faker.address().streetAddressNumber(),
-                    faker.address().city(),
-                    faker.address().state(),
-                    faker.valueObject().zipCode()
+                    customFaker.address().streetAddress(),
+                    customFaker.address().buildingNumber(),
+                    customFaker.lorem().word(),
+                    customFaker.address().streetAddressNumber(),
+                    customFaker.address().city(),
+                    customFaker.address().state(),
+                    customFaker.valueObject().zipCode()
             )
     );
 

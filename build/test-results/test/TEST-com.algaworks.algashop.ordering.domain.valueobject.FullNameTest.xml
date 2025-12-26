@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.algaworks.algashop.ordering.domain.valueobject.FullNameTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2025-12-26T19:02:54.022Z" hostname="MacBook-Pro-do-Junior.local" time="0.005">
+  <properties/>
+  <testcase name="[1] firstName = &quot;Jamison&quot;, lastName = &quot;Stiedemann&quot;" classname="com.algaworks.algashop.ordering.domain.valueobject.FullNameTest" time="0.001"/>
+  <testcase name="[2] firstName = &quot; Angelica&quot;, lastName = &quot; Lang&quot;" classname="com.algaworks.algashop.ordering.domain.valueobject.FullNameTest" time="0.0"/>
+  <testcase name="[3] firstName = &quot;Tabatha &quot;, lastName = &quot;Kautzer &quot;" classname="com.algaworks.algashop.ordering.domain.valueobject.FullNameTest" time="0.0"/>
+  <testcase name="[1] firstName = &quot;Cletus&quot;, lastName = &quot;&quot;, expectedException = class java.lang.IllegalArgumentException" classname="com.algaworks.algashop.ordering.domain.valueobject.FullNameTest" time="0.001"/>
+  <testcase name="[2] firstName = &quot;Benito&quot;, lastName = &quot; &quot;, expectedException = class java.lang.IllegalArgumentException" classname="com.algaworks.algashop.ordering.domain.valueobject.FullNameTest" time="0.001"/>
+  <testcase name="[3] firstName = &quot;Veta&quot;, lastName = null, expectedException = class java.lang.NullPointerException" classname="com.algaworks.algashop.ordering.domain.valueobject.FullNameTest" time="0.0"/>
+  <testcase name="[4] firstName = &quot;&quot;, lastName = &quot;Lubowitz&quot;, expectedException = class java.lang.IllegalArgumentException" classname="com.algaworks.algashop.ordering.domain.valueobject.FullNameTest" time="0.0"/>
+  <testcase name="[5] firstName = &quot; &quot;, lastName = &quot;Beier&quot;, expectedException = class java.lang.IllegalArgumentException" classname="com.algaworks.algashop.ordering.domain.valueobject.FullNameTest" time="0.0"/>
+  <testcase name="[6] firstName = null, lastName = &quot;Champlin&quot;, expectedException = class java.lang.NullPointerException" classname="com.algaworks.algashop.ordering.domain.valueobject.FullNameTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

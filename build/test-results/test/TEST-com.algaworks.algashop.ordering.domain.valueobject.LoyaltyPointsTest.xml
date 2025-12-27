@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.algaworks.algashop.ordering.domain.valueobject.LoyaltyPointsTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-12-26T19:02:54.029Z" hostname="MacBook-Pro-do-Junior.local" time="0.004">
+<testsuite name="com.algaworks.algashop.ordering.domain.valueobject.LoyaltyPointsTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-12-27T19:58:59.218Z" hostname="MacBook-Pro-do-Junior.local" time="0.006">
   <properties/>
   <testcase name="[1] invalidValue = -1" classname="com.algaworks.algashop.ordering.domain.valueobject.LoyaltyPointsTest" time="0.0"/>
-  <testcase name="[2] invalidValue = -100" classname="com.algaworks.algashop.ordering.domain.valueobject.LoyaltyPointsTest" time="0.001"/>
+  <testcase name="[2] invalidValue = -100" classname="com.algaworks.algashop.ordering.domain.valueobject.LoyaltyPointsTest" time="0.0"/>
   <testcase name="[3] invalidValue = null" classname="com.algaworks.algashop.ordering.domain.valueobject.LoyaltyPointsTest" time="0.0"/>
   <testcase name="[1] invalidValue = -1" classname="com.algaworks.algashop.ordering.domain.valueobject.LoyaltyPointsTest" time="0.001"/>
   <testcase name="[2] invalidValue = -100" classname="com.algaworks.algashop.ordering.domain.valueobject.LoyaltyPointsTest" time="0.0"/>

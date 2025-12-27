@@ -81,7 +81,7 @@ class MoneyTest {
     void givenTwoMoneyObjectsWhenMultiplyBothThenReturnValue(){
         final var money = customFaker.valueObject().money();
         final var value1 = money.value();
-        final var quantity = customFaker.valueObject().quantity();
+        final var quantity = customFaker.valueObject().quantity(1, 10);
         final var value2 = quantity.value();
         assertThat(money.multiply(quantity).value())
                 .isEqualTo(value1.multiply(new BigDecimal(value2)).setScale(2, HALF_EVEN));

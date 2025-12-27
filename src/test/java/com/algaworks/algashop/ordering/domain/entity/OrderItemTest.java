@@ -1,6 +1,10 @@
 package com.algaworks.algashop.ordering.domain.entity;
 
 import com.algaworks.algashop.ordering.domain.utility.CustomFaker;
+import com.algaworks.algashop.ordering.domain.utility.databuilder.ProductDataBuilder;
+import com.algaworks.algashop.ordering.domain.valueobject.id.OrderId;
+import com.algaworks.algashop.ordering.domain.valueobject.id.OrderItemId;
+import com.algaworks.algashop.ordering.domain.valueobject.id.ProductId;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,24 +16,22 @@ class OrderItemTest {
 
     @Test
     void shouldCreateBrandNew(){
-        final var orderId = faker.valueObject().orderId();
-        final var productId = faker.valueObject().productId();
-        final var productName = faker.valueObject().productName();
-        final var price = faker.valueObject().money();
-        final var quantity = faker.valueObject().quantity();
+        final var orderId = new OrderId();
+        final var product = ProductDataBuilder.builder()
+                .withInStock(() -> true)
+                .build();
+        final var quantity = faker.valueObject().quantity(1, 10);
         final var orderItem = OrderItem.brandNew()
                 .orderId(orderId)
-                .productId(productId)
-                .productName(productName)
-                .price(price)
+                .product(product)
                 .quantity(quantity)
                 .build();
         assertWith(orderItem,
                 o -> assertThat(o.id()).isNotNull(),
                 o -> assertThat(o.orderId()).isEqualTo(orderId),
-                o -> assertThat(o.productId()).isEqualTo(productId),
-                o -> assertThat(o.productName()).isEqualTo(productName),
-                o -> assertThat(o.price()).isEqualTo(price),
+                o -> assertThat(o.productId()).isEqualTo(product.id()),
+                o -> assertThat(o.productName()).isEqualTo(product.name()),
+                o -> assertThat(o.price()).isEqualTo(product.price()),
                 o -> assertThat(o.quantity()).isEqualTo(quantity),
                 o -> assertThat(o.totalAmount()).isNotNull()
                 );
@@ -37,12 +39,12 @@ class OrderItemTest {
 
     @Test
     void shouldCreateExisting(){
-        final var id = faker.valueObject().orderItemId();
-        final var orderId = faker.valueObject().orderId();
-        final var productId = faker.valueObject().productId();
+        final var id = new OrderItemId();
+        final var orderId = new OrderId();
+        final var productId = new ProductId();
         final var productName = faker.valueObject().productName();
         final var price = faker.valueObject().money();
-        final var quantity = faker.valueObject().quantity();
+        final var quantity = faker.valueObject().quantity(1, 10);
         final var totalAmount = faker.valueObject().money();
         final var orderItem = OrderItem.existing()
                 .id(id)

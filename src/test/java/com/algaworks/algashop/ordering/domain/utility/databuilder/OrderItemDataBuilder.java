@@ -3,6 +3,7 @@ package com.algaworks.algashop.ordering.domain.utility.databuilder;
 import com.algaworks.algashop.ordering.domain.entity.OrderItem;
 import com.algaworks.algashop.ordering.domain.utility.CustomFaker;
 import com.algaworks.algashop.ordering.domain.valueobject.Money;
+import com.algaworks.algashop.ordering.domain.valueobject.Product;
 import com.algaworks.algashop.ordering.domain.valueobject.ProductName;
 import com.algaworks.algashop.ordering.domain.valueobject.Quantity;
 import com.algaworks.algashop.ordering.domain.valueobject.id.OrderId;
@@ -12,7 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;
 
-import java.util.Collection;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -27,19 +27,13 @@ public class OrderItemDataBuilder {
     private static final CustomFaker faker = new CustomFaker();
 
     @With
-    private Supplier<OrderItemId> id = () -> faker.valueObject().orderItemId();
+    private Supplier<OrderItemId> id = OrderItemId::new;
     @With
-    private Supplier<OrderId> orderId = () -> faker.valueObject().orderId();
+    private Supplier<OrderId> orderId = OrderId::new;
     @With
-    private Supplier<ProductId> productId = () -> faker.valueObject().productId();
-    @With
-    private Supplier<ProductName> productName = () -> faker.valueObject().productName();
-    @With
-    private Supplier<Money> price = () -> faker.valueObject().money(5, 200);
+    private Supplier<Product> product = () -> ProductDataBuilder.builder().build();
     @With
     private Supplier<Quantity> quantity = () -> faker.valueObject().quantity(1, 10);
-    @With
-    private Supplier<Money> totalAmount = () -> faker.valueObject().money();
 
     public static OrderItemDataBuilder builder() {
         return new OrderItemDataBuilder();
@@ -48,9 +42,7 @@ public class OrderItemDataBuilder {
     public OrderItem buildNew() {
         return OrderItem.brandNew()
                 .orderId(orderId.get())
-                .productId(productId.get())
-                .productName(productName.get())
-                .price(price.get())
+                .product(product.get())
                 .quantity(quantity.get())
                 .build();
     }
@@ -59,11 +51,11 @@ public class OrderItemDataBuilder {
         return OrderItem.existing()
                 .id(id.get())
                 .orderId(orderId.get())
-                .productId(productId.get())
-                .productName(productName.get())
-                .price(price.get())
+                .productId(product.get().id())
+                .productName(product.get().name())
+                .price(product.get().price())
                 .quantity(quantity.get())
-                .totalAmount(totalAmount.get())
+                .totalAmount(product.get().price())
                 .build();
     }
 

@@ -22,23 +22,32 @@ public class BillingInfoTestErrorProvider implements ArgumentsProvider {
                 Arguments.of(null,
                         customFaker.valueObject().document(),
                         customFaker.valueObject().phone(),
-                        customFaker.valueObject().address()
+                        customFaker.valueObject().address(),
+                        customFaker.valueObject().email()
                 ),
                 Arguments.of(customFaker.valueObject().fullName(),
                         null,
                         customFaker.valueObject().phone(),
-                        customFaker.valueObject().address()
+                        customFaker.valueObject().address(),
+                        customFaker.valueObject().email()
                 ),
                 Arguments.of(customFaker.valueObject().fullName(),
                         customFaker.valueObject().document(),
                         null,
-                        customFaker.valueObject().address()
+                        customFaker.valueObject().address(),
+                        customFaker.valueObject().email()
                 ),
                 Arguments.of(customFaker.valueObject().fullName(),
                         customFaker.valueObject().document(),
                         customFaker.valueObject().phone(),
-                        null
-                )
+                        null,
+                        customFaker.valueObject().email()
+                ),
+                Arguments.of(customFaker.valueObject().fullName(),
+                        customFaker.valueObject().document(),
+                        customFaker.valueObject().phone(),
+                        customFaker.valueObject().address(),
+                        null)
         );
     }
 

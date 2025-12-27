@@ -5,44 +5,50 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
+import java.time.LocalDate;
+
+import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertWith;
 
-class ShippingInfoTest {
+class ShippingTest {
 
     private static final CustomFaker customFaker = new CustomFaker();
 
     @Test
     void shouldCreate(){
-        final var fullName = customFaker.valueObject().fullName();
-        final var document = customFaker.valueObject().document();
-        final var phone = customFaker.valueObject().phone();
+        final var cost = customFaker.valueObject().money(5, 100);
+        final var expectedDate = LocalDate.ofInstant(
+                customFaker.timeAndDate().future(),
+                UTC
+        );
+        final var recipient = customFaker.valueObject().recipient();
         final var address = customFaker.valueObject().address();
-        final var billingInfo = ShippingInfo.builder()
-                .fullName(fullName)
-                .document(document)
-                .phone(phone)
+        final var billingInfo = Shipping.builder()
+                .cost(cost)
+                .expectedDate(expectedDate)
+                .recipient(recipient)
                 .address(address)
                 .build();
         assertWith(billingInfo,
-                b -> assertThat(b.fullName()).isEqualTo(fullName),
-                b -> assertThat(b.document()).isEqualTo(document),
-                b -> assertThat(b.phone()).isEqualTo(phone),
+                b -> assertThat(b.cost()).isEqualTo(cost),
+                b -> assertThat(b.expectedDate()).isEqualTo(expectedDate),
+                b -> assertThat(b.recipient()).isEqualTo(recipient),
                 b -> assertThat(b.address()).isEqualTo(address)
                 );
     }
 
     @ParameterizedTest
     @ArgumentsSource(ShippingInfoTestErrorProvider.class)
-    void shouldNotCreate(final FullName fullName,
-                         final Document document,
-                         final Phone phone,
+    void shouldNotCreate(final Money cost,
+                         final LocalDate expectedDate,
+                         final Recipient recipient,
                          final Address address){
-        final var builder = ShippingInfo.builder()
-                .fullName(fullName)
-                .document(document)
-                .phone(phone)
+        final var builder = Shipping.builder()
+                .cost(cost)
+                .expectedDate(expectedDate)
+                .recipient(recipient)
                 .address(address);
         assertThatExceptionOfType(NullPointerException.class)
                 .isThrownBy(builder::build);

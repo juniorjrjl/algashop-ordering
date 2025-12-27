@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2025-12-26T19:02:54.034Z" hostname="MacBook-Pro-do-Junior.local" time="0.01">
+<testsuite name="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2025-12-27T19:58:59.225Z" hostname="MacBook-Pro-do-Junior.local" time="0.014">
   <properties/>
   <testcase name="giveGreaterValueWhenCheckIsLessThenReturnTrue()" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.0"/>
-  <testcase name="[1] value = -873168815.62999999523162841796875, expectedException = class java.lang.IllegalArgumentException" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.0"/>
-  <testcase name="[2] value = null, expectedException = class java.lang.NullPointerException" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.0"/>
-  <testcase name="giveLessValueWhenCheckIsGreaterThenReturnTrue()" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.0"/>
+  <testcase name="[1] value = -1430438149.769999980926513671875, expectedException = class java.lang.IllegalArgumentException" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.001"/>
+  <testcase name="[2] value = null, expectedException = class java.lang.NullPointerException" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.001"/>
+  <testcase name="giveLessValueWhenCheckIsGreaterThenReturnTrue()" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.001"/>
   <testcase name="givenTwoMoneyObjectsWhenSumBothThenReturnValue()" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.002"/>
   <testcase name="givenTwoMoneyObjectsWhenMultiplyBothThenReturnValue()" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.0"/>
-  <testcase name="giveSameValueWhenCheckIsEqualThenReturnTrue()" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.0"/>
-  <testcase name="[1] value = &quot;284.42143042&quot;" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.0"/>
-  <testcase name="[2] value = &quot;90.44&quot;" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.001"/>
-  <testcase name="[1] value = 450.972215967" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.001"/>
-  <testcase name="[2] value = 390.06" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.0"/>
-  <testcase name="givenTwoMoneyObjectsWhenDivideBothThenReturnValue()" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.001"/>
-  <testcase name="[1] value = &quot;quasi&quot;, expectedException = class java.lang.IllegalArgumentException" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.001"/>
-  <testcase name="[2] value = null, expectedException = class java.lang.NullPointerException" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.0"/>
+  <testcase name="giveSameValueWhenCheckIsEqualThenReturnTrue()" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.001"/>
+  <testcase name="[1] value = &quot;896.772457556&quot;" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.0"/>
+  <testcase name="[2] value = &quot;236.63&quot;" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.001"/>
+  <testcase name="[1] value = 233.273931073" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.0"/>
+  <testcase name="[2] value = 261.19" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.0"/>
+  <testcase name="givenTwoMoneyObjectsWhenDivideBothThenReturnValue()" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.0"/>
+  <testcase name="[1] value = &quot;placeat&quot;, expectedException = class java.lang.IllegalArgumentException" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.001"/>
+  <testcase name="[2] value = null, expectedException = class java.lang.NullPointerException" classname="com.algaworks.algashop.ordering.domain.valueobject.MoneyTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

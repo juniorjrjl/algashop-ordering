@@ -23,32 +23,32 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor(access = PRIVATE)
 public class CustomerDataBuilder {
 
-    private static final CustomFaker faker = new CustomFaker();
+    private static final CustomFaker customFaker = new CustomFaker();
 
     @With
-    private Supplier<CustomerId> id = () -> faker.valueObject().customerId();
+    private Supplier<CustomerId> id = CustomerId::new;
     @With
-    private Supplier<FullName> fullName = ()  -> faker.valueObject().fullName();
+    private Supplier<FullName> fullName = ()  -> customFaker.valueObject().fullName();
     @With
-    private Supplier<BirthDate> birthDate = ()  -> faker.valueObject().birthDate();
+    private Supplier<BirthDate> birthDate = ()  -> customFaker.valueObject().birthDate();
     @With
-    private Supplier<Email> email = ()  -> faker.valueObject().email();
+    private Supplier<Email> email = ()  -> customFaker.valueObject().email();
     @With
-    private Supplier<Phone> phone  = ()  -> faker.valueObject().phone();
+    private Supplier<Phone> phone  = ()  -> customFaker.valueObject().phone();
     @With
-    private Supplier<Document> document = ()  -> faker.valueObject().document();
+    private Supplier<Document> document = ()  -> customFaker.valueObject().document();
     @With
-    private Supplier<Boolean> promotionNotificationsAllowed = () -> faker.bool().bool();
+    private Supplier<Boolean> promotionNotificationsAllowed = () -> customFaker.bool().bool();
     @With
-    private Supplier<Boolean> archived = () -> faker.bool().bool();
+    private Supplier<Boolean> archived = () -> customFaker.bool().bool();
     @With
     private Supplier<OffsetDateTime> registeredAt = OffsetDateTime::now;
     @With
     private Supplier<OffsetDateTime> archivedAt = () -> null;
     @With
-    private Supplier<LoyaltyPoints> loyaltyPoints = ()  -> faker.valueObject().loyaltyPoints();
+    private Supplier<LoyaltyPoints> loyaltyPoints = () -> customFaker.valueObject().loyaltyPoints(100, 9999);
     @With
-    private Supplier<Address> address = ()  -> faker.valueObject().address();
+    private Supplier<Address> address = ()  -> customFaker.valueObject().address();
 
     public static CustomerDataBuilder builder() {
         return new CustomerDataBuilder();

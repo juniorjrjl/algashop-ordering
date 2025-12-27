@@ -2,42 +2,28 @@ package com.algaworks.algashop.ordering.domain.utility;
 
 import com.algaworks.algashop.ordering.domain.valueobject.Address;
 import com.algaworks.algashop.ordering.domain.valueobject.BirthDate;
-import com.algaworks.algashop.ordering.domain.valueobject.ProductName;
-import com.algaworks.algashop.ordering.domain.valueobject.id.CustomerId;
 import com.algaworks.algashop.ordering.domain.valueobject.Document;
 import com.algaworks.algashop.ordering.domain.valueobject.Email;
 import com.algaworks.algashop.ordering.domain.valueobject.FullName;
 import com.algaworks.algashop.ordering.domain.valueobject.LoyaltyPoints;
 import com.algaworks.algashop.ordering.domain.valueobject.Money;
 import com.algaworks.algashop.ordering.domain.valueobject.Phone;
+import com.algaworks.algashop.ordering.domain.valueobject.ProductName;
 import com.algaworks.algashop.ordering.domain.valueobject.Quantity;
+import com.algaworks.algashop.ordering.domain.valueobject.Recipient;
+import com.algaworks.algashop.ordering.domain.valueobject.Shipping;
 import com.algaworks.algashop.ordering.domain.valueobject.ZipCode;
-import com.algaworks.algashop.ordering.domain.valueobject.id.OrderId;
-import com.algaworks.algashop.ordering.domain.valueobject.id.OrderItemId;
-import com.algaworks.algashop.ordering.domain.valueobject.id.ProductId;
 import net.datafaker.providers.base.AbstractProvider;
 import net.datafaker.providers.base.BaseProviders;
+
+import java.time.LocalDate;
+
+import static java.time.ZoneOffset.UTC;
 
 public class ValueObjectProvider extends AbstractProvider<BaseProviders> {
 
     protected ValueObjectProvider(final BaseProviders faker) {
         super(faker);
-    }
-
-    public ProductId productId() {
-        return new ProductId();
-    }
-
-    public CustomerId customerId() {
-        return new CustomerId();
-    }
-
-    public OrderId orderId() {
-        return new OrderId();
-    }
-
-    public OrderItemId orderItemId() {
-        return new OrderItemId();
     }
 
     public ProductName productName() {
@@ -122,6 +108,23 @@ public class ValueObjectProvider extends AbstractProvider<BaseProviders> {
 
     public Quantity quantity(final int min, final int max) {
         return new Quantity(faker.number().numberBetween(min, max));
+    }
+
+    public Recipient recipient(){
+        return Recipient.builder()
+                .fullName(fullName())
+                .document(document())
+                .phone(phone())
+                .build();
+    }
+
+    public Shipping shipping(){
+        return Shipping.builder()
+                .cost(money(1, 200))
+                .expectedDate(LocalDate.ofInstant(faker.timeAndDate().future(), UTC))
+                .recipient(recipient())
+                .address(address())
+                .build();
     }
 
 }

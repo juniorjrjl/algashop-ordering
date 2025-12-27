@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertWith;
 
-class BillingInfoTest {
+class BillingTest {
 
     private static final CustomFaker customFaker = new CustomFaker();
 
@@ -19,11 +19,13 @@ class BillingInfoTest {
         final var document = customFaker.valueObject().document();
         final var phone = customFaker.valueObject().phone();
         final var address = customFaker.valueObject().address();
-        final var billingInfo = BillingInfo.builder()
+        final var email = customFaker.valueObject().email();
+        final var billingInfo = Billing.builder()
                 .fullName(fullName)
                 .document(document)
                 .phone(phone)
                 .address(address)
+                .email(email)
                 .build();
         assertWith(billingInfo,
                 b -> assertThat(b.fullName()).isEqualTo(fullName),
@@ -39,7 +41,7 @@ class BillingInfoTest {
                          final Document document,
                          final Phone phone,
                          final Address address){
-        final var builder = BillingInfo.builder()
+        final var builder = Billing.builder()
                 .fullName(fullName)
                 .document(document)
                 .phone(phone)

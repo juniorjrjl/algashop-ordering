@@ -5,16 +5,16 @@ import lombok.Builder;
 import static java.util.Objects.requireNonNull;
 
 @Builder
-public record BillingInfo(FullName fullName,
-                          Document document,
-                          Phone phone,
-                          Address address) {
+public record Recipient(
+        FullName fullName,
+        Document document,
+        Phone phone
+) {
 
-    public BillingInfo{
+    public Recipient {
         requireNonNull(fullName);
         requireNonNull(document);
         requireNonNull(phone);
-        requireNonNull(address);
     }
 
 }

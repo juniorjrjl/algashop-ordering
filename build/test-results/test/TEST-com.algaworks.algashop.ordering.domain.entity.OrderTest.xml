@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.algaworks.algashop.ordering.domain.entity.OrderTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2025-12-26T19:02:53.939Z" hostname="MacBook-Pro-do-Junior.local" time="0.032">
+<testsuite name="com.algaworks.algashop.ordering.domain.entity.OrderTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2025-12-27T19:58:59.078Z" hostname="MacBook-Pro-do-Junior.local" time="0.059">
   <properties/>
-  <testcase name="givenDraftOrderWhenChangePaymentMethodShouldAllowChange()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.002"/>
-  <testcase name="shouldAddItem()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.004"/>
-  <testcase name="givenDraftOrderWhenPlaceShouldChangeToPlaced()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.008"/>
-  <testcase name="givenDraftOrderWhenChangeShippingInfoShouldAllowChange()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.003"/>
+  <testcase name="givenDraftOrderWhenChangePaymentMethodShouldAllowChange()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.004"/>
+  <testcase name="shouldAddItem()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.007"/>
+  <testcase name="givenDraftOrderWhenPlaceShouldChangeToPlaced()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.012"/>
+  <testcase name="givenDraftOrderWhenChangeShippingInfoShouldAllowChange()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.002"/>
+  <testcase name="givenDraftOrderWhenChangeNonExistingItemShouldThrowException()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.001"/>
   <testcase name="givenDraftOrderWhenChangeBillingInfoShouldAllowChange()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.001"/>
-  <testcase name="shouldCreateDraft()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.005"/>
-  <testcase name="shouldThrowExceptionWhenTryModifyListUsingGet()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.002"/>
-  <testcase name="givenPlacedOrderWhenTryToPlaceShouldThrowException()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.003"/>
-  <testcase name="givenPlacedOrderWhenMarkAsPaidShouldChangeToPaid()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.002"/>
-  <testcase name="givenDraftOrderAndOrderDeliveryDateInThePastWhenChangeShippingInfoShouldNotAllowChange()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.001"/>
-  <testcase name="givenOrderToAddItemsShouldCalculateTotals()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.0"/>
+  <testcase name="shouldCreateDraft()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.007"/>
+  <testcase name="shouldThrowExceptionWhenTryModifyListUsingGet()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.006"/>
+  <testcase name="givenPlacedOrderWhenTryToPlaceShouldThrowException()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.004"/>
+  <testcase name="givenPlacedOrderWhenMarkAsPaidShouldChangeToPaid()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.004"/>
+  <testcase name="givenDraftOrderAndAddOrderItemWhenChangeItemShouldRecalculate()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.001"/>
+  <testcase name="givenDraftOrderAndOrderDeliveryDateInThePastWhenChangeShippingInfoShouldNotAllowChange()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.002"/>
+  <testcase name="givenDraftOrderWhenTryAddProductOutOfStockShouldThrowError()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.001"/>
+  <testcase name="givenOrderToAddItemsShouldCalculateTotals()" classname="com.algaworks.algashop.ordering.domain.entity.OrderTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

@@ -7,7 +7,10 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.support.ParameterDeclarations;
 
+import java.time.LocalDate;
 import java.util.stream.Stream;
+
+import static java.time.ZoneOffset.UTC;
 
 public class ShippingInfoTestErrorProvider implements ArgumentsProvider {
 
@@ -18,25 +21,29 @@ public class ShippingInfoTestErrorProvider implements ArgumentsProvider {
     public Stream<? extends Arguments> provideArguments(
             @NonNull final ParameterDeclarations parameters,
             @NonNull final ExtensionContext context) {
+        final var expectedDate = LocalDate.ofInstant(
+                customFaker.timeAndDate().future(),
+                UTC
+        );
         return Stream.of(
                 Arguments.of(null,
-                        customFaker.valueObject().document(),
-                        customFaker.valueObject().phone(),
+                        expectedDate,
+                        customFaker.valueObject().recipient(),
                         customFaker.valueObject().address()
                 ),
-                Arguments.of(customFaker.valueObject().fullName(),
+                Arguments.of(customFaker.valueObject().money(),
                         null,
-                        customFaker.valueObject().phone(),
+                        customFaker.valueObject().recipient(),
                         customFaker.valueObject().address()
                 ),
-                Arguments.of(customFaker.valueObject().fullName(),
-                        customFaker.valueObject().document(),
+                Arguments.of(customFaker.valueObject().money(),
+                        expectedDate,
                         null,
                         customFaker.valueObject().address()
                 ),
-                Arguments.of(customFaker.valueObject().fullName(),
-                        customFaker.valueObject().document(),
-                        customFaker.valueObject().phone(),
+                Arguments.of(customFaker.valueObject().money(),
+                        expectedDate,
+                        customFaker.valueObject().recipient(),
                         null
                 )
         );

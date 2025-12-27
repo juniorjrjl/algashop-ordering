@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.algaworks.algashop.ordering.domain.valueobject.ZipCodeTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2025-12-26T19:02:54.064Z" hostname="MacBook-Pro-do-Junior.local" time="0.002">
+<testsuite name="com.algaworks.algashop.ordering.domain.valueobject.ZipCodeTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2025-12-27T19:58:59.267Z" hostname="MacBook-Pro-do-Junior.local" time="0.003">
   <properties/>
-  <testcase name="[1] value = &quot;&quot;, expectedException = class java.lang.IllegalArgumentException" classname="com.algaworks.algashop.ordering.domain.valueobject.ZipCodeTest" time="0.0"/>
+  <testcase name="[1] value = &quot;&quot;, expectedException = class java.lang.IllegalArgumentException" classname="com.algaworks.algashop.ordering.domain.valueobject.ZipCodeTest" time="0.001"/>
   <testcase name="[2] value = &quot;123456&quot;, expectedException = class java.lang.IllegalArgumentException" classname="com.algaworks.algashop.ordering.domain.valueobject.ZipCodeTest" time="0.0"/>
   <testcase name="[3] value = null, expectedException = class java.lang.NullPointerException" classname="com.algaworks.algashop.ordering.domain.valueobject.ZipCodeTest" time="0.0"/>
   <testcase name="[4] value = &quot;&quot;, expectedException = class java.lang.IllegalArgumentException" classname="com.algaworks.algashop.ordering.domain.valueobject.ZipCodeTest" time="0.0"/>
-  <testcase name="shouldCreateZipCode()" classname="com.algaworks.algashop.ordering.domain.valueobject.ZipCodeTest" time="0.0"/>
+  <testcase name="shouldCreateZipCode()" classname="com.algaworks.algashop.ordering.domain.valueobject.ZipCodeTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

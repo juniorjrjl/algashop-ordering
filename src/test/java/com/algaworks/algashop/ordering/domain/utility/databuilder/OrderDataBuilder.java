@@ -91,7 +91,7 @@ public class OrderDataBuilder {
         );
     }
 
-    public Order build(){
+    public Order buildExisting(){
         return Order.existing()
                 .id(id.get())
                 .customerId(customerId.get())

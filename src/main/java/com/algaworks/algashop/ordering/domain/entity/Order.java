@@ -24,9 +24,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.algaworks.algashop.ordering.domain.entity.OrderStatus.CANCELED;
 import static com.algaworks.algashop.ordering.domain.entity.OrderStatus.DRAFT;
 import static com.algaworks.algashop.ordering.domain.entity.OrderStatus.PAID;
 import static com.algaworks.algashop.ordering.domain.entity.OrderStatus.PLACED;
+import static com.algaworks.algashop.ordering.domain.entity.OrderStatus.READY;
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
@@ -123,13 +125,23 @@ public class Order {
 
     public void place(){
         this.verifyIfCanChangeToPlace();
-        this.setPlacedAt(OffsetDateTime.now());
         this.changeStatus(PLACED);
+        this.setPlacedAt(OffsetDateTime.now());
     }
 
     public void markAsPaid() {
-        this.setPaidAt(OffsetDateTime.now());
         this.changeStatus(PAID);
+        this.setPaidAt(OffsetDateTime.now());
+    }
+
+    public void markAsReady() {
+        this.changeStatus(READY);
+        this.setReadyAt(OffsetDateTime.now());
+    }
+
+    public void cancel() {
+        this.changeStatus(CANCELED);
+        this.setCanceledAt(OffsetDateTime.now());
     }
 
     public void changePaymentMethod(final PaymentMethod newPaymentMethod){
@@ -175,6 +187,14 @@ public class Order {
 
     public boolean isPaid(){
         return PAID.equals(this.orderStatus);
+    }
+
+    public boolean isReady(){
+        return READY.equals(this.orderStatus);
+    }
+
+    public boolean isCanceled(){
+        return CANCELED.equals(this.orderStatus);
     }
 
     public OrderId id() {

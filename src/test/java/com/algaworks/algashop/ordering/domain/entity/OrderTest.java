@@ -1,14 +1,13 @@
 package com.algaworks.algashop.ordering.domain.entity;
 
+import com.algaworks.algashop.ordering.domain.exception.OrderCannotBeEditedException;
 import com.algaworks.algashop.ordering.domain.exception.OrderDoesNotContainOrderItemException;
 import com.algaworks.algashop.ordering.domain.exception.OrderInvalidShippingDeliveryDateException;
-import com.algaworks.algashop.ordering.domain.exception.OrderCannotBeEditedException;
 import com.algaworks.algashop.ordering.domain.exception.OrderStatusCannotBeChangedException;
 import com.algaworks.algashop.ordering.domain.exception.OutOfStockException;
 import com.algaworks.algashop.ordering.domain.utility.CustomFaker;
 import com.algaworks.algashop.ordering.domain.utility.databuilder.BillingDataBuilder;
 import com.algaworks.algashop.ordering.domain.utility.databuilder.OrderDataBuilder;
-import com.algaworks.algashop.ordering.domain.utility.databuilder.OrderItemDataBuilder;
 import com.algaworks.algashop.ordering.domain.utility.databuilder.ProductDataBuilder;
 import com.algaworks.algashop.ordering.domain.valueobject.Money;
 import com.algaworks.algashop.ordering.domain.valueobject.Quantity;
@@ -17,16 +16,21 @@ import com.algaworks.algashop.ordering.domain.valueobject.id.CustomerId;
 import com.algaworks.algashop.ordering.domain.valueobject.id.OrderItemId;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.FieldSource;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
+import static com.algaworks.algashop.ordering.domain.entity.OrderStatus.CANCELED;
 import static com.algaworks.algashop.ordering.domain.entity.OrderStatus.DRAFT;
+import static com.algaworks.algashop.ordering.domain.entity.OrderStatus.PAID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertWith;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 
 class OrderTest {
 
@@ -79,14 +83,14 @@ class OrderTest {
 
     @Test
     void shouldThrowExceptionWhenTryModifyListUsingGet(){
-        final var order = OrderDataBuilder.builder().build();
+        final var order = OrderDataBuilder.builder().buildExisting();
         assertThatExceptionOfType(UnsupportedOperationException.class)
                 .isThrownBy(() -> order.items().clear());
     }
 
     @Test
     void givenOrderToAddItemsShouldCalculateTotals(){
-        final var order = OrderDataBuilder.builder(Order.draft(new CustomerId())).build();
+        final var order = OrderDataBuilder.builder(Order.draft(new CustomerId())).buildExisting();
         final var product1 = ProductDataBuilder.builder()
                 .withInStock(() -> true)
                 .build();
@@ -117,9 +121,11 @@ class OrderTest {
                 .withShipping(() -> customFaker.valueObject().shipping())
                 .withBilling(() -> BillingDataBuilder.builder().build())
                 .withPaymentMethod(() -> customFaker.options().option(PaymentMethod.class))
-                .withItems(() -> OrderItemDataBuilder.builder()
-                        .buildExistingList(customFaker.number().numberBetween(1, 9)))
-                .build();
+                .buildExisting();
+        IntStream.range(1, 10).forEach(_ -> order.addItem(
+                ProductDataBuilder.builder().withInStock(() -> true).build(),
+                customFaker.valueObject().quantity(1, 10)
+        ));
         order.place();
         assertThat(order.isPlaced()).isTrue();
     }
@@ -131,9 +137,11 @@ class OrderTest {
                 .withShipping(() -> customFaker.valueObject().shipping())
                 .withBilling(() -> BillingDataBuilder.builder().build())
                 .withPaymentMethod(() -> customFaker.options().option(PaymentMethod.class))
-                .withItems(() -> OrderItemDataBuilder.builder()
-                        .buildExistingList(customFaker.number().numberBetween(1, 9)))
-                .build();
+                .buildExisting();
+        IntStream.range(1, 10).forEach(_ -> order.addItem(
+                ProductDataBuilder.builder().withInStock(() -> true).build(),
+                customFaker.valueObject().quantity(1, 10)
+        ));
         order.place();
         assertThatExceptionOfType(OrderStatusCannotBeChangedException.class)
                 .isThrownBy(order::place);
@@ -145,9 +153,11 @@ class OrderTest {
                 .withShipping(() -> customFaker.valueObject().shipping())
                 .withBilling(() -> BillingDataBuilder.builder().build())
                 .withPaymentMethod(() -> customFaker.options().option(PaymentMethod.class))
-                .withItems(() -> OrderItemDataBuilder.builder()
-                        .buildExistingList(customFaker.number().numberBetween(1, 9)))
-                .build();
+                .buildExisting();
+        IntStream.range(1, 10).forEach(_ -> order.addItem(
+                ProductDataBuilder.builder().withInStock(() -> true).build(),
+                customFaker.valueObject().quantity(1, 10)
+        ));
         order.place();
         order.markAsPaid();
         assertWith(order,
@@ -158,7 +168,7 @@ class OrderTest {
 
     @Test
     void givenDraftOrderWhenChangePaymentMethodShouldAllowChange(){
-        final var order = OrderDataBuilder.builder(Order.draft(new CustomerId())).build();
+        final var order = OrderDataBuilder.builder(Order.draft(new CustomerId())).buildExisting();
         final var newPaymentMethod = customFaker.options().option(PaymentMethod.class);
         order.changePaymentMethod(newPaymentMethod);
         assertThat(order.paymentMethod()).isEqualTo(newPaymentMethod);
@@ -167,7 +177,7 @@ class OrderTest {
     @Test
     void givenDraftOrderWhenChangeBillingInfoShouldAllowChange(){
         final var billing = BillingDataBuilder.builder().build();
-        final var order = OrderDataBuilder.builder(Order.draft(new CustomerId())).build();
+        final var order = OrderDataBuilder.builder(Order.draft(new CustomerId())).buildExisting();
         order.changeBilling(billing);
         assertThat(order.billing()).isEqualTo(billing);
     }
@@ -175,7 +185,7 @@ class OrderTest {
     @Test
     void givenDraftOrderWhenChangeShippingInfoShouldAllowChange(){
         final var shipping = customFaker.valueObject().shipping();
-        final var order = OrderDataBuilder.builder(Order.draft(new CustomerId())).build();
+        final var order = OrderDataBuilder.builder(Order.draft(new CustomerId())).buildExisting();
         order.changeShipping(shipping);
         assertThat(order.shipping()).isEqualTo(shipping);
     }
@@ -187,7 +197,7 @@ class OrderTest {
                 .toBuilder()
                 .expectedDate(customFaker.timeAndDate().birthday())
                 .build();
-        final var order = OrderDataBuilder.builder(Order.draft(new CustomerId())).build();
+        final var order = OrderDataBuilder.builder(Order.draft(new CustomerId())).buildExisting();
         assertThatExceptionOfType(OrderInvalidShippingDeliveryDateException.class)
                 .isThrownBy(() -> order.changeShipping(shipping));
     }
@@ -195,7 +205,7 @@ class OrderTest {
     @Test
     void givenDraftOrderAndAddOrderItemWhenChangeItemShouldRecalculate(){
         final var order = OrderDataBuilder.builder(Order.draft(new CustomerId()))
-                .build();
+                .buildExisting();
         final var product = ProductDataBuilder.builder()
                 .withInStock(() -> true)
                 .build();
@@ -215,7 +225,7 @@ class OrderTest {
     @Test
     void givenDraftOrderWhenChangeNonExistingItemShouldThrowException(){
         final var order = OrderDataBuilder.builder(Order.draft(new CustomerId()))
-                .build();
+                .buildExisting();
         final var orderItemId = new OrderItemId();
         final var quantity = customFaker.valueObject().quantity(1, 10);
         assertThatExceptionOfType(OrderDoesNotContainOrderItemException.class)
@@ -226,7 +236,7 @@ class OrderTest {
     @Test
     void givenDraftOrderWhenTryAddProductOutOfStockShouldThrowError(){
         final var order = OrderDataBuilder.builder(Order.draft(new CustomerId()))
-                .build();
+                .buildExisting();
         final var product = ProductDataBuilder.builder()
                 .withInStock(() -> false)
                 .build();
@@ -257,7 +267,7 @@ class OrderTest {
                 .withShipping(() -> customFaker.valueObject().shipping())
                 .withBilling(() -> BillingDataBuilder.builder().build())
                 .withPaymentMethod(() -> customFaker.options().option(PaymentMethod.class))
-                .build();
+                .buildExisting();
         order.addItem(
                 ProductDataBuilder.builder()
                         .withInStock(() -> true)
@@ -273,7 +283,7 @@ class OrderTest {
     void givenDraftOrderWhenRemoveExistingItemShouldRemoveIt(){
         final var order = OrderDataBuilder.builder(Order.draft(new CustomerId()))
                 .withShipping(() -> customFaker.valueObject().shipping())
-                .build();
+                .buildExisting();
         ProductDataBuilder.builder()
                 .withInStock(() -> true)
                 .buildList(2)
@@ -301,13 +311,54 @@ class OrderTest {
     void givenDraftOrderWhenRemoveNonExistingItemShouldThrowException(){
         final var order = OrderDataBuilder.builder(Order.draft(new CustomerId()))
                 .withShipping(() -> customFaker.valueObject().shipping())
-                .build();
+                .buildExisting();
         ProductDataBuilder.builder()
                 .withInStock(() -> true)
                 .buildList(2)
                 .forEach(p -> order.addItem(p, customFaker.valueObject().quantity(1, 10)));
         assertThatExceptionOfType(OrderDoesNotContainOrderItemException.class)
                 .isThrownBy(() -> order.removeItem(new OrderItemId()));
+    }
+
+    @Test
+    void givenPlacedOrderWhenTryChangeToReadyShouldAllowIt(){
+        final var order = OrderDataBuilder.builder()
+                .withOrderStatus(() -> PAID)
+                .buildExisting();
+        order.markAsReady();
+        assertThat(order.readyAt()).isNotNull();
+        assertThat(order.isReady()).isTrue();
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = OrderStatus.class, names = {"PAID", "READY"}, mode = EXCLUDE)
+    void givenNonPaidOrderWhenTryChangeToReadyShouldAllowIt(final OrderStatus orderStatus){
+        final var order = OrderDataBuilder.builder()
+                .withOrderStatus(() -> orderStatus)
+                .buildExisting();
+        assertThatExceptionOfType(OrderStatusCannotBeChangedException.class)
+                .isThrownBy(order::markAsReady);
+        assertThat(order.isReady()).isFalse();
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = OrderStatus.class, names = "CANCELED", mode = EXCLUDE)
+    void givenNonCanceledOrderWhenTryCancelShouldAllowIt(final OrderStatus orderStatus){
+        final var order = OrderDataBuilder.builder()
+                .withOrderStatus(() -> orderStatus)
+                .buildExisting();
+        order.cancel();
+        assertThat(order.canceledAt()).isNotNull();
+        assertThat(order.isCanceled()).isTrue();
+    }
+
+    @Test
+    void givenCanceledOrderWhenTryCancelAgainShouldThrowException(){
+        final var order = OrderDataBuilder.builder()
+                .withOrderStatus(() -> CANCELED)
+                .buildExisting();
+        assertThatExceptionOfType(OrderStatusCannotBeChangedException.class)
+                .isThrownBy(order::cancel);
     }
 
 }

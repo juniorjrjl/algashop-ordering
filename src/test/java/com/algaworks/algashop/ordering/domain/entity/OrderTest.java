@@ -2,6 +2,7 @@ package com.algaworks.algashop.ordering.domain.entity;
 
 import com.algaworks.algashop.ordering.domain.exception.OrderDoesNotContainOrderItemException;
 import com.algaworks.algashop.ordering.domain.exception.OrderInvalidShippingDeliveryDateException;
+import com.algaworks.algashop.ordering.domain.exception.OrderCannotBeEditedException;
 import com.algaworks.algashop.ordering.domain.exception.OrderStatusCannotBeChangedException;
 import com.algaworks.algashop.ordering.domain.exception.OutOfStockException;
 import com.algaworks.algashop.ordering.domain.utility.CustomFaker;
@@ -15,8 +16,12 @@ import com.algaworks.algashop.ordering.domain.valueobject.Shipping;
 import com.algaworks.algashop.ordering.domain.valueobject.id.CustomerId;
 import com.algaworks.algashop.ordering.domain.valueobject.id.OrderItemId;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.FieldSource;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static com.algaworks.algashop.ordering.domain.entity.OrderStatus.DRAFT;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -228,6 +233,81 @@ class OrderTest {
         final var quantity = customFaker.valueObject().quantity(1, 10);
         assertThatExceptionOfType(OutOfStockException.class)
                 .isThrownBy(() -> order.addItem(product, quantity));
+    }
+
+    private static final List<Consumer<Order>> givenPlacedOrderWhenTryEditItShouldThrowException
+            = List.of(
+                    o -> o.addItem(
+                            ProductDataBuilder.builder()
+                                    .withInStock(() -> true)
+                                    .build(),
+                            customFaker.valueObject().quantity()
+                    ),
+            o -> o.changePaymentMethod(customFaker.options().option(PaymentMethod.class)),
+            o -> o.changeBilling(BillingDataBuilder.builder().build()),
+            o -> o.changeShipping(customFaker.valueObject().shipping()),
+            o -> o.changeItemQuantity(o.items().iterator().next().id(), customFaker.valueObject().quantity()),
+            o -> o.removeItem(o.items().iterator().next().id())
+    );
+
+    @ParameterizedTest
+    @FieldSource
+    void givenPlacedOrderWhenTryEditItShouldThrowException(final Consumer<Order> orderAction){
+        final var order = OrderDataBuilder.builder(Order.draft(new CustomerId()))
+                .withShipping(() -> customFaker.valueObject().shipping())
+                .withBilling(() -> BillingDataBuilder.builder().build())
+                .withPaymentMethod(() -> customFaker.options().option(PaymentMethod.class))
+                .build();
+        order.addItem(
+                ProductDataBuilder.builder()
+                        .withInStock(() -> true)
+                        .build(),
+                customFaker.valueObject().quantity()
+        );
+        order.place();
+        assertThatExceptionOfType(OrderCannotBeEditedException.class)
+                .isThrownBy(() -> orderAction.accept(order));
+    }
+
+    @Test
+    void givenDraftOrderWhenRemoveExistingItemShouldRemoveIt(){
+        final var order = OrderDataBuilder.builder(Order.draft(new CustomerId()))
+                .withShipping(() -> customFaker.valueObject().shipping())
+                .build();
+        ProductDataBuilder.builder()
+                .withInStock(() -> true)
+                .buildList(2)
+                .forEach(p -> order.addItem(p, customFaker.valueObject().quantity(1, 10)));
+        final var orderItemsList = order.items().stream().toList();
+        final OrderItem toRemove;
+        final OrderItem keepInOrder;
+        if (customFaker.bool().bool()) {
+            toRemove = orderItemsList.getFirst();
+            keepInOrder = orderItemsList.getLast();
+        } else {
+            keepInOrder = orderItemsList.getFirst();
+            toRemove = orderItemsList.getLast();
+        }
+        order.removeItem(toRemove.id());
+        final var productAmount = keepInOrder.price().multiply(keepInOrder.quantity());
+        assertWith(order,
+                o -> assertThat(o.items()).containsOnly(keepInOrder),
+                o -> assertThat(o.totalAmount()).isEqualTo(productAmount.add(o.shipping().cost())),
+                o -> assertThat(o.totalItems()).isEqualTo(keepInOrder.quantity())
+        );
+    }
+
+    @Test
+    void givenDraftOrderWhenRemoveNonExistingItemShouldThrowException(){
+        final var order = OrderDataBuilder.builder(Order.draft(new CustomerId()))
+                .withShipping(() -> customFaker.valueObject().shipping())
+                .build();
+        ProductDataBuilder.builder()
+                .withInStock(() -> true)
+                .buildList(2)
+                .forEach(p -> order.addItem(p, customFaker.valueObject().quantity(1, 10)));
+        assertThatExceptionOfType(OrderDoesNotContainOrderItemException.class)
+                .isThrownBy(() -> order.removeItem(new OrderItemId()));
     }
 
 }

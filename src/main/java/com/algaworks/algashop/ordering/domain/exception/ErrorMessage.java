@@ -43,5 +43,7 @@ public final class ErrorMessage {
     public static final String ERROR_PRODUCT_IS_OUT_OF_STOCK
             = "Product %s is out of stock";
 
+    public static final String ORDER_NOT_ALLOW_CHANGES_EXCEPTION
+            = "Order %s cannot be changed, it is in order status '%s'";
 
 }

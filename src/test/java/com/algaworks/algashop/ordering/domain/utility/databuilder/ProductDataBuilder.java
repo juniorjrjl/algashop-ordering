@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.domain.utility.databuilder;
 
+import com.algaworks.algashop.ordering.domain.entity.OrderItem;
 import com.algaworks.algashop.ordering.domain.utility.CustomFaker;
 import com.algaworks.algashop.ordering.domain.valueobject.Money;
 import com.algaworks.algashop.ordering.domain.valueobject.Product;
@@ -9,7 +10,10 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;
 
+import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -39,6 +43,11 @@ public class ProductDataBuilder {
                 .price(price.get())
                 .inStock(inStock.get())
                 .build();
+    }
+
+    public Set<Product> buildList(final int amount){
+        return Stream.generate(this::build)
+                .limit(amount).collect(Collectors.toSet());
     }
 
 }

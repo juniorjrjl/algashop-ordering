@@ -2,13 +2,10 @@ package com.algaworks.algashop.ordering.domain.utility.databuilder;
 
 import com.algaworks.algashop.ordering.domain.entity.OrderItem;
 import com.algaworks.algashop.ordering.domain.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.valueobject.Money;
 import com.algaworks.algashop.ordering.domain.valueobject.Product;
-import com.algaworks.algashop.ordering.domain.valueobject.ProductName;
 import com.algaworks.algashop.ordering.domain.valueobject.Quantity;
 import com.algaworks.algashop.ordering.domain.valueobject.id.OrderId;
 import com.algaworks.algashop.ordering.domain.valueobject.id.OrderItemId;
-import com.algaworks.algashop.ordering.domain.valueobject.id.ProductId;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;
@@ -31,7 +28,9 @@ public class OrderItemDataBuilder {
     @With
     private Supplier<OrderId> orderId = OrderId::new;
     @With
-    private Supplier<Product> product = () -> ProductDataBuilder.builder().build();
+    private Supplier<Product> product = () -> ProductDataBuilder.builder()
+            .withInStock(() -> true)
+            .build();
     @With
     private Supplier<Quantity> quantity = () -> faker.valueObject().quantity(1, 10);
 
@@ -60,7 +59,7 @@ public class OrderItemDataBuilder {
     }
 
     public Set<OrderItem> buildExistingList(final int amount){
-        return Stream.generate(() -> OrderItemDataBuilder.builder().buildExisting())
+        return Stream.generate(this::buildExisting)
                 .limit(amount).collect(Collectors.toSet());
     }
 

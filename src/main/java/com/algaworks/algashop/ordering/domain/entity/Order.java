@@ -3,6 +3,7 @@ package com.algaworks.algashop.ordering.domain.entity;
 import com.algaworks.algashop.ordering.domain.exception.OrderCannotBePlacedException;
 import com.algaworks.algashop.ordering.domain.exception.OrderDoesNotContainOrderItemException;
 import com.algaworks.algashop.ordering.domain.exception.OrderInvalidShippingDeliveryDateException;
+import com.algaworks.algashop.ordering.domain.exception.OrderCannotBeEditedException;
 import com.algaworks.algashop.ordering.domain.exception.OrderStatusCannotBeChangedException;
 import com.algaworks.algashop.ordering.domain.valueobject.Billing;
 import com.algaworks.algashop.ordering.domain.valueobject.Money;
@@ -21,6 +22,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.algaworks.algashop.ordering.domain.entity.OrderStatus.DRAFT;
 import static com.algaworks.algashop.ordering.domain.entity.OrderStatus.PAID;
@@ -94,6 +96,7 @@ public class Order {
 
     public void addItem(final Product product,
                         final Quantity quantity){
+        this.verifyIfChangeable();
         requireNonNull(product);
         requireNonNull(quantity);
         product.checkOutOfStock();
@@ -103,6 +106,18 @@ public class Order {
                 .quantity(quantity)
                 .build();
         this.items.add(orderItem);
+        this.recalculateTotals();
+    }
+
+    public void removeItem(final OrderItemId orderItemId){
+        this.verifyIfChangeable();
+        requireNonNull(orderItemId);
+        final var orderItem = findOrderItem(orderItemId);
+        final var currentItems = this.items.stream()
+                .filter(i -> !i.equals(orderItem))
+                .collect(Collectors.toSet());
+        this.setItems(currentItems);
+
         this.recalculateTotals();
     }
 
@@ -118,16 +133,19 @@ public class Order {
     }
 
     public void changePaymentMethod(final PaymentMethod newPaymentMethod){
+        this.verifyIfChangeable();
         requireNonNull(newPaymentMethod);
         this.setPaymentMethod(newPaymentMethod);
     }
 
     public void changeBilling(final Billing billing){
+        this.verifyIfChangeable();
         requireNonNull(billing);
         this.setBilling(billing);
     }
 
     public void changeShipping(final Shipping shipping){
+        this.verifyIfChangeable();
         requireNonNull(shipping);
         if (shipping.expectedDate().isBefore(LocalDate.now())) {
             throw new OrderInvalidShippingDeliveryDateException(this.id);
@@ -137,6 +155,7 @@ public class Order {
     }
 
     public void changeItemQuantity(final OrderItemId orderItemId, final Quantity newQuantity){
+        this.verifyIfChangeable();
         requireNonNull(orderItemId);
         requireNonNull(newQuantity);
 
@@ -250,6 +269,16 @@ public class Order {
         }
         if (isNull(this.items()) || this.items.isEmpty()){
             throw OrderCannotBePlacedException.noShippingInfo(this.id);
+        }
+    }
+
+    private boolean isNotDraft(){
+        return !isDraft();
+    }
+
+    private void verifyIfChangeable(){
+        if (isNotDraft()){
+            throw new OrderCannotBeEditedException(this.id, this.orderStatus);
         }
     }
 

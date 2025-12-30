@@ -10,6 +10,10 @@ public interface RichComparable<T> extends Comparable<T> {
         return compareTo(toCompare) < 0;
     }
 
+    default boolean isLessThanOrEqualTo(final T toCompare){
+        return compareTo(toCompare) <= 0;
+    }
+
     default boolean isGreaterThan(final T toCompare){
         return compareTo(toCompare) > 0;
     }

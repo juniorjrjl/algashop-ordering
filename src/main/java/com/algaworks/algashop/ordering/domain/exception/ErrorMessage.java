@@ -37,7 +37,7 @@ public final class ErrorMessage {
     public static final String ERROR_ORDER_CANNOT_BE_PLACED_HAS_NO_PAYMENT_METHOD
             = "Order %s cannot be placed, it has no payment method";
 
-    public static final String ERROR_DOES_NOT_CONTAIN_ITEM
+    public static final String ERROR_ORDER_DOES_NOT_CONTAIN_ITEM
             = "Order %s does not contain item %s";
 
     public static final String ERROR_PRODUCT_IS_OUT_OF_STOCK
@@ -45,5 +45,14 @@ public final class ErrorMessage {
 
     public static final String ORDER_NOT_ALLOW_CHANGES_EXCEPTION
             = "Order %s cannot be changed, it is in order status '%s'";
+
+    public static final String QUANTITY_LESS_THAN
+            = "Quantity must not be less than %s";
+
+    public static final String ERROR_SHOPPING_CART_DOES_NOT_CONTAIN_ITEM
+            = "Shopping cart %s does not contain item %s";
+
+    public static final String ERROR_SHOPPING_CART_DOES_NOT_CONTAIN_PRODUCT
+            = "Shopping cart %s does not contain product %s";
 
 }

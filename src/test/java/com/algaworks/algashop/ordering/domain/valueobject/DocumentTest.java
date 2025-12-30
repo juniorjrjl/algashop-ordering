@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.domain.valueobject;
 
+import com.algaworks.algashop.ordering.domain.exception.DomainException;
 import com.algaworks.algashop.ordering.domain.utility.CustomFaker;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,7 +31,7 @@ class DocumentTest {
 
     @ParameterizedTest
     @FieldSource
-    void shouldNotCreateDocument(final String value, final Class<? extends Exception> expectedException) {
+    void shouldNotCreateDocument(final String value, final Class<? extends DomainException> expectedException) {
         assertThatExceptionOfType(expectedException)
                 .isThrownBy(() -> new Document(value));
     }

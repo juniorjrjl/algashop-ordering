@@ -1,0 +1,15 @@
+package com.algaworks.algashop.ordering.domain.model.exception;
+
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderItemId;
+
+import static com.algaworks.algashop.ordering.domain.model.exception.ErrorMessage.ERROR_ORDER_DOES_NOT_CONTAIN_ITEM;
+
+public class OrderDoesNotContainOrderItemException extends DomainException {
+
+    public OrderDoesNotContainOrderItemException(final OrderId id,
+                                                 final OrderItemId orderItemId) {
+        final var message = String.format(ERROR_ORDER_DOES_NOT_CONTAIN_ITEM, id, orderItemId);
+        super(message);
+    }
+}

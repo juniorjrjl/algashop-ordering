@@ -28,6 +28,7 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("com.fasterxml.uuid:java-uuid-generator:5.2.0")
 	implementation("commons-validator:commons-validator:1.10.1")
 	implementation("io.hypersistence:hypersistence-tsid:2.1.4")
@@ -35,6 +36,9 @@ dependencies {
 	compileOnly("org.projectlombok:lombok")
 
 	annotationProcessor("org.projectlombok:lombok")
+
+	implementation("org.springframework.boot:spring-boot-h2console:4.0.1")
+	runtimeOnly("com.h2database:h2")
 
 	testCompileOnly("org.projectlombok:lombok")
 

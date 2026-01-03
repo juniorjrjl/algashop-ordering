@@ -18,7 +18,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOf
 
 class ShoppingCartItemTest {
 
-    private static final CustomFaker customFaker = new CustomFaker();
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     @Test
     void shouldCreate(){

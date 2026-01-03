@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertWith;
 
 class OrderItemTest {
 
-    private static final CustomFaker faker = new CustomFaker();
+    private static final CustomFaker faker = CustomFaker.getInstance();
 
     @Test
     void shouldCreateBrandNew(){

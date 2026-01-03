@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertWith;
 
 class OrderFactoryTest {
 
-    private final CustomFaker customFaker = new CustomFaker();
+    private final CustomFaker customFaker = CustomFaker.getInstance();
 
     @Test
     void shouldGenerateFilledOrderThatCanBePlaced(){

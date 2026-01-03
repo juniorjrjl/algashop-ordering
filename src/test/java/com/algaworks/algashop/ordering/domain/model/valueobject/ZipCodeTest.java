@@ -13,7 +13,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOf
 
 class ZipCodeTest {
 
-    private static final CustomFaker faker = new CustomFaker();
+    private static final CustomFaker faker = CustomFaker.getInstance();
 
     @Test
     void shouldCreateZipCode() {

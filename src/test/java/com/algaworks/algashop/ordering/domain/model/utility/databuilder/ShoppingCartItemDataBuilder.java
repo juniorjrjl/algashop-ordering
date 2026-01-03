@@ -23,7 +23,7 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor(access = PRIVATE)
 public class ShoppingCartItemDataBuilder {
 
-    private static final CustomFaker customFaker = new CustomFaker();
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     @With
     private Supplier<ShoppingCartItemId> id = ShoppingCartItemId::new;

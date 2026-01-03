@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public class BillingInfoTestErrorProvider implements ArgumentsProvider {
 
-    private static final CustomFaker customFaker = new CustomFaker();
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     @Override
     @NonNull

@@ -34,7 +34,7 @@ import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 
 class OrderTest {
 
-    private static final CustomFaker customFaker = new CustomFaker();
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     @Test
     void shouldCreateDraft(){

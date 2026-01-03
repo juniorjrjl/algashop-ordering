@@ -23,7 +23,7 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor(access = PRIVATE)
 public class CustomerDataBuilder {
 
-    private static final CustomFaker customFaker = new CustomFaker();
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     @With
     private Supplier<CustomerId> id = CustomerId::new;

@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class DocumentTest {
 
-    private static final CustomFaker faker = new CustomFaker();
+    private static final CustomFaker faker = CustomFaker.getInstance();
 
     @Test
     void shouldCreateDocument(){

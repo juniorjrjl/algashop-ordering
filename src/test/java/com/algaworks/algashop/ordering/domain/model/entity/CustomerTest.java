@@ -23,7 +23,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOf
 
 class CustomerTest {
 
-    private static final CustomFaker faker = new CustomFaker();
+    private static final CustomFaker faker = CustomFaker.getInstance();
 
     @Test
     void givenUnarchivedCustomerWhenArchiveShouldAnonymize(){

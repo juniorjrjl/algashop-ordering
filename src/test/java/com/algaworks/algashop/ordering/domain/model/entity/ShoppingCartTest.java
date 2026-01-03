@@ -29,7 +29,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOf
 
 class ShoppingCartTest {
 
-    private static final CustomFaker customFaker = new CustomFaker();
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     @Test
     void givenValidProductsAndQuantitiesWhenAddItemShouldAllowIt(){

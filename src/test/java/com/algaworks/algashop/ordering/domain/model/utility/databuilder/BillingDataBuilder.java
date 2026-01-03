@@ -19,7 +19,7 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor(access = PRIVATE)
 public class BillingDataBuilder {
 
-    private static final CustomFaker faker = new CustomFaker();
+    private static final CustomFaker faker = CustomFaker.getInstance();
 
     @With
     private Supplier<FullName> fullName = () -> faker.valueObject().fullName();

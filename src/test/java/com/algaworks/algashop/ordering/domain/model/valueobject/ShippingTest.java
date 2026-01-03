@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertWith;
 
 class ShippingTest {
 
-    private static final CustomFaker customFaker = new CustomFaker();
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     @Test
     void shouldCreate(){

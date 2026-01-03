@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertWith;
 
 class AddressTest {
 
-    private static final CustomFaker customFaker = new CustomFaker();
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     private static final List<Arguments> shouldCreateAddress = List.of(
             Arguments.of(

@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertWith;
 
 class FullNameTest {
 
-    private static final CustomFaker customFaker = new CustomFaker();
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     private static final List<Arguments> shouldCreate = List.of(
             Arguments.of(customFaker.name().firstName(), customFaker.name().lastName()),

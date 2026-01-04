@@ -6,9 +6,10 @@ import com.algaworks.algashop.ordering.domain.model.exception.OrderInvalidShippi
 import com.algaworks.algashop.ordering.domain.model.exception.OrderStatusCannotBeChangedException;
 import com.algaworks.algashop.ordering.domain.model.exception.OutOfStockException;
 import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.BillingDataBuilder;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.OrderDataBuilder;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.ProductDataBuilder;
+import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.BillingDataBuilder;
+import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.OrderDataBuilder;
+import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.ProductDataBuilder;
+import com.algaworks.algashop.ordering.domain.model.utility.tag.UnitTest;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Money;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Quantity;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Shipping;
@@ -32,6 +33,7 @@ import static org.assertj.core.api.Assertions.assertWith;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 
+@UnitTest
 class OrderTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();

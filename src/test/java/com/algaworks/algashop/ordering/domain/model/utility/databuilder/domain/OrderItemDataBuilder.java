@@ -1,4 +1,4 @@
-package com.algaworks.algashop.ordering.domain.model.utility.databuilder;
+package com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain;
 
 import com.algaworks.algashop.ordering.domain.model.entity.OrderItem;
 import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
@@ -21,7 +21,7 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor(access = PRIVATE)
 public class OrderItemDataBuilder {
 
-    private static final CustomFaker faker = CustomFaker.getInstance();
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     @With
     private Supplier<OrderItemId> id = OrderItemId::new;
@@ -32,7 +32,7 @@ public class OrderItemDataBuilder {
             .withInStock(() -> true)
             .build();
     @With
-    private Supplier<Quantity> quantity = () -> faker.valueObject().quantity(1, 10);
+    private Supplier<Quantity> quantity = () -> customFaker.valueObject().quantity(1, 10);
 
     public static OrderItemDataBuilder builder() {
         return new OrderItemDataBuilder();

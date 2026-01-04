@@ -56,6 +56,30 @@ tasks.withType<Test> {
 	finalizedBy(tasks.jacocoTestReport)
 }
 
+tasks.register<Test>("integrationTest"){
+	description = "Run unit tests."
+	group = "verification"
+
+	testClassesDirs = tasks.test.get().testClassesDirs
+	classpath = tasks.test.get().classpath
+
+	useJUnitPlatform{
+		includeTags("IntegrationTest")
+	}
+}
+
+tasks.register<Test>("unitTest"){
+	description = "Run unit tests."
+	group = "verification"
+
+	testClassesDirs = tasks.test.get().testClassesDirs
+	classpath = tasks.test.get().classpath
+
+	useJUnitPlatform{
+		includeTags("UnitTest")
+	}
+}
+
 tasks.jacocoTestReport {
 	reports {
 		xml.required = false

@@ -2,7 +2,8 @@ package com.algaworks.algashop.ordering.domain.model.entity;
 
 import com.algaworks.algashop.ordering.domain.model.exception.CustomerArchivedException;
 import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.CustomerDataBuilder;
+import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.CustomerDataBuilder;
+import com.algaworks.algashop.ordering.domain.model.utility.tag.UnitTest;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Document;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Email;
 import com.algaworks.algashop.ordering.domain.model.valueobject.FullName;
@@ -21,14 +22,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertWith;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
+@UnitTest
 class CustomerTest {
 
-    private static final CustomFaker faker = CustomFaker.getInstance();
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     @Test
     void givenUnarchivedCustomerWhenArchiveShouldAnonymize(){
-        var email = faker.valueObject().email();
-        var address = faker.valueObject().address();
+        var email = customFaker.valueObject().email();
+        var address = customFaker.valueObject().address();
         var customer = CustomerDataBuilder.builder()
                 .withEmail(() -> email)
                 .withAddress(() -> address)
@@ -52,8 +54,8 @@ class CustomerTest {
     private static final List<Arguments> givenArchivedCustomerWhenTryToChangeIdShouldThrowException =
             List.of(
                     Arguments.of((Consumer<Customer>) Customer::archive),
-                    Arguments.of((Consumer<Customer>) c -> c.changeEmail(faker.valueObject().email())),
-                    Arguments.of((Consumer<Customer>) c -> c.changePhone(faker.valueObject().phone()))
+                    Arguments.of((Consumer<Customer>) c -> c.changeEmail(customFaker.valueObject().email())),
+                    Arguments.of((Consumer<Customer>) c -> c.changePhone(customFaker.valueObject().phone()))
             );
 
     @ParameterizedTest
@@ -69,9 +71,9 @@ class CustomerTest {
     @Test
     void givenBrandNewCustomerWhenAddValidLoyaltyPointsShouldSumPoints(){
         var customer = CustomerDataBuilder.builder().buildNew();
-        var firstPoints = faker.valueObject().loyaltyPoints(1, 30);
+        var firstPoints = customFaker.valueObject().loyaltyPoints(1, 30);
         customer.addLoyaltyPoints(firstPoints);
-        var secondPoints = faker.valueObject().loyaltyPoints(1, 30);
+        var secondPoints = customFaker.valueObject().loyaltyPoints(1, 30);
         customer.addLoyaltyPoints(secondPoints);
 
         assertThat(customer.loyaltyPoints()).isEqualTo(firstPoints.add(secondPoints));

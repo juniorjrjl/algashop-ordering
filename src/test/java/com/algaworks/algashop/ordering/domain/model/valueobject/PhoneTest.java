@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.domain.model.valueobject;
 
 import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
+import com.algaworks.algashop.ordering.domain.model.utility.tag.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -11,13 +12,14 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@UnitTest
 class PhoneTest {
 
-    private static final CustomFaker faker = CustomFaker.getInstance();
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     @Test
     void shouldCreatePhone(){
-        final var value = faker.phoneNumber().cellPhone();
+        final var value = customFaker.phoneNumber().cellPhone();
         final var document = new Phone(value);
         assertThat(document.toString()).hasToString(value);
     }

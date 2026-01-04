@@ -1,4 +1,4 @@
-package com.algaworks.algashop.ordering.domain.model.utility.databuilder;
+package com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain;
 
 import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Address;
@@ -19,18 +19,18 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor(access = PRIVATE)
 public class BillingDataBuilder {
 
-    private static final CustomFaker faker = CustomFaker.getInstance();
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     @With
-    private Supplier<FullName> fullName = () -> faker.valueObject().fullName();
+    private Supplier<FullName> fullName = () -> customFaker.valueObject().fullName();
     @With
-    private Supplier<Document> document = () -> faker.valueObject().document();
+    private Supplier<Document> document = () -> customFaker.valueObject().document();
     @With
-    private Supplier<Phone> phone = () -> faker.valueObject().phone();
+    private Supplier<Phone> phone = () -> customFaker.valueObject().phone();
     @With
-    private Supplier<Address> address = () -> faker.valueObject().addressWithComplement();
+    private Supplier<Address> address = () -> customFaker.valueObject().addressWithComplement();
     @With
-    private Supplier<Email> email = () -> faker.valueObject().email();
+    private Supplier<Email> email = () -> customFaker.valueObject().email();
 
     public static BillingDataBuilder builder() {
         return new BillingDataBuilder();

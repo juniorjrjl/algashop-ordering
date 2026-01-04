@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.domain.model.valueobject;
 
 import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
+import com.algaworks.algashop.ordering.domain.model.utility.tag.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -13,6 +14,7 @@ import static java.math.RoundingMode.HALF_EVEN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@UnitTest
 class MoneyTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();

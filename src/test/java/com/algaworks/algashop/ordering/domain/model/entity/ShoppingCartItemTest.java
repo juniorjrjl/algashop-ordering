@@ -1,8 +1,9 @@
 package com.algaworks.algashop.ordering.domain.model.entity;
 
 import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.ProductDataBuilder;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.ShoppingCartItemDataBuilder;
+import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.ProductDataBuilder;
+import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.ShoppingCartItemDataBuilder;
+import com.algaworks.algashop.ordering.domain.model.utility.tag.UnitTest;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Quantity;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.ShoppingCartId;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertWith;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
+@UnitTest
 class ShoppingCartItemTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();

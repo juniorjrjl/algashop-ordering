@@ -1,4 +1,4 @@
-package com.algaworks.algashop.ordering.domain.model.utility.databuilder;
+package com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain;
 
 import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Money;

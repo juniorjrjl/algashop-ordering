@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.domain.model.valueobject;
 
 import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
+import com.algaworks.algashop.ordering.domain.model.utility.tag.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -11,20 +12,21 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@UnitTest
 class EmailTest {
 
-    private static final CustomFaker faker = CustomFaker.getInstance();
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     @Test
     void shouldCreateEmail(){
-        final var value = faker.internet().safeEmailAddress();
+        final var value = customFaker.internet().safeEmailAddress();
         final var email = new Email(value);
         assertThat(email.toString()).hasToString(value);
     }
 
     private static final List<Arguments> shouldNotCreateEmail =
             List.of(
-                    Arguments.of(faker.lorem().word(), IllegalArgumentException.class),
+                    Arguments.of(customFaker.lorem().word(), IllegalArgumentException.class),
                     Arguments.of(null, NullPointerException.class)
             );
 

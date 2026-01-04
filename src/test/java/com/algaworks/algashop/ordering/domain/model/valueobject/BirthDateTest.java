@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.domain.model.valueobject;
 
 import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
+import com.algaworks.algashop.ordering.domain.model.utility.tag.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -13,13 +14,14 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@UnitTest
 class BirthDateTest {
 
-    private static final CustomFaker faker = CustomFaker.getInstance();
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     @Test
     void shouldCreateBirthDate() {
-        final var value = faker.timeAndDate().birthday();
+        final var value = customFaker.timeAndDate().birthday();
         var birthdate = new BirthDate(value);
         assertThat(birthdate.age()).isEqualTo(Period.between(value, LocalDate.now()).getYears());
     }

@@ -1,7 +1,8 @@
 package com.algaworks.algashop.ordering.domain.model.entity;
 
 import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.ProductDataBuilder;
+import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.ProductDataBuilder;
+import com.algaworks.algashop.ordering.domain.model.utility.tag.UnitTest;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderId;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderItemId;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.ProductId;
@@ -10,9 +11,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertWith;
 
+@UnitTest
 class OrderItemTest {
 
-    private static final CustomFaker faker = CustomFaker.getInstance();
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     @Test
     void shouldCreateBrandNew(){
@@ -20,7 +22,7 @@ class OrderItemTest {
         final var product = ProductDataBuilder.builder()
                 .withInStock(() -> true)
                 .build();
-        final var quantity = faker.valueObject().quantity(1, 10);
+        final var quantity = customFaker.valueObject().quantity(1, 10);
         final var orderItem = OrderItem.brandNew()
                 .orderId(orderId)
                 .product(product)
@@ -42,10 +44,10 @@ class OrderItemTest {
         final var id = new OrderItemId();
         final var orderId = new OrderId();
         final var productId = new ProductId();
-        final var productName = faker.valueObject().productName();
-        final var price = faker.valueObject().money();
-        final var quantity = faker.valueObject().quantity(1, 10);
-        final var totalAmount = faker.valueObject().money();
+        final var productName = customFaker.valueObject().productName();
+        final var price = customFaker.valueObject().money();
+        final var quantity = customFaker.valueObject().quantity(1, 10);
+        final var totalAmount = customFaker.valueObject().money();
         final var orderItem = OrderItem.existing()
                 .id(id)
                 .orderId(orderId)

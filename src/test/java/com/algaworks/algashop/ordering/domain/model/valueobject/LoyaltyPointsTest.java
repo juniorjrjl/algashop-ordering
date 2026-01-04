@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.domain.model.valueobject;
 
 import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
+import com.algaworks.algashop.ordering.domain.model.utility.tag.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
@@ -9,13 +10,14 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@UnitTest
 class LoyaltyPointsTest {
 
-    private static final CustomFaker faker = CustomFaker.getInstance();
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     @Test
     void shouldGenerate(){
-        final var value = faker.number().numberBetween(1, 20);
+        final var value = customFaker.number().numberBetween(1, 20);
         final var loyaltyPoints = new LoyaltyPoints(value);
         assertThat(loyaltyPoints.value()).isEqualTo(value);
     }
@@ -31,8 +33,8 @@ class LoyaltyPointsTest {
 
     @Test
     void shouldAddValue(){
-        final var value = faker.number().numberBetween(1, 20);
-        final var toAdd = faker.number().numberBetween(1, 20);
+        final var value = customFaker.number().numberBetween(1, 20);
+        final var toAdd = customFaker.number().numberBetween(1, 20);
         final var loyaltyPoints = new LoyaltyPoints(value);
         final var updatedLoyaltyPoints = loyaltyPoints.add(toAdd);
         assertThat(updatedLoyaltyPoints.value()).isEqualTo(value + toAdd);
@@ -42,7 +44,7 @@ class LoyaltyPointsTest {
     @ValueSource(ints = {-1, -100})
     @NullSource
     void shouldNotAddValue(final Integer invalidValue){
-        final var value = faker.number().numberBetween(1, 20);
+        final var value = customFaker.number().numberBetween(1, 20);
         final var loyaltyPoints = new LoyaltyPoints(value);
 
         assertThatExceptionOfType(IllegalArgumentException.class)

@@ -3,9 +3,10 @@ package com.algaworks.algashop.ordering.domain.model.entity;
 import com.algaworks.algashop.ordering.domain.model.exception.DomainException;
 import com.algaworks.algashop.ordering.domain.model.exception.ShoppingCartDoesNotContainOrderItemException;
 import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.ProductDataBuilder;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.ShoppingCartDataBuilder;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.ShoppingCartItemDataBuilder;
+import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.ProductDataBuilder;
+import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.ShoppingCartDataBuilder;
+import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.ShoppingCartItemDataBuilder;
+import com.algaworks.algashop.ordering.domain.model.utility.tag.UnitTest;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Money;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Product;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Quantity;
@@ -27,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertWith;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
+@UnitTest
 class ShoppingCartTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();

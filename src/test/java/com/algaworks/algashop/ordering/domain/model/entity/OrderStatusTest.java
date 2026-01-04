@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.domain.model.entity;
 
+import com.algaworks.algashop.ordering.domain.model.utility.tag.UnitTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -11,6 +12,7 @@ import static com.algaworks.algashop.ordering.domain.model.entity.OrderStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 
+@UnitTest
 class OrderStatusTest {
 
     private static final List<Arguments> canChangeTo = List.of(

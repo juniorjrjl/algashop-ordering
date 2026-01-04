@@ -45,6 +45,7 @@ dependencies {
 	testAnnotationProcessor("org.projectlombok:lombok")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
 	testImplementation("net.datafaker:datafaker:2.5.2")
 	testImplementation("org.assertj:assertj-core:3.27.6")
 

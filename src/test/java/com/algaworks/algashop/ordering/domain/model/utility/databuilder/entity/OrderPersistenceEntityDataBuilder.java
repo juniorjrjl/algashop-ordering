@@ -4,13 +4,19 @@ import com.algaworks.algashop.ordering.domain.model.entity.OrderStatus;
 import com.algaworks.algashop.ordering.domain.model.entity.PaymentMethod;
 import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
 import com.algaworks.algashop.ordering.domain.model.utility.IdGenerator;
-import com.algaworks.algashop.ordering.infrastruct.persistence.entity.OrderPersistenceEntity;
+import com.algaworks.algashop.ordering.domain.model.utility.databuilder.embeddable.BillingEmbeddableDataBuilder;
+import com.algaworks.algashop.ordering.domain.model.utility.databuilder.embeddable.ShippingEmbeddableDataBuilder;
+import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.BillingEmbeddable;
+import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.ShippingEmbeddable;
+import com.algaworks.algashop.ordering.infrastructure.persistence.entity.OrderItemPersistenceEntity;
+import com.algaworks.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -42,6 +48,19 @@ public class OrderPersistenceEntityDataBuilder {
     private Supplier<OffsetDateTime> canceledAt = OffsetDateTime::now;
     @With
     private Supplier<OffsetDateTime> readyAt = OffsetDateTime::now;
+    @With
+    private Supplier<UUID> createdBy = UUID::randomUUID;
+    @With
+    private Supplier<OffsetDateTime> lastModifiedAt = OffsetDateTime::now;
+    @With
+    private Supplier<UUID> lastModifiedBy = UUID::randomUUID;
+    @With
+    private Supplier<ShippingEmbeddable> shipping = () -> ShippingEmbeddableDataBuilder.builder().build();
+    @With
+    private Supplier<BillingEmbeddable> billing = () -> BillingEmbeddableDataBuilder.builder().build();
+    @With
+    private Supplier<Set<OrderItemPersistenceEntity>> items = () -> OrderItemPersistenceEntityDataBuilder.builder()
+            .buildList(customFaker.number().numberBetween(1, 5));
 
     public static OrderPersistenceEntityDataBuilder builder() {
         return new OrderPersistenceEntityDataBuilder();
@@ -58,7 +77,14 @@ public class OrderPersistenceEntityDataBuilder {
                 placedAt.get(),
                 paidAt.get(),
                 canceledAt.get(),
-                readyAt.get()
+                readyAt.get(),
+                createdBy.get(),
+                lastModifiedAt.get(),
+                lastModifiedBy.get(),
+                null,
+                billing.get(),
+                shipping.get(),
+                items.get()
         );
     }
 

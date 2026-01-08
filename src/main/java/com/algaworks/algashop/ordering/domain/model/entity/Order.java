@@ -1,9 +1,9 @@
 package com.algaworks.algashop.ordering.domain.model.entity;
 
+import com.algaworks.algashop.ordering.domain.model.exception.OrderCannotBeEditedException;
 import com.algaworks.algashop.ordering.domain.model.exception.OrderCannotBePlacedException;
 import com.algaworks.algashop.ordering.domain.model.exception.OrderDoesNotContainOrderItemException;
 import com.algaworks.algashop.ordering.domain.model.exception.OrderInvalidShippingDeliveryDateException;
-import com.algaworks.algashop.ordering.domain.model.exception.OrderCannotBeEditedException;
 import com.algaworks.algashop.ordering.domain.model.exception.OrderStatusCannotBeChangedException;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Billing;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Money;
@@ -14,7 +14,9 @@ import com.algaworks.algashop.ordering.domain.model.valueobject.id.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderId;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderItemId;
 import lombok.Builder;
+import lombok.Setter;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Collections;
@@ -31,6 +33,7 @@ import static com.algaworks.algashop.ordering.domain.model.entity.OrderStatus.PL
 import static com.algaworks.algashop.ordering.domain.model.entity.OrderStatus.READY;
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
+import static lombok.AccessLevel.PRIVATE;
 
 @Builder(toBuilder = true)
 public class Order implements AggregateRoot<OrderId> {
@@ -48,6 +51,8 @@ public class Order implements AggregateRoot<OrderId> {
     private OrderStatus orderStatus;
     private PaymentMethod paymentMethod;
     private Set<OrderItem> items;
+    @Setter(PRIVATE)
+    private Long version;
 
     @Builder(builderClassName = "ExistingOrderBuilder", builderMethodName = "existing")
     public Order(final OrderId id,
@@ -62,7 +67,8 @@ public class Order implements AggregateRoot<OrderId> {
                  final Shipping shipping,
                  final OrderStatus orderStatus,
                  final PaymentMethod paymentMethod,
-                 final Set<OrderItem> items) {
+                 final Set<OrderItem> items,
+                 final Long version) {
         this.setId(id);
         this.setCustomerId(customerId);
         this.setTotalAmount(totalAmount);
@@ -76,6 +82,7 @@ public class Order implements AggregateRoot<OrderId> {
         this.setOrderStatus(orderStatus);
         this.setPaymentMethod(paymentMethod);
         this.setItems(items);
+        this.setVersion(version);
     }
 
     public static Order draft(final CustomerId customerId){
@@ -92,7 +99,8 @@ public class Order implements AggregateRoot<OrderId> {
                 null,
                 DRAFT,
                 null,
-                new HashSet<>()
+                new HashSet<>(),
+                null
         );
     }
 
@@ -366,6 +374,10 @@ public class Order implements AggregateRoot<OrderId> {
     private void setItems(final Set<OrderItem> items) {
         requireNonNull(items);
         this.items = items;
+    }
+
+    public Long version(){
+        return this.version;
     }
 
     @Override

@@ -4,9 +4,11 @@ import com.algaworks.algashop.ordering.domain.model.entity.OrderStatus;
 import com.algaworks.algashop.ordering.domain.model.entity.PaymentMethod;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Address;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Billing;
+import com.algaworks.algashop.ordering.domain.model.valueobject.BirthDate;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Document;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Email;
 import com.algaworks.algashop.ordering.domain.model.valueobject.FullName;
+import com.algaworks.algashop.ordering.domain.model.valueobject.LoyaltyPoints;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Money;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Phone;
 import com.algaworks.algashop.ordering.domain.model.valueobject.ProductName;
@@ -26,6 +28,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
@@ -33,6 +36,10 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
 @Mapper(componentModel = SPRING)
 public interface EmbeddableDisassembler {
+
+    LoyaltyPoints toLoyaltyPoints(final Integer value);
+
+    BirthDate toBirthDate(final LocalDate value);
 
     ProductName toProductName(final String value);
 

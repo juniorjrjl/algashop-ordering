@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.domain.model.utility;
 
 import com.algaworks.algashop.ordering.domain.model.utility.tag.IntegrationTest;
+import com.algaworks.algashop.ordering.infrastructure.persistence.config.JpaConfig;
 import com.algaworks.algashop.ordering.infrastructure.persistence.config.SpringDataAuditingConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -10,7 +11,7 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 
 @IntegrationTest
 @DataJpaTest
-@Import({SpringDataAuditingConfig.class})
+@Import({SpringDataAuditingConfig.class, JpaConfig.class})
 public abstract class AbstractDBTest {
 
     protected CustomFaker customFaker = CustomFaker.getInstance();
@@ -22,7 +23,7 @@ public abstract class AbstractDBTest {
 
     @AfterEach
     void tearDown() {
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "ORDER_ITEMS", "ORDERS");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "CUSTOMERS", "ORDER_ITEMS", "ORDERS");
     }
 
 }

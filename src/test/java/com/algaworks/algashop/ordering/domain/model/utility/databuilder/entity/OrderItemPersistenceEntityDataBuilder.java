@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.domain.model.utility.databuilder.entity;
 
 import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
+import com.algaworks.algashop.ordering.domain.model.utility.IdGenerator;
 import com.algaworks.algashop.ordering.infrastructure.persistence.entity.OrderItemPersistenceEntity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,7 @@ public class OrderItemPersistenceEntityDataBuilder {
 
     @With
     private Supplier<Long> id = () -> customFaker.number().randomNumber();
-    private Supplier<UUID> productId = UUID::randomUUID;
+    private Supplier<UUID> productId = IdGenerator::generateUUID;
     private Supplier<String> productName = () -> customFaker.lorem().word();
     private Supplier<BigDecimal> price =
             () -> new BigDecimal(Double.toString(customFaker.number().randomDouble(2 ,1, 100)));

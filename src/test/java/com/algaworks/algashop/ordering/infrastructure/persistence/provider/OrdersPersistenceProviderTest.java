@@ -3,6 +3,8 @@ package com.algaworks.algashop.ordering.infrastructure.persistence.provider;
 import com.algaworks.algashop.ordering.domain.model.utility.AbstractDBTest;
 import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.OrderDataBuilder;
 import com.algaworks.algashop.ordering.domain.model.utility.tag.IntegrationTest;
+import com.algaworks.algashop.ordering.infrastructure.persistence.assembler.EmbeddableAssembler;
+import com.algaworks.algashop.ordering.infrastructure.persistence.assembler.EmbeddableAssemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.assembler.OrderPersistenceEntityAssemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.disassembler.EmbeddableDisassemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.disassembler.OrderPersistenceEntityDisassemblerImpl;
@@ -27,6 +29,7 @@ import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORT
         OrderPersistenceEntityAssemblerImpl.class,
         OrderPersistenceEntityDisassemblerImpl.class,
         EmbeddableDisassemblerImpl.class,
+        EmbeddableAssemblerImpl.class
 })
 class OrdersPersistenceProviderTest extends AbstractDBTest {
 

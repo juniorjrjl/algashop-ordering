@@ -5,6 +5,8 @@ import com.algaworks.algashop.ordering.domain.model.utility.AbstractDBTest;
 import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.OrderDataBuilder;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderId;
+import com.algaworks.algashop.ordering.infrastructure.persistence.assembler.EmbeddableAssembler;
+import com.algaworks.algashop.ordering.infrastructure.persistence.assembler.EmbeddableAssemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.assembler.OrderPersistenceEntityAssemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.disassembler.EmbeddableDisassemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.disassembler.OrderPersistenceEntityDisassemblerImpl;
@@ -27,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
         OrderPersistenceEntityAssemblerImpl.class,
         OrderPersistenceEntityDisassemblerImpl.class,
         EmbeddableDisassemblerImpl.class,
+        EmbeddableAssemblerImpl.class
 })
 class OrdersTest extends AbstractDBTest {
 

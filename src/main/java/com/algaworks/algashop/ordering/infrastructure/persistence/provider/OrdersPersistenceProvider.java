@@ -7,12 +7,11 @@ import com.algaworks.algashop.ordering.infrastructure.persistence.assembler.Orde
 import com.algaworks.algashop.ordering.infrastructure.persistence.disassembler.OrderPersistenceEntityDisassembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.repository.OrderPersistenceEntityRepository;
+import com.algaworks.algashop.ordering.infrastructure.persistence.utility.PersistenceUtil;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ReflectionUtils;
 
 import java.util.Optional;
 
@@ -53,27 +52,27 @@ public class OrdersPersistenceProvider implements Orders {
     }
 
     private void insert(final Order aggregateRoot) {
-        final var entity = assembler.fromDomain(
+        final var toInsert = assembler.fromDomain(
                 new OrderPersistenceEntity(),
                 aggregateRoot
         );
-        repository.saveAndFlush(entity);
-        updateVersion(aggregateRoot, entity.getVersion());
+        repository.saveAndFlush(toInsert);
+        PersistenceUtil.updateVersion(aggregateRoot, toInsert.getVersion());
     }
 
     private void update(final Order aggregateRoot, final OrderPersistenceEntity entity) {
         final var updated = assembler.fromDomain(entity, aggregateRoot);
         entityManager.detach(updated);
         repository.saveAndFlush(updated);
-        updateVersion(aggregateRoot, entity.getVersion());
+        PersistenceUtil.updateVersion(aggregateRoot, entity.getVersion());
     }
 
-    @SneakyThrows
+    /*@SneakyThrows
     private void updateVersion(final Order aggregateRoot, final Long currentVersion) {
         final var version = aggregateRoot.getClass().getDeclaredField("version");
         version.setAccessible(true);
         ReflectionUtils.setField(version, aggregateRoot, currentVersion);
         version.setAccessible(false);
-    }
+    }*/
 
 }

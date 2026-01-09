@@ -10,6 +10,7 @@ import com.algaworks.algashop.ordering.domain.model.valueobject.FullName;
 import com.algaworks.algashop.ordering.domain.model.valueobject.LoyaltyPoints;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Phone;
 import lombok.Builder;
+import lombok.Setter;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
@@ -18,6 +19,7 @@ import static com.algaworks.algashop.ordering.domain.model.exception.ErrorMessag
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
+import static lombok.AccessLevel.PRIVATE;
 
 public class Customer implements AggregateRoot<CustomerId> {
 
@@ -33,6 +35,8 @@ public class Customer implements AggregateRoot<CustomerId> {
     private OffsetDateTime archivedAt;
     private LoyaltyPoints loyaltyPoints;
     private Address address;
+    @Setter(PRIVATE)
+    private Long version;
 
     @Builder(builderClassName = "ExistingCustomerBuilder", builderMethodName = "existing")
     private Customer(final CustomerId id,
@@ -46,7 +50,8 @@ public class Customer implements AggregateRoot<CustomerId> {
                     final OffsetDateTime archivedAt,
                     final LoyaltyPoints loyaltyPoints,
                     final Address address,
-                    final Boolean archived) {
+                    final Boolean archived,
+                     final Long version) {
         this.setId(id);
         this.setFullName(fullName);
         this.setBirthDate(birthDate);
@@ -59,6 +64,7 @@ public class Customer implements AggregateRoot<CustomerId> {
         this.setLoyaltyPoints(loyaltyPoints);
         this.setAddress(address);
         this.setArchived(archived);
+        this.setVersion(version);
     }
 
     @Builder(builderClassName = "BrandNewCustomerBuilder", builderMethodName = "brandNew")
@@ -81,7 +87,8 @@ public class Customer implements AggregateRoot<CustomerId> {
                 null,
                 LoyaltyPoints.ZERO,
                 address,
-                false
+                false,
+                null
         );
     }
 
@@ -187,6 +194,10 @@ public class Customer implements AggregateRoot<CustomerId> {
         return Objects.equals(id, customer.id);
     }
 
+    public Long version(){
+        return this.version;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
@@ -244,7 +255,7 @@ public class Customer implements AggregateRoot<CustomerId> {
         this.registeredAt = requireNonNull(registeredAt);
     }
 
-    public void setArchivedAt(final OffsetDateTime archivedAt) {
+    private void setArchivedAt(final OffsetDateTime archivedAt) {
         this.verifyIfChangeable();
         this.archivedAt = archivedAt;
     }

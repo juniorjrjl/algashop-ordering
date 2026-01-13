@@ -86,7 +86,7 @@ public class ShoppingCartItem {
         return totalAmount;
     }
 
-    public Boolean available() {
+    public Boolean isAvailable() {
         return available;
     }
 

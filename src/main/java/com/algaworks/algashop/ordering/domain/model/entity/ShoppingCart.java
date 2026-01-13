@@ -10,6 +10,7 @@ import com.algaworks.algashop.ordering.domain.model.valueobject.id.ProductId;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.ShoppingCartId;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.ShoppingCartItemId;
 import lombok.Builder;
+import lombok.Setter;
 
 import java.time.OffsetDateTime;
 import java.util.Collections;
@@ -20,6 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
+import static lombok.AccessLevel.PRIVATE;
 
 public class ShoppingCart implements AggregateRoot<ShoppingCartId> {
 
@@ -29,13 +31,16 @@ public class ShoppingCart implements AggregateRoot<ShoppingCartId> {
     private Quantity totalItems;
     private OffsetDateTime createdAt;
     private Set<ShoppingCartItem> items;
+    @Setter(PRIVATE)
+    private Long version;
 
     public static ShoppingCart startShopping(final CustomerId customerId){
         return new ShoppingCart(
                 new ShoppingCartId(),
                 customerId,
                 OffsetDateTime.now(),
-                new HashSet<>()
+                new HashSet<>(),
+                null
         );
     }
 
@@ -43,11 +48,13 @@ public class ShoppingCart implements AggregateRoot<ShoppingCartId> {
     private ShoppingCart(final ShoppingCartId id,
                          final CustomerId customerId,
                          final OffsetDateTime createdAt,
-                         final Set<ShoppingCartItem> items) {
+                         final Set<ShoppingCartItem> items,
+                         final Long version) {
         this.setId(id);
         this.setCustomerId(customerId);
         this.setCreatedAt(createdAt);
         this.setItems(items);
+        this.setVersion(version);
         this.recalculateTotals();
     }
 
@@ -125,7 +132,7 @@ public class ShoppingCart implements AggregateRoot<ShoppingCartId> {
     }
 
     public boolean containsUnavailable(){
-        return !this.items.stream().allMatch(ShoppingCartItem::available);
+        return !this.items.stream().allMatch(ShoppingCartItem::isAvailable);
     }
 
     public ShoppingCartId id() {
@@ -150,6 +157,10 @@ public class ShoppingCart implements AggregateRoot<ShoppingCartId> {
 
     public Set<ShoppingCartItem> items() {
         return Collections.unmodifiableSet(items);
+    }
+
+    public Long version() {
+        return version;
     }
 
     @Override

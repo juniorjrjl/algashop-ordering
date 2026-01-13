@@ -2,6 +2,7 @@ package com.algaworks.algashop.ordering.infrastructure.persistence.provider;
 
 import com.algaworks.algashop.ordering.domain.model.entity.Customer;
 import com.algaworks.algashop.ordering.domain.model.repository.Customers;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Email;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.CustomerId;
 import com.algaworks.algashop.ordering.infrastructure.persistence.assembler.CustomerPersistenceEntityAssembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.disassembler.CustomerPersistenceEntityDisassembler;
@@ -51,6 +52,17 @@ public class CustomersPersistenceProvider implements Customers {
         return repository.count();
     }
 
+    @Override
+    public Optional<Customer> ofEmail(final Email email) {
+        return repository.findByEmail(email.value())
+                .map(disassembler::toDomain);
+    }
+
+    @Override
+    public boolean isEmailUnique(final Email email, final CustomerId exceptCustomerId) {
+        return !repository.existsByEmailAndIdNot(email.value(), exceptCustomerId.value());
+    }
+
     private void insert(final Customer aggregateRoot) {
         final var toInsert = assembler.toDomain(
                 new CustomerPersistenceEntity(),
@@ -66,13 +78,5 @@ public class CustomersPersistenceProvider implements Customers {
         repository.saveAndFlush(updated);
         PersistenceUtil.updateVersion(aggregateRoot, entity.getVersion());
     }
-
-    /*@SneakyThrows
-    private void updateVersion(final Customer aggregateRoot, final Long currentVersion) {
-        final var version = aggregateRoot.getClass().getDeclaredField("version");
-        version.setAccessible(true);
-        ReflectionUtils.setField(version, aggregateRoot, currentVersion);
-        version.setAccessible(false);
-    }*/
 
 }

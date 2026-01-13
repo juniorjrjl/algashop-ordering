@@ -2,16 +2,11 @@ package com.algaworks.algashop.ordering.infrastructure.persistence.assembler;
 
 import com.algaworks.algashop.ordering.domain.model.entity.Order;
 import com.algaworks.algashop.ordering.domain.model.entity.OrderItem;
-import com.algaworks.algashop.ordering.domain.model.entity.OrderStatus;
-import com.algaworks.algashop.ordering.domain.model.entity.PaymentMethod;
-import com.algaworks.algashop.ordering.domain.model.valueobject.Billing;
-import com.algaworks.algashop.ordering.domain.model.valueobject.Recipient;
-import com.algaworks.algashop.ordering.domain.model.valueobject.Shipping;
-import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.BillingEmbeddable;
-import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.RecipientEmbeddable;
-import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.ShippingEmbeddable;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.CustomerId;
+import com.algaworks.algashop.ordering.infrastructure.persistence.entity.CustomerPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.entity.OrderItemPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity;
+import com.algaworks.algashop.ordering.infrastructure.persistence.repository.CustomerPersistenceEntityRepository;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
@@ -28,14 +23,17 @@ import static org.mapstruct.NullValueMappingStrategy.RETURN_DEFAULT;
 public abstract class OrderPersistenceEntityAssembler {
 
     protected EmbeddableAssembler embeddableAssembler;
+    protected CustomerPersistenceEntityRepository customerRepository;
 
     @Autowired
-    public void setEmbeddableAssembler(final EmbeddableAssembler embeddableAssembler) {
+    public void setEmbeddableAssembler(final EmbeddableAssembler embeddableAssembler,
+                                       final CustomerPersistenceEntityRepository customerRepository) {
         this.embeddableAssembler = embeddableAssembler;
+        this.customerRepository = customerRepository;
     }
 
     @Mapping(target = "id", expression = "java(embeddableAssembler.map(order.id()))")
-    @Mapping(target = "customerId", expression = "java(embeddableAssembler.map(order.customerId()))")
+    @Mapping(target = "customer", expression = "java(getCustomerReference(order.customerId()))")
     @Mapping(target = "totalAmount", expression = "java(embeddableAssembler.map(order.totalAmount()))")
     @Mapping(target = "totalItems", expression = "java(embeddableAssembler.map(order.totalItems()))")
     @Mapping(target = "orderStatus", expression = "java(embeddableAssembler.map(order.orderStatus()))")
@@ -59,6 +57,10 @@ public abstract class OrderPersistenceEntityAssembler {
                                               final Order order) {
         entity.addOrderToItems();
         return entity;
+    }
+
+    public CustomerPersistenceEntity getCustomerReference(final CustomerId customerId){
+        return customerRepository.getReferenceById(embeddableAssembler.map(customerId));
     }
 
     @IterableMapping(nullValueMappingStrategy = RETURN_DEFAULT)

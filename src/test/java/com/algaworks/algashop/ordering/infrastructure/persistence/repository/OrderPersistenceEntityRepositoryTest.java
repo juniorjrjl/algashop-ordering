@@ -1,7 +1,10 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.repository;
 
-import com.algaworks.algashop.ordering.domain.model.utility.AbstractDBTest;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.entity.OrderPersistenceEntityDataBuilder;
+import com.algaworks.algashop.ordering.utility.AbstractDBTest;
+import com.algaworks.algashop.ordering.utility.databuilder.entity.CustomerPersistenceEntityDataBuilder;
+import com.algaworks.algashop.ordering.utility.databuilder.entity.OrderPersistenceEntityDataBuilder;
+import com.algaworks.algashop.ordering.infrastructure.persistence.entity.CustomerPersistenceEntity;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,17 +15,28 @@ import static org.assertj.core.api.Assertions.assertWith;
 class OrderPersistenceEntityRepositoryTest extends AbstractDBTest {
 
     private final OrderPersistenceEntityRepository repository;
+    private final CustomerPersistenceEntityRepository customerRepository;
+    private CustomerPersistenceEntity customerEntity;
 
     @Autowired
     OrderPersistenceEntityRepositoryTest(final OrderPersistenceEntityRepository repository,
+                                         final CustomerPersistenceEntityRepository customerRepository,
                                          final JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate);
         this.repository = repository;
+        this.customerRepository = customerRepository;
+    }
+
+    @BeforeEach
+    void setup(){
+        this.customerEntity = CustomerPersistenceEntityDataBuilder.builder().withArchived(() -> false).build();
+        this.customerEntity = customerRepository.save(customerEntity);
     }
 
     @Test
     void shouldPersistAndFind(){
         final var entity = OrderPersistenceEntityDataBuilder.builder()
+                .withCustomer(() -> this.customerEntity)
                 .build();
         repository.save(entity);
         assertThat(repository.existsById(entity.getId())).isTrue();
@@ -36,6 +50,7 @@ class OrderPersistenceEntityRepositoryTest extends AbstractDBTest {
     @Test
     void shouldSetAuditingValues(){
         final var entity = OrderPersistenceEntityDataBuilder.builder()
+                .withCustomer(() -> this.customerEntity)
                 .withCreatedBy(() -> null)
                 .withLastModifiedAt(() -> null)
                 .withLastModifiedBy(() -> null)

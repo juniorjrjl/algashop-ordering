@@ -1,9 +1,9 @@
 package com.algaworks.algashop.ordering.domain.model.factory;
 
 import com.algaworks.algashop.ordering.domain.model.entity.PaymentMethod;
-import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.BillingDataBuilder;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.ProductDataBuilder;
+import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.BillingDataBuilder;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBuilder;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.CustomerId;
 import org.junit.jupiter.api.Test;
 

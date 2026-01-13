@@ -5,6 +5,7 @@ import com.algaworks.algashop.ordering.domain.model.entity.OrderItem;
 import com.algaworks.algashop.ordering.infrastructure.persistence.entity.OrderItemPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 import java.util.HashSet;
@@ -18,6 +19,7 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 @Mapper(componentModel = SPRING, uses = EmbeddableDisassembler.class, injectionStrategy = CONSTRUCTOR)
 public interface OrderPersistenceEntityDisassembler {
 
+    @Mapping(target = "customerId", source = "customer.id")
     Order.ExistingOrderBuilder toDomain(@MappingTarget final Order.ExistingOrderBuilder builder,
                                         final OrderPersistenceEntity aggregateRoot);
 

@@ -1,7 +1,7 @@
 package com.algaworks.algashop.ordering.domain.model.repository;
 
-import com.algaworks.algashop.ordering.domain.model.utility.AbstractDBTest;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.CustomerDataBuilder;
+import com.algaworks.algashop.ordering.utility.AbstractDBTest;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.CustomerId;
 import com.algaworks.algashop.ordering.infrastructure.persistence.assembler.CustomerPersistenceEntityAssemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.assembler.EmbeddableAssemblerImpl;
@@ -106,6 +106,44 @@ class CustomersTest extends AbstractDBTest {
     @Test
     void shouldReturnIfOrdersNotExist(){
         assertThat(customers.exists(new CustomerId())).isFalse();
+    }
+
+    @Test
+    void shouldFoundByEmail(){
+        final var customer = CustomerDataBuilder.builder().buildExisting();
+        customers.add(customer);
+        assertThat(customers.ofEmail(customer.email())).isPresent();
+    }
+
+    @Test
+    void shouldNotFoundByEmail(){
+        final var customer = CustomerDataBuilder.builder().buildExisting();
+        assertThat(customers.ofEmail(customer.email())).isEmpty();
+    }
+
+    @Test
+    void shouldReturnEmailNotInUse() {
+        final var customer = CustomerDataBuilder.builder().buildExisting();
+        customers.add(customer);
+
+        assertThat(customers.isEmailUnique(customer.email(), customer.id())).isTrue();
+    }
+
+    @Test
+    void shouldReturnEmailInUse(){
+        final var customer = CustomerDataBuilder.builder().buildExisting();
+        customers.add(customer);
+
+        assertThat(customers.isEmailUnique(customer.email(), new CustomerId())).isFalse();
+    }
+
+    @Test
+    void givenNewCustomerWithNonStoredEmailShouldReturnEmailNotInUse() {
+        final var stored = CustomerDataBuilder.builder().buildExisting();
+        customers.add(stored);
+
+        final var customer = CustomerDataBuilder.builder().buildExisting();
+        assertThat(customers.isEmailUnique(customer.email(), customer.id())).isTrue();
     }
 
 }

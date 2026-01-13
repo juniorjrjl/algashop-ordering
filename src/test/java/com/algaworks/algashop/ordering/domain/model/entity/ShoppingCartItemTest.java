@@ -1,9 +1,9 @@
 package com.algaworks.algashop.ordering.domain.model.entity;
 
-import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.ProductDataBuilder;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.ShoppingCartItemDataBuilder;
-import com.algaworks.algashop.ordering.domain.model.utility.tag.UnitTest;
+import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBuilder;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartItemDataBuilder;
+import com.algaworks.algashop.ordering.utility.tag.UnitTest;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Quantity;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.ShoppingCartId;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ class ShoppingCartItemTest {
                 i -> assertThat(i.shoppingCartId()).isEqualTo(shoppingCartId),
                 i -> assertThat(i.name()).isEqualTo(product.name()),
                 i -> assertThat(i.price()).isEqualTo(product.price()),
-                i -> assertThat(i.available()).isEqualTo(product.inStock()),
+                i -> assertThat(i.isAvailable()).isEqualTo(product.inStock()),
                 i -> assertThat(i.totalAmount()).isEqualTo(product.price().multiply(quantity))
                 );
     }

@@ -2,8 +2,8 @@ package com.algaworks.algashop.ordering.domain.model.entity;
 
 import com.algaworks.algashop.ordering.domain.model.exception.ShoppingCartDoesNotContainOrderItemException;
 import com.algaworks.algashop.ordering.domain.model.exception.ShoppingCartDoesNotContainProductException;
-import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.ProductDataBuilder;
+import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBuilder;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.ShoppingCartItemId;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.extension.ExtensionContext;

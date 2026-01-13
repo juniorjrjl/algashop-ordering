@@ -2,6 +2,8 @@ package com.algaworks.algashop.ordering.infrastructure.persistence.provider;
 
 import com.algaworks.algashop.ordering.domain.model.entity.Order;
 import com.algaworks.algashop.ordering.domain.model.repository.Orders;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Money;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderId;
 import com.algaworks.algashop.ordering.infrastructure.persistence.assembler.OrderPersistenceEntityAssembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.disassembler.OrderPersistenceEntityDisassembler;
@@ -13,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Year;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -51,6 +55,26 @@ public class OrdersPersistenceProvider implements Orders {
         return repository.count();
     }
 
+    @Override
+    public List<Order> placedByCustomerInYear(final CustomerId customerId, final Year year) {
+        final var entities =  repository.placedByCustomerInYear(
+                customerId.value(),
+                year.getValue()
+        );
+        return entities.stream().map(disassembler::toDomain).toList();
+    }
+
+    @Override
+    public Long salesQuantityByCustomerInYear(final CustomerId customerId, final Year year) {
+        return repository.salesQuantityByCustomerInYear(customerId.value(), year.getValue());
+    }
+
+    @Override
+    public Money totalSoldForCustomer(final CustomerId customerId) {
+        final var value =  repository.totalSoldForCustomer(customerId.value());
+        return new Money(value);
+    }
+
     private void insert(final Order aggregateRoot) {
         final var toInsert = assembler.fromDomain(
                 new OrderPersistenceEntity(),
@@ -66,13 +90,5 @@ public class OrdersPersistenceProvider implements Orders {
         repository.saveAndFlush(updated);
         PersistenceUtil.updateVersion(aggregateRoot, entity.getVersion());
     }
-
-    /*@SneakyThrows
-    private void updateVersion(final Order aggregateRoot, final Long currentVersion) {
-        final var version = aggregateRoot.getClass().getDeclaredField("version");
-        version.setAccessible(true);
-        ReflectionUtils.setField(version, aggregateRoot, currentVersion);
-        version.setAccessible(false);
-    }*/
 
 }

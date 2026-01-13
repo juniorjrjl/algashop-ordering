@@ -1,6 +1,5 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.assembler;
 
-import com.algaworks.algashop.ordering.domain.model.entity.Customer;
 import com.algaworks.algashop.ordering.domain.model.entity.OrderStatus;
 import com.algaworks.algashop.ordering.domain.model.entity.PaymentMethod;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Address;
@@ -21,6 +20,8 @@ import com.algaworks.algashop.ordering.domain.model.valueobject.id.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderId;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderItemId;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.ProductId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.ShoppingCartId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.ShoppingCartItemId;
 import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.AddressEmbeddable;
 import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.BillingEmbeddable;
 import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.RecipientEmbeddable;
@@ -72,6 +73,14 @@ public interface EmbeddableAssembler {
 
     default Integer map(final LoyaltyPoints loyaltyPoints) {
         return isNull(loyaltyPoints) ? null : loyaltyPoints.value();
+    }
+
+    default UUID map(final ShoppingCartId shoppingCartId) {
+        return isNull(shoppingCartId) ? null : shoppingCartId.value();
+    }
+
+    default UUID map(final ShoppingCartItemId shoppingCartItemId) {
+        return isNull(shoppingCartItemId) ? null : shoppingCartItemId.value();
     }
 
     default Long map(final OrderItemId orderItemId) {

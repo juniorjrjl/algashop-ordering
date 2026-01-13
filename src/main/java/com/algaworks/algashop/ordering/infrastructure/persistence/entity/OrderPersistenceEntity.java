@@ -6,6 +6,8 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
@@ -39,7 +41,10 @@ public class OrderPersistenceEntity{
 
     @Id
     private Long id;
-    private UUID customerId;
+
+    @JoinColumn
+    @ManyToOne(optional = false)
+    private CustomerPersistenceEntity customer;
     private BigDecimal totalAmount;
     private Integer totalItems;
     private String orderStatus;
@@ -67,7 +72,7 @@ public class OrderPersistenceEntity{
 
     public OrderPersistenceEntity(
             final Long id,
-            final UUID customerId,
+            final CustomerPersistenceEntity customer,
             final BigDecimal totalAmount,
             final Integer totalItems,
             final String orderStatus,
@@ -84,7 +89,7 @@ public class OrderPersistenceEntity{
             final ShippingEmbeddable shipping,
             final Set<OrderItemPersistenceEntity> items) {
         this.id = id;
-        this.customerId = customerId;
+        this.customer = customer;
         this.totalAmount = totalAmount;
         this.totalItems = totalItems;
         this.orderStatus = orderStatus;

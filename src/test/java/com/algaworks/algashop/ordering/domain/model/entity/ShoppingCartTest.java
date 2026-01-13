@@ -2,11 +2,11 @@ package com.algaworks.algashop.ordering.domain.model.entity;
 
 import com.algaworks.algashop.ordering.domain.model.exception.DomainException;
 import com.algaworks.algashop.ordering.domain.model.exception.ShoppingCartDoesNotContainOrderItemException;
-import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.ProductDataBuilder;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.ShoppingCartDataBuilder;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.ShoppingCartItemDataBuilder;
-import com.algaworks.algashop.ordering.domain.model.utility.tag.UnitTest;
+import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBuilder;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartDataBuilder;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartItemDataBuilder;
+import com.algaworks.algashop.ordering.utility.tag.UnitTest;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Money;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Product;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Quantity;

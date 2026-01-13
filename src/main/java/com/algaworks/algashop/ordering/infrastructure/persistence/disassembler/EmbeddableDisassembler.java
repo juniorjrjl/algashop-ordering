@@ -20,6 +20,8 @@ import com.algaworks.algashop.ordering.domain.model.valueobject.id.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderId;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderItemId;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.ProductId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.ShoppingCartId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.ShoppingCartItemId;
 import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.AddressEmbeddable;
 import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.BillingEmbeddable;
 import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.RecipientEmbeddable;
@@ -50,6 +52,10 @@ public interface EmbeddableDisassembler {
     ZipCode toZipCode(final String value);
 
     CustomerId toCustomerId(final UUID value);
+
+    ShoppingCartId toShoppingCartId(final UUID value);
+
+    ShoppingCartItemId toShoppingCartItemId(final UUID value);
 
     Address toAddress(final AddressEmbeddable address);
 

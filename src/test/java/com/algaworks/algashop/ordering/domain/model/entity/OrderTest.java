@@ -5,11 +5,11 @@ import com.algaworks.algashop.ordering.domain.model.exception.OrderDoesNotContai
 import com.algaworks.algashop.ordering.domain.model.exception.OrderInvalidShippingDeliveryDateException;
 import com.algaworks.algashop.ordering.domain.model.exception.OrderStatusCannotBeChangedException;
 import com.algaworks.algashop.ordering.domain.model.exception.OutOfStockException;
-import com.algaworks.algashop.ordering.domain.model.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.BillingDataBuilder;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.OrderDataBuilder;
-import com.algaworks.algashop.ordering.domain.model.utility.databuilder.domain.ProductDataBuilder;
-import com.algaworks.algashop.ordering.domain.model.utility.tag.UnitTest;
+import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.BillingDataBuilder;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.OrderDataBuilder;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBuilder;
+import com.algaworks.algashop.ordering.utility.tag.UnitTest;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Money;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Quantity;
 import com.algaworks.algashop.ordering.domain.model.valueobject.Shipping;
@@ -170,7 +170,9 @@ class OrderTest {
 
     @Test
     void givenDraftOrderWhenChangePaymentMethodShouldAllowChange(){
-        final var order = OrderDataBuilder.builder(Order.draft(new CustomerId())).buildExisting();
+        final var order = OrderDataBuilder.builder(Order.draft(new CustomerId()))
+                .withShipping(() -> customFaker.valueObject().shipping())
+                .buildExisting();
         final var newPaymentMethod = customFaker.options().option(PaymentMethod.class);
         order.changePaymentMethod(newPaymentMethod);
         assertThat(order.paymentMethod()).isEqualTo(newPaymentMethod);
@@ -187,7 +189,9 @@ class OrderTest {
     @Test
     void givenDraftOrderWhenChangeShippingInfoShouldAllowChange(){
         final var shipping = customFaker.valueObject().shipping();
-        final var order = OrderDataBuilder.builder(Order.draft(new CustomerId())).buildExisting();
+        final var order = OrderDataBuilder.builder(Order.draft(new CustomerId()))
+                .withShipping(() -> customFaker.valueObject().shipping())
+                .buildExisting();
         order.changeShipping(shipping);
         assertThat(order.shipping()).isEqualTo(shipping);
     }
@@ -207,6 +211,7 @@ class OrderTest {
     @Test
     void givenDraftOrderAndAddOrderItemWhenChangeItemShouldRecalculate(){
         final var order = OrderDataBuilder.builder(Order.draft(new CustomerId()))
+                .withShipping(() -> customFaker.valueObject().shipping())
                 .buildExisting();
         final var product = ProductDataBuilder.builder()
                 .withInStock(() -> true)
@@ -219,7 +224,7 @@ class OrderTest {
 
         final var expectedAmount = product.price().multiply(newQuantity);
         assertWith(order,
-                o -> assertThat(o.totalAmount()).isEqualTo(expectedAmount),
+                o -> assertThat(o.totalAmount()).isEqualTo(expectedAmount.add(order.shipping().cost())),
                 o -> assertThat(o.totalItems()).isEqualTo(newQuantity)
                 );
     }

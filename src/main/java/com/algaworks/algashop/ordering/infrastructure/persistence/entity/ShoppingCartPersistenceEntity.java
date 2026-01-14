@@ -27,7 +27,7 @@ import static jakarta.persistence.CascadeType.ALL;
 import static java.util.Objects.isNull;
 
 @Entity
-@Table(name = "SHOPPING_CART")
+@Table(name = "SHOPPING_CARTS")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
@@ -79,7 +79,7 @@ public class ShoppingCartPersistenceEntity {
         this.addCartToItems();
     }
 
-    private void addCartToItems() {
+    public void addCartToItems() {
         if (isNull(this.items) || this.items.isEmpty()) {
             return;
         }

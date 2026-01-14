@@ -16,7 +16,7 @@ public abstract class AbstractDBTest {
 
     protected CustomFaker customFaker = CustomFaker.getInstance();
     protected final JdbcTemplate jdbcTemplate;
-    private final String[] TABLES = {"ORDER_ITEMS", "ORDERS", "CUSTOMERS"};
+    private final String[] TABLES = {"SHOPPING_CART_ITEMS", "SHOPPING_CARTS", "ORDER_ITEMS", "ORDERS", "CUSTOMERS"};
 
     public AbstractDBTest(final JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

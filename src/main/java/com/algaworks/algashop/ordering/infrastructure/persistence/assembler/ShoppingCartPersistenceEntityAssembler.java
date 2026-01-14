@@ -7,6 +7,7 @@ import com.algaworks.algashop.ordering.infrastructure.persistence.entity.Custome
 import com.algaworks.algashop.ordering.infrastructure.persistence.entity.ShoppingCartItemPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.entity.ShoppingCartPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.repository.CustomerPersistenceEntityRepository;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -43,6 +44,13 @@ public abstract class ShoppingCartPersistenceEntityAssembler {
     @Mapping(target = "lastModifiedBy", ignore = true)
     public abstract ShoppingCartPersistenceEntity fromDomain(@MappingTarget final ShoppingCartPersistenceEntity entity,
                                                              final ShoppingCart shoppingCart);
+
+    @AfterMapping
+    public ShoppingCartPersistenceEntity itemsSetup(@MappingTarget final ShoppingCartPersistenceEntity entity,
+                                                             final ShoppingCart shoppingCart){
+        entity.addCartToItems();
+        return entity;
+    }
 
     public CustomerPersistenceEntity getCustomerReference(final CustomerId customerId){
         return customerRepository.getReferenceById(embeddableAssembler.map(customerId));

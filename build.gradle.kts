@@ -16,6 +16,7 @@ java {
 	}
 }
 
+val mockitoAgent: Configuration = configurations.create("mockitoAgent")
 configurations {
 	compileOnly {
 		extendsFrom(configurations.annotationProcessor.get())
@@ -53,8 +54,17 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
 	testImplementation("net.datafaker:datafaker:2.5.2")
 	testImplementation("org.assertj:assertj-core:3.27.6")
+	mockitoAgent("org.mockito:mockito-core"){
+		isTransitive = false
+	}
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.withType<Test>().configureEach {
+	jvmArgs(
+		"-javaagent:${configurations.getByName("mockitoAgent").asPath}"
+	)
 }
 
 tasks.withType<Test> {

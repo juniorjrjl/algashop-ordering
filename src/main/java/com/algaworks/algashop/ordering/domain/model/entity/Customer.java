@@ -69,12 +69,12 @@ public class Customer implements AggregateRoot<CustomerId> {
 
     @Builder(builderClassName = "BrandNewCustomerBuilder", builderMethodName = "brandNew")
     private static Customer createBrandNew(final FullName fullName,
-                                          final BirthDate birthDate,
-                                          final Email email,
-                                          final Phone phone,
-                                          final Document document,
-                                          final Boolean promotionNotificationsAllowed,
-                                          final Address address){
+                                           final BirthDate birthDate,
+                                           final Email email,
+                                           final Phone phone,
+                                           final Document document,
+                                           final Boolean promotionNotificationsAllowed,
+                                           final Address address){
         return new Customer(
                 new CustomerId(),
                 fullName,
@@ -142,8 +142,8 @@ public class Customer implements AggregateRoot<CustomerId> {
 
     public void addLoyaltyPoints(final LoyaltyPoints loyaltyPointsAdded) {
         this.verifyIfChangeable();
-        if (isNull(loyaltyPointsAdded) || loyaltyPointsAdded.value() <= 0){
-            throw new IllegalArgumentException();
+        if (loyaltyPointsAdded.equals(LoyaltyPoints.ZERO)) {
+            return;
         }
         this.setLoyaltyPoints(loyaltyPoints().add(loyaltyPointsAdded));
     }

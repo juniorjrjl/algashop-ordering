@@ -18,4 +18,8 @@ public interface RichComparable<T> extends Comparable<T> {
         return compareTo(toCompare) > 0;
     }
 
+    default boolean isGreaterThanOrEqualTo(final T toCompare){
+        return compareTo(toCompare) >= 0;
+    }
+
 }

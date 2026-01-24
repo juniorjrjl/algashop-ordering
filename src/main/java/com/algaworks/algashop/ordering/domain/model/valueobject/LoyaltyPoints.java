@@ -8,6 +8,7 @@ import static java.util.Objects.requireNonNull;
 public record LoyaltyPoints(Integer value) implements Comparable<LoyaltyPoints> {
 
     public static final LoyaltyPoints ZERO = new LoyaltyPoints();
+    public static final LoyaltyPoints BASE_POINTS = new LoyaltyPoints(5);
 
     private LoyaltyPoints() {
         this(0);

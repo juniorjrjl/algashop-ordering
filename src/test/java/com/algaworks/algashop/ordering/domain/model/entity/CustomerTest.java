@@ -79,11 +79,4 @@ class CustomerTest {
         assertThat(customer.loyaltyPoints()).isEqualTo(firstPoints.add(secondPoints));
     }
 
-    @Test
-    void givenBrandNewCustomerWhenAddInvalidLoyaltyPointsShouldSumPoints(){
-        var customer = CustomerDataBuilder.builder().buildNew();
-        assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> customer.addLoyaltyPoints(LoyaltyPoints.ZERO));
-    }
-
 }

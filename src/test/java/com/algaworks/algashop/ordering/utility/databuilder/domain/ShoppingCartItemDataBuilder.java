@@ -34,7 +34,7 @@ public class ShoppingCartItemDataBuilder {
     @With
     private Supplier<ProductName> name = () -> customFaker.valueObject().productName();
     @With
-    private Supplier<Money> price = () ->  customFaker.valueObject().money();
+    private Supplier<Money> price = () ->  customFaker.valueObject().money(1, 100);
     @With
     private Supplier<Quantity> quantity = () -> customFaker.valueObject().quantity(1, 10);
     @With

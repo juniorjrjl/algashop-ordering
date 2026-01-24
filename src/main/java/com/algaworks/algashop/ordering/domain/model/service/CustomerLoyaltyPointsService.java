@@ -28,7 +28,7 @@ public class CustomerLoyaltyPointsService {
         customer.addLoyaltyPoints(calculatePoints(order));
     }
 
-    private LoyaltyPoints calculatePoints(final Order order) {
+    private static LoyaltyPoints calculatePoints(final Order order) {
         if (shouldGivePointsByAmount(order.totalAmount())){
             final var result= order.totalAmount().divide(expectedToGivePoints);
             return new LoyaltyPoints(result.value().intValue() * BASE_POINTS.value());
@@ -37,7 +37,7 @@ public class CustomerLoyaltyPointsService {
         return LoyaltyPoints.ZERO;
     }
 
-    private boolean shouldGivePointsByAmount(final Money amount) {
+    private static boolean shouldGivePointsByAmount(final Money amount) {
         return amount.isGreaterThanOrEqualTo(expectedToGivePoints);
     }
 

@@ -13,18 +13,13 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.Set;
 
-import static java.util.Objects.requireNonNull;
-
 @DomainService
 public class CheckoutService {
 
-    public Order checkout(final ShoppingCart shoppingCart,
-                          final Billing billing,
-                          final Shipping shipping,
-                          final PaymentMethod paymentMethod) {
-        requireNonNull(billing);
-        requireNonNull(shipping);
-        requireNonNull(paymentMethod);
+    public Order checkout(@NonNull final ShoppingCart shoppingCart,
+                          @NonNull final Billing billing,
+                          @NonNull final Shipping shipping,
+                          @NonNull final PaymentMethod paymentMethod) {
         validateShoppingCart(shoppingCart);
         final var order = buildDraftOrder(shoppingCart, billing, shipping, paymentMethod);
         addItems(order, shoppingCart.items());
@@ -44,7 +39,6 @@ public class CheckoutService {
     }
 
     private static void validateShoppingCart(final ShoppingCart shoppingCart) {
-        requireNonNull(shoppingCart);
         if (shoppingCart.isEmpty() || shoppingCart.containsUnavailable()){
             throw new ShoppingCartCantProceedToCheckoutException();
         }

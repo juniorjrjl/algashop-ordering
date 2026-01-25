@@ -11,6 +11,7 @@ import lombok.Builder;
 
 import java.util.Objects;
 
+import static com.algaworks.algashop.ordering.domain.model.exception.ErrorMessage.QUANTITY_LESS_THAN;
 import static java.util.Objects.requireNonNull;
 
 public class OrderItem {
@@ -60,9 +61,8 @@ public class OrderItem {
         return orderItem;
     }
 
-    void changeQuantity(final Quantity quantity) {
-        requireNonNull(quantity);
-        this.setQuantity(quantity);
+    void changeQuantity(final Quantity newQuantity) {
+        this.setQuantity(newQuantity);
         this.recalculateTotals();
     }
 
@@ -124,7 +124,10 @@ public class OrderItem {
     }
 
     private void setQuantity(final Quantity quantity) {
-        requireNonNull(quantity);
+        if (requireNonNull(quantity).isLessThanOrEqualTo(Quantity.ZERO)) {
+            final String message = String.format(QUANTITY_LESS_THAN, 0);
+            throw new IllegalArgumentException(message);
+        }
         this.quantity = quantity;
     }
 

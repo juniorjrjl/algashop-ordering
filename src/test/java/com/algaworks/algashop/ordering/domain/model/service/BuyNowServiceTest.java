@@ -66,7 +66,7 @@ class BuyNowServiceTest {
 
     private static final List<Arguments> givenInvalidArgsWhenBuyNowThenThrowException = List.of(
             Arguments.of(
-                    ProductDataBuilder.builder().build(),
+                    ProductDataBuilder.builder().withInStock(() -> true).build(),
                     new CustomerId(),
                     BillingDataBuilder.builder().build(),
                     customFaker.valueObject().shipping(),
@@ -74,7 +74,7 @@ class BuyNowServiceTest {
                     null
             ),
             Arguments.of(
-                    ProductDataBuilder.builder().build(),
+                    ProductDataBuilder.builder().withInStock(() -> true).build(),
                     new CustomerId(),
                     BillingDataBuilder.builder().build(),
                     customFaker.valueObject().shipping(),
@@ -82,7 +82,7 @@ class BuyNowServiceTest {
                     customFaker.options().option(PaymentMethod.class)
             ),
             Arguments.of(
-                    ProductDataBuilder.builder().build(),
+                    ProductDataBuilder.builder().withInStock(() -> true).build(),
                     new CustomerId(),
                     BillingDataBuilder.builder().build(),
                     null,
@@ -90,7 +90,7 @@ class BuyNowServiceTest {
                     customFaker.options().option(PaymentMethod.class)
             ),
             Arguments.of(
-                    ProductDataBuilder.builder().build(),
+                    ProductDataBuilder.builder().withInStock(() -> true).build(),
                     new CustomerId(),
                     null,
                     customFaker.valueObject().shipping(),
@@ -98,7 +98,7 @@ class BuyNowServiceTest {
                     customFaker.options().option(PaymentMethod.class)
             ),
             Arguments.of(
-                    ProductDataBuilder.builder().build(),
+                    ProductDataBuilder.builder().withInStock(() -> true).build(),
                     null,
                     BillingDataBuilder.builder().build(),
                     customFaker.valueObject().shipping(),

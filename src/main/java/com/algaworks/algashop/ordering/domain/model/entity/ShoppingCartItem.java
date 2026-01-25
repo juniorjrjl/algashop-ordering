@@ -145,7 +145,11 @@ public class ShoppingCartItem {
     }
 
     private void setQuantity(final Quantity quantity) {
-        this.quantity = requireNonNull(quantity);
+        if (requireNonNull(quantity).isLessThanOrEqualTo(Quantity.ZERO)){
+            final String message = String.format(QUANTITY_LESS_THAN, 0);
+            throw new IllegalArgumentException(message);
+        }
+        this.quantity = quantity;
     }
 
     private void setTotalAmount(final Money totalAmount) {

@@ -32,6 +32,7 @@ val mapstructVersion = "1.6.3"
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-restclient")
 	implementation("com.fasterxml.uuid:java-uuid-generator:5.2.0")
 	implementation("commons-validator:commons-validator:1.10.1")
 	implementation("io.hypersistence:hypersistence-tsid:2.1.4")
@@ -50,10 +51,12 @@ dependencies {
 
 	testAnnotationProcessor("org.projectlombok:lombok")
 
+	//testImplementation("org.wiremock:wiremock:3.13.2")
+	testImplementation("org.wiremock.integrations:wiremock-spring-boot:4.0.9")
 	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
 	testImplementation("net.datafaker:datafaker:2.5.2")
-	testImplementation("org.assertj:assertj-core:3.27.6")
+	testImplementation("org.assertj:assertj-core:3.27.7")
 	mockitoAgent("org.mockito:mockito-core"){
 		isTransitive = false
 	}

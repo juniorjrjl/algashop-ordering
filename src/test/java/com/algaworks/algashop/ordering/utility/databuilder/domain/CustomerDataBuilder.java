@@ -1,15 +1,15 @@
 package com.algaworks.algashop.ordering.utility.databuilder.domain;
 
-import com.algaworks.algashop.ordering.domain.model.entity.Customer;
+import com.algaworks.algashop.ordering.domain.model.customer.Customer;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.model.valueobject.Address;
-import com.algaworks.algashop.ordering.domain.model.valueobject.BirthDate;
-import com.algaworks.algashop.ordering.domain.model.valueobject.id.CustomerId;
-import com.algaworks.algashop.ordering.domain.model.valueobject.Document;
-import com.algaworks.algashop.ordering.domain.model.valueobject.Email;
-import com.algaworks.algashop.ordering.domain.model.valueobject.FullName;
-import com.algaworks.algashop.ordering.domain.model.valueobject.LoyaltyPoints;
-import com.algaworks.algashop.ordering.domain.model.valueobject.Phone;
+import com.algaworks.algashop.ordering.domain.model.commons.Address;
+import com.algaworks.algashop.ordering.domain.model.customer.BirthDate;
+import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
+import com.algaworks.algashop.ordering.domain.model.commons.Document;
+import com.algaworks.algashop.ordering.domain.model.commons.Email;
+import com.algaworks.algashop.ordering.domain.model.commons.FullName;
+import com.algaworks.algashop.ordering.domain.model.customer.LoyaltyPoints;
+import com.algaworks.algashop.ordering.domain.model.commons.Phone;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;
@@ -28,15 +28,15 @@ public class CustomerDataBuilder {
     @With
     private Supplier<CustomerId> id = CustomerId::new;
     @With
-    private Supplier<FullName> fullName = ()  -> customFaker.valueObject().fullName();
+    private Supplier<FullName> fullName = ()  -> customFaker.common().fullName();
     @With
-    private Supplier<BirthDate> birthDate = ()  -> customFaker.valueObject().birthDate();
+    private Supplier<BirthDate> birthDate = ()  -> customFaker.customer().birthDate();
     @With
-    private Supplier<Email> email = ()  -> customFaker.valueObject().email();
+    private Supplier<Email> email = ()  -> customFaker.common().email();
     @With
-    private Supplier<Phone> phone  = ()  -> customFaker.valueObject().phone();
+    private Supplier<Phone> phone  = ()  -> customFaker.common().phone();
     @With
-    private Supplier<Document> document = ()  -> customFaker.valueObject().document();
+    private Supplier<Document> document = ()  -> customFaker.common().document();
     @With
     private Supplier<Boolean> promotionNotificationsAllowed = () -> customFaker.bool().bool();
     @With
@@ -46,9 +46,9 @@ public class CustomerDataBuilder {
     @With
     private Supplier<OffsetDateTime> archivedAt = () -> null;
     @With
-    private Supplier<LoyaltyPoints> loyaltyPoints = () -> customFaker.valueObject().loyaltyPoints(100, 9999);
+    private Supplier<LoyaltyPoints> loyaltyPoints = () -> customFaker.customer().loyaltyPoints(100, 9999);
     @With
-    private Supplier<Address> address = ()  -> customFaker.valueObject().address();
+    private Supplier<Address> address = ()  -> customFaker.common().address();
 
     public static CustomerDataBuilder builder() {
         return new CustomerDataBuilder();

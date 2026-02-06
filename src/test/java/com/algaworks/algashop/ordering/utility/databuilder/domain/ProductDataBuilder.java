@@ -1,10 +1,10 @@
 package com.algaworks.algashop.ordering.utility.databuilder.domain;
 
 import com.algaworks.algashop.ordering.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.model.valueobject.Money;
-import com.algaworks.algashop.ordering.domain.model.valueobject.Product;
-import com.algaworks.algashop.ordering.domain.model.valueobject.ProductName;
-import com.algaworks.algashop.ordering.domain.model.valueobject.id.ProductId;
+import com.algaworks.algashop.ordering.domain.model.commons.Money;
+import com.algaworks.algashop.ordering.domain.model.product.Product;
+import com.algaworks.algashop.ordering.domain.model.product.ProductName;
+import com.algaworks.algashop.ordering.domain.model.product.ProductId;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;
@@ -25,9 +25,9 @@ public class ProductDataBuilder {
     @With
     private Supplier<ProductId> id = ProductId::new;
     @With
-    private Supplier<ProductName> name = () -> customFaker.valueObject().productName();
+    private Supplier<ProductName> name = () -> customFaker.product().productName();
     @With
-    private Supplier<Money> price = () -> customFaker.valueObject().money(5, 999);
+    private Supplier<Money> price = () -> customFaker.common().money(5, 999);
     @With
     private Supplier<Boolean> inStock = () -> customFaker.bool().bool();
 

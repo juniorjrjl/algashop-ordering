@@ -51,7 +51,6 @@ dependencies {
 
 	testAnnotationProcessor("org.projectlombok:lombok")
 
-	//testImplementation("org.wiremock:wiremock:3.13.2")
 	testImplementation("org.wiremock.integrations:wiremock-spring-boot:4.0.9")
 	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")

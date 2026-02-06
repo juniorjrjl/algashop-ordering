@@ -1,10 +1,10 @@
 package com.algaworks.algashop.ordering.utility.databuilder.entity;
 
 import com.algaworks.algashop.ordering.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.model.utility.IdGenerator;
+import com.algaworks.algashop.ordering.domain.model.IdGenerator;
 import com.algaworks.algashop.ordering.utility.databuilder.embeddable.AddressEmbeddableDataBuilder;
-import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.AddressEmbeddable;
-import com.algaworks.algashop.ordering.infrastructure.persistence.entity.CustomerPersistenceEntity;
+import com.algaworks.algashop.ordering.infrastructure.persistence.common.AddressEmbeddable;
+import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;

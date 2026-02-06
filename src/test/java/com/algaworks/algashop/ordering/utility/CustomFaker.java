@@ -25,8 +25,20 @@ public class CustomFaker extends Faker {
         return optionalCustomFaker.get();
     }
 
-    public ValueObjectProvider valueObject(){
-        return getProvider(ValueObjectProvider.class, ValueObjectProvider::new);
+    public CommonProvider common(){
+        return getProvider(CommonProvider.class, CommonProvider::new);
+    }
+
+    public CustomerProvider customer(){
+        return getProvider(CustomerProvider.class, CustomerProvider::new);
+    }
+
+    public OrderProvider order(){
+        return getProvider(OrderProvider.class, OrderProvider::new);
+    }
+
+    public ProductProvider  product(){
+        return getProvider(ProductProvider.class, ProductProvider::new);
     }
 
 }

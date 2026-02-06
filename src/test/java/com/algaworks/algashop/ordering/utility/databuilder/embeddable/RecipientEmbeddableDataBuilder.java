@@ -1,7 +1,7 @@
 package com.algaworks.algashop.ordering.utility.databuilder.embeddable;
 
 import com.algaworks.algashop.ordering.utility.CustomFaker;
-import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.RecipientEmbeddable;
+import com.algaworks.algashop.ordering.infrastructure.persistence.order.RecipientEmbeddable;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;

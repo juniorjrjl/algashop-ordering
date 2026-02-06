@@ -1,8 +1,8 @@
 package com.algaworks.algashop.ordering.utility;
 
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
-import com.algaworks.algashop.ordering.infrastructure.persistence.config.JpaConfig;
-import com.algaworks.algashop.ordering.infrastructure.persistence.config.SpringDataAuditingConfig;
+import com.algaworks.algashop.ordering.infrastructure.persistence.JpaConfig;
+import com.algaworks.algashop.ordering.infrastructure.persistence.SpringDataAuditingConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.context.annotation.Import;

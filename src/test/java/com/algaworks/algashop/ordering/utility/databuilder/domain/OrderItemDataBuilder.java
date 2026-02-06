@@ -1,11 +1,11 @@
 package com.algaworks.algashop.ordering.utility.databuilder.domain;
 
-import com.algaworks.algashop.ordering.domain.model.entity.OrderItem;
+import com.algaworks.algashop.ordering.domain.model.order.OrderItem;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.model.valueobject.Product;
-import com.algaworks.algashop.ordering.domain.model.valueobject.Quantity;
-import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderId;
-import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderItemId;
+import com.algaworks.algashop.ordering.domain.model.product.Product;
+import com.algaworks.algashop.ordering.domain.model.commons.Quantity;
+import com.algaworks.algashop.ordering.domain.model.order.OrderId;
+import com.algaworks.algashop.ordering.domain.model.order.OrderItemId;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;
@@ -32,7 +32,7 @@ public class OrderItemDataBuilder {
             .withInStock(() -> true)
             .build();
     @With
-    private Supplier<Quantity> quantity = () -> customFaker.valueObject().quantity(1, 10);
+    private Supplier<Quantity> quantity = () -> customFaker.common().quantity(1, 10);
 
     public static OrderItemDataBuilder builder() {
         return new OrderItemDataBuilder();

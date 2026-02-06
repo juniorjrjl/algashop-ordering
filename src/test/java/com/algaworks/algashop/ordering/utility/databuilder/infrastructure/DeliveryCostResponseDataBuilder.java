@@ -1,6 +1,6 @@
 package com.algaworks.algashop.ordering.utility.databuilder.infrastructure;
 
-import com.algaworks.algashop.ordering.infrastructure.client.rapidex.DeliveryCostResponse;
+import com.algaworks.algashop.ordering.infrastructure.shipping.client.rapidex.DeliveryCostResponse;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +21,7 @@ public class DeliveryCostResponseDataBuilder {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     @With
-    private Supplier<String> deliveryCost = () -> customFaker.valueObject().money().toString();
+    private Supplier<String> deliveryCost = () -> customFaker.common().money().toString();
     @With
     private Supplier<Long> estimatedDaysToDeliver = () -> customFaker.number().numberBetween(1L, 18L);
 

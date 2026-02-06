@@ -1,13 +1,13 @@
 package com.algaworks.algashop.ordering.utility.databuilder.domain;
 
-import com.algaworks.algashop.ordering.domain.model.entity.ShoppingCartItem;
+import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartItem;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.model.valueobject.Money;
-import com.algaworks.algashop.ordering.domain.model.valueobject.ProductName;
-import com.algaworks.algashop.ordering.domain.model.valueobject.Quantity;
-import com.algaworks.algashop.ordering.domain.model.valueobject.id.ProductId;
-import com.algaworks.algashop.ordering.domain.model.valueobject.id.ShoppingCartId;
-import com.algaworks.algashop.ordering.domain.model.valueobject.id.ShoppingCartItemId;
+import com.algaworks.algashop.ordering.domain.model.commons.Money;
+import com.algaworks.algashop.ordering.domain.model.product.ProductName;
+import com.algaworks.algashop.ordering.domain.model.commons.Quantity;
+import com.algaworks.algashop.ordering.domain.model.product.ProductId;
+import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartId;
+import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartItemId;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;
@@ -32,11 +32,11 @@ public class ShoppingCartItemDataBuilder {
     @With
     private Supplier<ProductId> productId =  ProductId::new;
     @With
-    private Supplier<ProductName> name = () -> customFaker.valueObject().productName();
+    private Supplier<ProductName> name = () -> customFaker.product().productName();
     @With
-    private Supplier<Money> price = () ->  customFaker.valueObject().money(1, 100);
+    private Supplier<Money> price = () ->  customFaker.common().money(1, 100);
     @With
-    private Supplier<Quantity> quantity = () -> customFaker.valueObject().quantity(1, 10);
+    private Supplier<Quantity> quantity = () -> customFaker.common().quantity(1, 10);
     @With
     private Supplier<Boolean> available = () -> customFaker.bool().bool();
 

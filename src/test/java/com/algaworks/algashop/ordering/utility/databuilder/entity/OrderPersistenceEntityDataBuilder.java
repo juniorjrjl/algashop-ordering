@@ -1,13 +1,13 @@
 package com.algaworks.algashop.ordering.utility.databuilder.entity;
 
-import com.algaworks.algashop.ordering.domain.model.entity.OrderStatus;
-import com.algaworks.algashop.ordering.domain.model.entity.PaymentMethod;
-import com.algaworks.algashop.ordering.domain.model.utility.IdGenerator;
-import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.BillingEmbeddable;
-import com.algaworks.algashop.ordering.infrastructure.persistence.embeddable.ShippingEmbeddable;
-import com.algaworks.algashop.ordering.infrastructure.persistence.entity.CustomerPersistenceEntity;
-import com.algaworks.algashop.ordering.infrastructure.persistence.entity.OrderItemPersistenceEntity;
-import com.algaworks.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity;
+import com.algaworks.algashop.ordering.domain.model.order.OrderStatus;
+import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
+import com.algaworks.algashop.ordering.domain.model.IdGenerator;
+import com.algaworks.algashop.ordering.infrastructure.persistence.order.BillingEmbeddable;
+import com.algaworks.algashop.ordering.infrastructure.persistence.order.ShippingEmbeddable;
+import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
+import com.algaworks.algashop.ordering.infrastructure.persistence.order.OrderItemPersistenceEntity;
+import com.algaworks.algashop.ordering.infrastructure.persistence.order.OrderPersistenceEntity;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.embeddable.BillingEmbeddableDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.embeddable.ShippingEmbeddableDataBuilder;

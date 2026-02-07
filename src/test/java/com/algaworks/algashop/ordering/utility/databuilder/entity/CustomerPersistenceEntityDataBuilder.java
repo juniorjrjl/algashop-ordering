@@ -30,7 +30,7 @@ public class CustomerPersistenceEntityDataBuilder {
     @With
     private Supplier<String> lastName =  () -> customFaker.name().lastName();
     @With
-    private Supplier<LocalDate> birthDate = () -> LocalDate.ofInstant(customFaker.timeAndDate().future(), ZoneId.of("UTC"));;
+    private Supplier<LocalDate> birthDate = () -> LocalDate.ofInstant(customFaker.timeAndDate().future(), ZoneId.of("UTC"));
     @With
     private Supplier<String> email = () -> customFaker.internet().emailAddress();
     @With

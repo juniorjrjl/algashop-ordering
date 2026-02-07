@@ -33,18 +33,18 @@ class ShoppingCartUpdateProviderTest extends AbstractDBTest {
     private final CustomFaker customFaker = CustomFaker.getInstance();
 
     private final ShoppingCartUpdateProvider provider;
-    private final ShoppingCartsPersistenceProvider shoppingCartpersistenceProvider;
+    private final ShoppingCartsPersistenceProvider shoppingCartPersistenceProvider;
     private final CustomerPersistenceEntityRepository customerRepository;
     private CustomerPersistenceEntity customerEntity;
 
     @Autowired
     public ShoppingCartUpdateProviderTest(final JdbcTemplate jdbcTemplate,
                                           final ShoppingCartUpdateProvider provider,
-                                          final ShoppingCartsPersistenceProvider shoppingCartpersistenceProvider,
+                                          final ShoppingCartsPersistenceProvider shoppingCartPersistenceProvider,
                                           final CustomerPersistenceEntityRepository customerRepository) {
         super(jdbcTemplate);
         this.provider = provider;
-        this.shoppingCartpersistenceProvider = shoppingCartpersistenceProvider;
+        this.shoppingCartPersistenceProvider = shoppingCartPersistenceProvider;
         this.customerRepository = customerRepository;
     }
 
@@ -60,7 +60,7 @@ class ShoppingCartUpdateProviderTest extends AbstractDBTest {
         final var shoppingCart = ShoppingCartDataBuilder.builder()
                 .withCustomerId(() -> new CustomerId(this.customerEntity.getId()))
                 .build();
-        shoppingCartpersistenceProvider.add(shoppingCart);
+        shoppingCartPersistenceProvider.add(shoppingCart);
         final var items = shoppingCart.items();
         final var toChangePrice = items.stream()
                 .toList()
@@ -73,7 +73,7 @@ class ShoppingCartUpdateProviderTest extends AbstractDBTest {
                 .value()
                 .subtract(toChangePrice.totalAmount().value());
         final var expectedNewCartAmount = new Money(oldTotalBigDecimal).add(expectedNewTotalItem);
-        final var actual = shoppingCartpersistenceProvider.ofId(shoppingCart.id())
+        final var actual = shoppingCartPersistenceProvider.ofId(shoppingCart.id())
                 .orElseThrow();
         assertThat(actual.totalAmount()).isEqualTo(expectedNewCartAmount);
         final var changedItem = actual.findItem(toChangePrice.productId());
@@ -87,14 +87,14 @@ class ShoppingCartUpdateProviderTest extends AbstractDBTest {
         final var shoppingCart = ShoppingCartDataBuilder.builder()
                 .withCustomerId(() -> new CustomerId(this.customerEntity.getId()))
                 .build();
-        shoppingCartpersistenceProvider.add(shoppingCart);
+        shoppingCartPersistenceProvider.add(shoppingCart);
         final var items = shoppingCart.items();
         final var toChangeAvailability = items.stream()
                 .toList()
                 .get(customFaker.number().numberBetween(0, items.size()));
         provider.changeAvailability(toChangeAvailability.productId(), !toChangeAvailability.isAvailable());
 
-        final var actual = shoppingCartpersistenceProvider.ofId(shoppingCart.id())
+        final var actual = shoppingCartPersistenceProvider.ofId(shoppingCart.id())
                 .orElseThrow();
         final var changedItem = actual.findItem(toChangeAvailability.productId());
         assertThat(changedItem.isAvailable()).isEqualTo(!toChangeAvailability.isAvailable());

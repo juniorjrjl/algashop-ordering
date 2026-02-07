@@ -52,4 +52,22 @@ public class CustomerManagementApplicationService {
         return disassembler.toOutput(customer);
     }
 
+    @Transactional
+    public void update(@NonNull final UUID id, @NonNull final CustomerUpdateInput input){
+        requireNonNull(id);
+        requireNonNull(input);
+
+        final var customer = customers.ofId(new CustomerId(id))
+                .orElseThrow(CustomerNotFoundException::new);
+        customer.changeFullName(new  FullName(input.getFirstName(), input.getLastName()));
+        customer.changePhone(new  Phone(input.getPhone()));
+        customer.changeAddress(commonModelAssembler.toAddress(input.getAddress()));
+        if (input.isPromotionNotificationsAllowed()){
+            customer.enablePromotionNotifications();
+        } else {
+            customer.disablePromotionNotifications();
+        }
+        customers.add(customer);
+    }
+
 }

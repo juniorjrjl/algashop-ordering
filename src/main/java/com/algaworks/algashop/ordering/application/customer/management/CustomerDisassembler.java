@@ -1,6 +1,6 @@
 package com.algaworks.algashop.ordering.application.customer.management;
 
-import com.algaworks.algashop.ordering.application.common.CommonModelDisassembler;
+import com.algaworks.algashop.ordering.application.common.CommonAssembler;
 import com.algaworks.algashop.ordering.domain.model.commons.Document;
 import com.algaworks.algashop.ordering.domain.model.commons.Email;
 import com.algaworks.algashop.ordering.domain.model.commons.FullName;
@@ -22,10 +22,10 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 @Mapper(componentModel = SPRING)
 public abstract class CustomerDisassembler {
 
-    protected CommonModelDisassembler  commonModelDisassembler;
+    protected CommonAssembler commonModelDisassembler;
 
     @Autowired
-    public void setCommonModelDisassembler(final CommonModelDisassembler commonModelDisassembler) {
+    public void setCommonModelDisassembler(final CommonAssembler commonModelDisassembler) {
         this.commonModelDisassembler = commonModelDisassembler;
     }
 

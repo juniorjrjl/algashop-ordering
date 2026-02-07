@@ -1,6 +1,6 @@
 package com.algaworks.algashop.ordering.application.customer.management;
 
-import com.algaworks.algashop.ordering.application.common.CommonModelAssembler;
+import com.algaworks.algashop.ordering.application.common.CommonDisassembler;
 import com.algaworks.algashop.ordering.domain.model.commons.Document;
 import com.algaworks.algashop.ordering.domain.model.commons.Email;
 import com.algaworks.algashop.ordering.domain.model.commons.FullName;
@@ -25,7 +25,7 @@ public class CustomerManagementApplicationService {
 
     private final CustomerRegistrationService service;
     private final Customers customers;
-    private final CommonModelAssembler commonModelAssembler;
+    private final CommonDisassembler commonModelAssembler;
     private final CustomerDisassembler disassembler;
 
     @Transactional

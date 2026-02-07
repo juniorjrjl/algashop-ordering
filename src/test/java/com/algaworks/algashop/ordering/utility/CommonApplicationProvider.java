@@ -1,5 +1,8 @@
 package com.algaworks.algashop.ordering.utility;
 
+import com.algaworks.algashop.ordering.application.checkout.BillingData;
+import com.algaworks.algashop.ordering.application.checkout.RecipientData;
+import com.algaworks.algashop.ordering.application.checkout.ShippingInput;
 import com.algaworks.algashop.ordering.application.common.AddressData;
 import net.datafaker.providers.base.AbstractProvider;
 
@@ -30,6 +33,33 @@ public class CommonApplicationProvider extends AbstractProvider<CustomFaker> {
                 .zipCode(faker.address().zipCode())
                 .neighborhood(faker.lorem().characters())
                 .complement(faker.address().buildingNumber())
+                .build();
+    }
+
+    public BillingData billing(){
+        return BillingData.builder()
+                .firstName(faker.name().firstName())
+                .lastName(faker.name().lastName())
+                .document(faker.cpf().valid())
+                .email(faker.internet().emailAddress())
+                .phone(faker.phoneNumber().phoneNumber())
+                .address(addressWithComplement())
+                .build();
+    }
+
+    public ShippingInput shipping(){
+        return ShippingInput.builder()
+                .recipient(recipient())
+                .address(addressWithComplement())
+                .build();
+    }
+
+    public RecipientData recipient(){
+        return RecipientData.builder()
+                .firstName(faker.name().firstName())
+                .lastName(faker.name().lastName())
+                .document(faker.cpf().valid())
+                .phone(faker.phoneNumber().phoneNumber())
                 .build();
     }
 

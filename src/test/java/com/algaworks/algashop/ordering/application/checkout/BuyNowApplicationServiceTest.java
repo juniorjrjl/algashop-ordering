@@ -1,0 +1,82 @@
+package com.algaworks.algashop.ordering.application.checkout;
+
+import com.algaworks.algashop.ordering.domain.model.customer.Customer;
+import com.algaworks.algashop.ordering.domain.model.customer.Customers;
+import com.algaworks.algashop.ordering.domain.model.order.OrderId;
+import com.algaworks.algashop.ordering.domain.model.order.Orders;
+import com.algaworks.algashop.ordering.domain.model.order.shipping.ShippingCostService;
+import com.algaworks.algashop.ordering.domain.model.product.ProductCatalogService;
+import com.algaworks.algashop.ordering.domain.model.product.ProductId;
+import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.databuilder.application.BuyNowInputDataBuilder;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBuilder;
+import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
+import static java.time.ZoneOffset.UTC;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+@SpringBootTest
+@IntegrationTest
+class BuyNowApplicationServiceTest {
+
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
+
+    @MockitoBean
+    private ProductCatalogService productCatalogService;
+    @MockitoBean
+    private ShippingCostService shippingCostService;
+
+    private Customer customer;
+
+    private final BuyNowApplicationService service;
+    private final Orders orders;
+    private final Customers customers;
+
+
+    @Autowired
+    public BuyNowApplicationServiceTest(final BuyNowApplicationService service,
+                                        final Orders orders,
+                                        final Customers customers) {
+        this.service = service;
+        this.orders = orders;
+        this.customers = customers;
+    }
+
+    @BeforeEach
+    void setup(){
+        customer = CustomerDataBuilder.builder().buildNew();
+        customers.add(customer);
+    }
+
+    @Test
+    void shouldBuyNow(){
+        final var product = ProductDataBuilder.builder().withInStock(() -> true).build();
+        final var input = BuyNowInputDataBuilder.builder()
+                .withCustomerId(() -> customer.id().value())
+                .withProductId(() -> product.id().value())
+                .build();
+        when(productCatalogService.ofId(new ProductId(input.getProductId()))).thenReturn(Optional.of(product));
+
+        final var calculationResult = new ShippingCostService.CalculationResult(
+                customFaker.common().money(),
+                LocalDate.ofInstant(customFaker.timeAndDate().future(), UTC)
+        );
+        when(shippingCostService.calculate(any())).thenReturn(calculationResult);
+
+        final var actual = service.buyNow(input);
+        assertThat(actual).isNotBlank();
+        assertThat(orders.exists(new OrderId(actual))).isTrue();
+    }
+
+}

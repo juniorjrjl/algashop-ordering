@@ -1,7 +1,14 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.order;
 
+import com.algaworks.algashop.ordering.domain.model.order.Billing;
 import com.algaworks.algashop.ordering.domain.model.order.Order;
+import com.algaworks.algashop.ordering.domain.model.order.OrderId;
 import com.algaworks.algashop.ordering.domain.model.order.OrderItem;
+import com.algaworks.algashop.ordering.domain.model.order.OrderItemId;
+import com.algaworks.algashop.ordering.domain.model.order.OrderStatus;
+import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
+import com.algaworks.algashop.ordering.domain.model.order.Recipient;
+import com.algaworks.algashop.ordering.domain.model.order.Shipping;
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableDisassembler;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -25,6 +32,14 @@ public interface OrderPersistenceEntityDisassembler {
     OrderItem.ExistingOrderItemBuilder toDomain(@MappingTarget final OrderItem.ExistingOrderItemBuilder builder,
                                                 final OrderItemPersistenceEntity item);
 
+    default OrderId toOrderId(final Long value){
+        return isNull(value) ? null : new OrderId(value);
+    }
+
+    default OrderItemId toOrderItemId(final Long value){
+        return isNull(value) ? null : new OrderItemId(value);
+    }
+
     default Set<OrderItem> toDomain(final Set<OrderItemPersistenceEntity> items){
         if (isNull(items) || items.isEmpty()) {
             return new HashSet<>();
@@ -37,5 +52,21 @@ public interface OrderPersistenceEntityDisassembler {
     default Order toDomain(final OrderPersistenceEntity aggregateRoot){
         return toDomain(Order.existing(), aggregateRoot).build();
     }
+
+    default PaymentMethod mapPaymentMethod(final String method) {
+        return isNull(method) ? null : PaymentMethod.valueOf(method);
+    }
+
+    default OrderStatus mapOrderStatus(final String status) {
+        return isNull(status) ? null : OrderStatus.valueOf(status);
+    }
+
+    @Mapping(target = "fullName", expression = "java(embeddableDisassembler.toFullName(recipient.getFirstName(), recipient.getLastName()))")
+    Recipient toRecipient(final RecipientEmbeddable recipient);
+
+    Shipping toShipping(final ShippingEmbeddable shipping);
+
+    @Mapping(target = "fullName", expression = "java(embeddableDisassembler.toFullName(billing.getFirstName(), billing.getLastName()))")
+    Billing toBilling(final BillingEmbeddable billing);
 
 }

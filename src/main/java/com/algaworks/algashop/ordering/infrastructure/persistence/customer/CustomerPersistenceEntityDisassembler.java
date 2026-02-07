@@ -1,10 +1,14 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.customer;
 
+import com.algaworks.algashop.ordering.domain.model.customer.BirthDate;
 import com.algaworks.algashop.ordering.domain.model.customer.Customer;
+import com.algaworks.algashop.ordering.domain.model.customer.LoyaltyPoints;
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableDisassembler;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+
+import java.time.LocalDate;
 
 import static org.mapstruct.InjectionStrategy.CONSTRUCTOR;
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
@@ -21,5 +25,10 @@ public interface CustomerPersistenceEntityDisassembler {
     default Customer toDomain(final CustomerPersistenceEntity entity) {
         return toDomain(Customer.existing(), entity).build();
     }
+
+    @Mapping(target = "add", ignore = true)
+    LoyaltyPoints toLoyaltyPoints(final Integer value);
+
+    BirthDate toBirthDate(final LocalDate value);
 
 }

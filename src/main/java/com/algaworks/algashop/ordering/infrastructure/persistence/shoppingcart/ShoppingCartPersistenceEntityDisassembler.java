@@ -1,7 +1,9 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart;
 
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
+import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartId;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartItem;
+import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartItemId;
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableDisassembler;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -9,6 +11,7 @@ import org.mapstruct.MappingTarget;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
@@ -38,5 +41,9 @@ public interface ShoppingCartPersistenceEntityDisassembler {
     default ShoppingCart toDomain(final ShoppingCartPersistenceEntity entity) {
         return toDomain(ShoppingCart.existing(), entity);
     }
+
+    ShoppingCartId toShoppingCartId(final UUID value);
+
+    ShoppingCartItemId toShoppingCartItemId(final UUID value);
 
 }

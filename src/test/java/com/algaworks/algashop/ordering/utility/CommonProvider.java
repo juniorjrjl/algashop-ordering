@@ -43,27 +43,26 @@ public class CommonProvider extends AbstractProvider<CustomFaker> {
     }
 
     public Address address(){
-        return new Address(
-                faker.address().streetAddress(),
-                null,
-                faker.lorem().word(),
-                faker.address().streetAddressNumber(),
-                faker.address().city(),
-                faker.address().state(),
-                zipCode()
-                );
+        return Address.builder()
+                .street(faker.address().streetAddress())
+                .neighborhood(faker.lorem().characters())
+                .number(faker.address().streetAddressNumber())
+                .city(faker.address().city())
+                .state(faker.address().state())
+                .zipCode(zipCode())
+                .build();
     }
 
     public Address addressWithComplement(){
-        return new Address(
-                faker.address().streetAddress(),
-                faker.address().buildingNumber(),
-                faker.lorem().characters(),
-                faker.address().streetAddressNumber(),
-                faker.address().city(),
-                faker.address().state(),
-                zipCode()
-        );
+        return Address.builder()
+                .street(faker.address().streetAddress())
+                .complement(faker.address().buildingNumber())
+                .neighborhood(faker.lorem().characters())
+                .number(faker.address().streetAddressNumber())
+                .city(faker.address().city())
+                .state(faker.address().state())
+                .zipCode(zipCode())
+                .build();
     }
 
     public Money money(){

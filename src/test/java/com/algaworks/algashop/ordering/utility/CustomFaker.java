@@ -3,13 +3,14 @@ package com.algaworks.algashop.ordering.utility;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
 
-import java.util.Optional;
 import java.util.Random;
+
+import static java.util.Objects.isNull;
 
 @Slf4j
 public class CustomFaker extends Faker {
 
-    private static Optional<CustomFaker> optionalCustomFaker = Optional.empty();
+    private static CustomFaker optionalCustomFaker = null;
 
     private CustomFaker() {
         final var random = new Random();
@@ -19,10 +20,14 @@ public class CustomFaker extends Faker {
     }
 
     public static CustomFaker getInstance() {
-        if (optionalCustomFaker.isEmpty()){
-            optionalCustomFaker = Optional.of(new CustomFaker());
+        if (isNull(optionalCustomFaker)){
+            optionalCustomFaker = new CustomFaker();
         }
-        return optionalCustomFaker.get();
+        return optionalCustomFaker;
+    }
+
+    public CommonApplicationProvider commonApplication(){
+        return getProvider(CommonApplicationProvider.class, CommonApplicationProvider::new);
     }
 
     public CommonProvider common(){

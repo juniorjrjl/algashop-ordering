@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.domain.model.customer;
 
+import com.algaworks.algashop.ordering.domain.model.commons.Money;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.OrderDataBuilder;
@@ -33,10 +34,16 @@ class CustomerLoyaltyPointsServiceTest {
                         .withPrice(() -> customFaker.common().money(1000, 9999))
                         .build())
                 .buildExistingList(customFaker.number().numberBetween(1, 9));
+        final var shipping = customFaker.order()
+                .shipping()
+                .toBuilder()
+                .cost(Money.ZERO)
+                .build();
         final var order = OrderDataBuilder.builder()
                 .withCustomerId(customer::id)
                 .withOrderStatus(() -> READY)
                 .withItems(() -> items)
+                .withShipping(() -> shipping)
                 .buildExisting();
 
         service.addPoints(customer, order);

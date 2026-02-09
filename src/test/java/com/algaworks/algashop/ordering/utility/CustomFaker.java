@@ -3,14 +3,21 @@ package com.algaworks.algashop.ordering.utility;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import static java.util.Objects.isNull;
 
 @Slf4j
 public class CustomFaker extends Faker {
 
-    private static CustomFaker optionalCustomFaker = null;
+    private static CustomFaker customFaker = null;
 
     private CustomFaker() {
         final var random = new Random();
@@ -20,10 +27,10 @@ public class CustomFaker extends Faker {
     }
 
     public static CustomFaker getInstance() {
-        if (isNull(optionalCustomFaker)){
-            optionalCustomFaker = new CustomFaker();
+        if (isNull(customFaker)){
+            customFaker = new CustomFaker();
         }
-        return optionalCustomFaker;
+        return customFaker;
     }
 
     public CommonApplicationProvider commonApplication(){
@@ -44,6 +51,18 @@ public class CustomFaker extends Faker {
 
     public ProductProvider  product(){
         return getProvider(ProductProvider.class, ProductProvider::new);
+    }
+
+    @SafeVarargs
+    public final <E extends Enum<E>> E option(final Class<E> enumeration, final E... exceptedValues) {
+        final var options = enumeration.getEnumConstants();
+        final var expectedSet = new HashSet<>(Arrays.asList(exceptedValues));
+        if (expectedSet.size() == options.length){
+            throw new IllegalArgumentException("All elements in 'exceptedValues'");
+        }
+        final var values = new ArrayList<>(List.of(options));
+        values.removeAll(expectedSet);
+        return values.get(customFaker.random().nextInt(values.size()));
     }
 
 }

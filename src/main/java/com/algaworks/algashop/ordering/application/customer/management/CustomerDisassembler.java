@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
@@ -55,7 +56,7 @@ public abstract class CustomerDisassembler {
     }
 
     protected LocalDate map(final BirthDate birthDate){
-        return requireNonNull(birthDate).value();
+        return isNull(birthDate) ? null : birthDate.value();
     }
 
     protected String map(final Email email){

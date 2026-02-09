@@ -17,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-import static java.util.Objects.requireNonNull;
-
 @Service
 @RequiredArgsConstructor
 public class CustomerManagementApplicationService {
@@ -30,7 +28,6 @@ public class CustomerManagementApplicationService {
 
     @Transactional
     public UUID create(@NonNull final CustomerInput input){
-        requireNonNull(input);
         final var customer = service.register(
                 new FullName(input.getFirstName(), input.getLastName()),
                 new BirthDate(input.getBirthDate()),
@@ -44,19 +41,8 @@ public class CustomerManagementApplicationService {
         return customer.id().value();
     }
 
-    @Transactional(readOnly = true)
-    public CustomerOutput findById(@NonNull final UUID id){
-        requireNonNull(id);
-        final var customer = customers.ofId(new CustomerId(id))
-                .orElseThrow(CustomerNotFoundException::new);
-        return disassembler.toOutput(customer);
-    }
-
     @Transactional
     public void update(@NonNull final UUID id, @NonNull final CustomerUpdateInput input){
-        requireNonNull(id);
-        requireNonNull(input);
-
         final var customer = customers.ofId(new CustomerId(id))
                 .orElseThrow(CustomerNotFoundException::new);
         customer.changeFullName(new  FullName(input.getFirstName(), input.getLastName()));
@@ -68,6 +54,28 @@ public class CustomerManagementApplicationService {
             customer.disablePromotionNotifications();
         }
         customers.add(customer);
+    }
+
+    @Transactional
+    public void archive(@NonNull final UUID id){
+        final var customer = customers.ofId(new CustomerId(id))
+                .orElseThrow(CustomerNotFoundException::new);
+        customer.archive();
+        customers.add(customer);
+    }
+
+    public void changeEmail(@NonNull final UUID id, @NonNull final String email){
+        final var customer = customers.ofId(new CustomerId(id))
+                .orElseThrow(CustomerNotFoundException::new);
+        service.changeEmail(customer, new Email(email));
+        customers.add(customer);
+    }
+
+    @Transactional(readOnly = true)
+    public CustomerOutput findById(@NonNull final UUID id){
+        final var customer = customers.ofId(new CustomerId(id))
+                .orElseThrow(CustomerNotFoundException::new);
+        return disassembler.toOutput(customer);
     }
 
 }

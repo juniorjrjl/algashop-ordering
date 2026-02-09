@@ -7,15 +7,16 @@ import com.algaworks.algashop.ordering.domain.model.order.Orders;
 import com.algaworks.algashop.ordering.domain.model.order.shipping.ShippingCostService;
 import com.algaworks.algashop.ordering.domain.model.product.ProductCatalogService;
 import com.algaworks.algashop.ordering.domain.model.product.ProductId;
+import com.algaworks.algashop.ordering.utility.AbstractApplicationTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.application.BuyNowInputDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBuilder;
-import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalDate;
@@ -27,8 +28,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-@IntegrationTest
-class BuyNowApplicationServiceTest {
+class BuyNowApplicationServiceTest extends AbstractApplicationTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
 
@@ -45,9 +45,11 @@ class BuyNowApplicationServiceTest {
 
 
     @Autowired
-    public BuyNowApplicationServiceTest(final BuyNowApplicationService service,
+    public BuyNowApplicationServiceTest(final JdbcTemplate jdbcTemplate,
+                                        final BuyNowApplicationService service,
                                         final Orders orders,
                                         final Customers customers) {
+        super(jdbcTemplate);
         this.service = service;
         this.orders = orders;
         this.customers = customers;

@@ -16,8 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static java.util.Objects.requireNonNull;
-
 @Service
 @RequiredArgsConstructor
 public class BuyNowApplicationService {
@@ -32,8 +30,6 @@ public class BuyNowApplicationService {
 
     @Transactional
     public String buyNow(final BuyNowInput input){
-        requireNonNull(input);
-
         final var product = findProduct(new ProductId(input.getProductId()));
         final var customerId = new CustomerId(input.getCustomerId());
         final var billing = billingInputDisassembler.toDomainModel(input.getBilling());

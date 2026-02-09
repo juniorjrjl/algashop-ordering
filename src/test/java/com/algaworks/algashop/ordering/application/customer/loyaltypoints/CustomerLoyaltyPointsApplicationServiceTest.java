@@ -175,12 +175,18 @@ class CustomerLoyaltyPointsApplicationServiceTest extends AbstractApplicationTes
                 .withQuantity(() -> new Quantity(1))
                 .withProduct(() -> product)
                 .buildExistingList(1);
+        final var shipping = customFaker.order()
+                .shipping()
+                .toBuilder()
+                .cost(Money.ZERO)
+                .build();
         final var order = OrderDataBuilder.builder(Order.draft(customer.id()))
                 .withShipping(() -> customFaker.order().shipping())
                 .withBilling(() -> customFaker.order().billing())
                 .withPaymentMethod(() -> customFaker.options().option(PaymentMethod.class))
                 .withItems(() -> orderItems)
                 .withOrderStatus(() -> READY)
+                .withShipping(() -> shipping)
                 .buildExisting();
         orders.add(order);
         service.addLoyaltyPoints(customer.id().value(), order.id().toString());

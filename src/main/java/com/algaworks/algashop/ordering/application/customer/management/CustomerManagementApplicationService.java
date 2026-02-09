@@ -42,8 +42,8 @@ public class CustomerManagementApplicationService {
     }
 
     @Transactional
-    public void update(@NonNull final UUID id, @NonNull final CustomerUpdateInput input){
-        final var customer = customers.ofId(new CustomerId(id))
+    public void update(@NonNull final UUID rawId, @NonNull final CustomerUpdateInput input){
+        final var customer = customers.ofId(new CustomerId(rawId))
                 .orElseThrow(CustomerNotFoundException::new);
         customer.changeFullName(new  FullName(input.getFirstName(), input.getLastName()));
         customer.changePhone(new  Phone(input.getPhone()));
@@ -57,23 +57,23 @@ public class CustomerManagementApplicationService {
     }
 
     @Transactional
-    public void archive(@NonNull final UUID id){
-        final var customer = customers.ofId(new CustomerId(id))
+    public void archive(@NonNull final UUID rawId){
+        final var customer = customers.ofId(new CustomerId(rawId))
                 .orElseThrow(CustomerNotFoundException::new);
         customer.archive();
         customers.add(customer);
     }
 
-    public void changeEmail(@NonNull final UUID id, @NonNull final String email){
-        final var customer = customers.ofId(new CustomerId(id))
+    public void changeEmail(@NonNull final UUID rawId, @NonNull final String email){
+        final var customer = customers.ofId(new CustomerId(rawId))
                 .orElseThrow(CustomerNotFoundException::new);
         service.changeEmail(customer, new Email(email));
         customers.add(customer);
     }
 
     @Transactional(readOnly = true)
-    public CustomerOutput findById(@NonNull final UUID id){
-        final var customer = customers.ofId(new CustomerId(id))
+    public CustomerOutput findById(@NonNull final UUID rawId){
+        final var customer = customers.ofId(new CustomerId(rawId))
                 .orElseThrow(CustomerNotFoundException::new);
         return disassembler.toOutput(customer);
     }

@@ -23,10 +23,10 @@ public class CustomerLoyaltyPointsApplicationService {
     private final Orders orders;
 
     @Transactional
-    public void addLoyaltyPoints(@NonNull final UUID customerId, @NonNull final String orderId){
-        final var customer = customers.ofId(new CustomerId(customerId))
+    public void addLoyaltyPoints(@NonNull final UUID rawCustomerId, @NonNull final String rawOrderId){
+        final var customer = customers.ofId(new CustomerId(rawCustomerId))
                 .orElseThrow(CustomerNotFoundException::new);
-        final var order = orders.ofId(new OrderId(orderId))
+        final var order = orders.ofId(new OrderId(rawOrderId))
                 .orElseThrow(OrderNotFoundException::new);
         service.addPoints(customer, order);
         customers.add(customer);

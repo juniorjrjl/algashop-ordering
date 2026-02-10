@@ -2,7 +2,6 @@ package com.algaworks.algashop.ordering.domain.model.order;
 
 import com.algaworks.algashop.ordering.domain.model.IdGenerator;
 import io.hypersistence.tsid.TSID;
-import org.jspecify.annotations.NonNull;
 
 import static java.util.Objects.requireNonNull;
 
@@ -25,7 +24,6 @@ public record OrderId(TSID value) {
     }
 
     @Override
-    @NonNull
     public String toString() {
         return value.toString();
     }

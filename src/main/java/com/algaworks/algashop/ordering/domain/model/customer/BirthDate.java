@@ -1,7 +1,5 @@
 package com.algaworks.algashop.ordering.domain.model.customer;
 
-import org.jspecify.annotations.NonNull;
-
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -22,7 +20,6 @@ public record BirthDate(LocalDate value) {
     }
 
     @Override
-    @NonNull
     public String toString() {
         return value.format(DateTimeFormatter.ISO_DATE);
     }

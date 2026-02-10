@@ -1,7 +1,6 @@
 package com.algaworks.algashop.ordering.domain.model.product;
 
 import com.algaworks.algashop.ordering.domain.model.IdGenerator;
-import org.jspecify.annotations.NonNull;
 
 import java.util.UUID;
 
@@ -18,7 +17,6 @@ public record ProductId(UUID value) {
     }
 
     @Override
-    @NonNull
     public String toString() {
         return value.toString();
     }

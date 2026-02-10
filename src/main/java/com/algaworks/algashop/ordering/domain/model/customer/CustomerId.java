@@ -18,7 +18,6 @@ public record CustomerId(UUID value) {
     }
 
     @Override
-    @NonNull
     public String toString() {
         return value.toString();
     }

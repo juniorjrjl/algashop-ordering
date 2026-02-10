@@ -11,15 +11,18 @@ import com.algaworks.algashop.ordering.domain.model.commons.ZipCode;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.product.ProductId;
 import com.algaworks.algashop.ordering.domain.model.product.ProductName;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+import org.mapstruct.AnnotateWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static java.util.Objects.isNull;
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
+@AnnotateWith(NullMarked.class)
 @Mapper(componentModel = SPRING)
 public interface EmbeddableDisassembler {
 
@@ -46,7 +49,7 @@ public interface EmbeddableDisassembler {
     CustomerId toCustomerId(final UUID value);
 
     default ProductId toProductId(final UUID value){
-        return isNull(value) ? null : new ProductId(value);
+        return new ProductId(value);
     }
 
     ProductName toProductName(final String value);

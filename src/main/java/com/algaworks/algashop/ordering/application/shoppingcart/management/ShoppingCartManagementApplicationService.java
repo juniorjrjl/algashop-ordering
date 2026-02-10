@@ -13,7 +13,6 @@ import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNot
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCarts;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingService;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +28,7 @@ public class ShoppingCartManagementApplicationService {
     private final ProductCatalogService productCatalogService;
 
     @Transactional
-    public UUID createNew(@NonNull final UUID rawCustomerId){
+    public UUID createNew(final UUID rawCustomerId){
         final var customerId = new CustomerId(rawCustomerId);
         if (!customers.exists(customerId)){
             throw new CustomerNotFoundException();
@@ -40,7 +39,7 @@ public class ShoppingCartManagementApplicationService {
     }
 
     @Transactional
-    public void addItem(@NonNull final ShoppingCartItemInput input){
+    public void addItem(final ShoppingCartItemInput input){
         final var shoppingCart = shoppingCarts.ofId(new ShoppingCartId(input.getShoppingCartId()))
                 .orElseThrow(ShoppingCartNotFound::new);
         final var product = productCatalogService.ofId(new ProductId(input.getProductId()))
@@ -51,7 +50,7 @@ public class ShoppingCartManagementApplicationService {
     }
 
     @Transactional
-    public void removeItem(@NonNull final UUID rawId, @NonNull final UUID rawShoppingCartItemId){
+    public void removeItem(final UUID rawId, final UUID rawShoppingCartItemId){
         final var shoppingCart = shoppingCarts.ofId(new ShoppingCartId(rawId))
                 .orElseThrow(ShoppingCartNotFound::new);
         shoppingCart.removeItem(new ShoppingCartItemId(rawShoppingCartItemId));
@@ -59,7 +58,7 @@ public class ShoppingCartManagementApplicationService {
     }
 
     @Transactional
-    public void empty(@NonNull final UUID rawId){
+    public void empty(final UUID rawId){
         final var shoppingCart = shoppingCarts.ofId(new ShoppingCartId(rawId))
                 .orElseThrow(ShoppingCartNotFound::new);
         shoppingCart.empty();
@@ -67,7 +66,7 @@ public class ShoppingCartManagementApplicationService {
     }
 
     @Transactional
-    public void delete(@NonNull final UUID rawId){
+    public void delete(final UUID rawId){
         final var shoppingCart = shoppingCarts.ofId(new ShoppingCartId(rawId))
                 .orElseThrow(ShoppingCartNotFound::new);
         shoppingCarts.remove(shoppingCart);

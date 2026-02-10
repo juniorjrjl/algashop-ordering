@@ -1,11 +1,12 @@
 package com.algaworks.algashop.ordering.domain.model.shoppingcart;
 
 import com.algaworks.algashop.ordering.domain.model.commons.Money;
-import com.algaworks.algashop.ordering.domain.model.product.Product;
-import com.algaworks.algashop.ordering.domain.model.product.ProductName;
 import com.algaworks.algashop.ordering.domain.model.commons.Quantity;
+import com.algaworks.algashop.ordering.domain.model.product.Product;
 import com.algaworks.algashop.ordering.domain.model.product.ProductId;
+import com.algaworks.algashop.ordering.domain.model.product.ProductName;
 import lombok.Builder;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -80,6 +81,7 @@ public class ShoppingCartItem {
         return quantity;
     }
 
+    @Nullable
     public Money totalAmount() {
         return totalAmount;
     }
@@ -137,6 +139,7 @@ public class ShoppingCartItem {
     private void setName(final ProductName name) {
         this.name = requireNonNull(name);
     }
+
 
     private void setPrice(final Money price) {
         this.price = requireNonNull(price);

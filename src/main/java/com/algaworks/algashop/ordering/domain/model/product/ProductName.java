@@ -1,7 +1,5 @@
 package com.algaworks.algashop.ordering.domain.model.product;
 
-import org.jspecify.annotations.NonNull;
-
 import static com.algaworks.algashop.ordering.domain.model.FieldValidations.requiresNonBlank;
 
 public record ProductName(String value) {
@@ -12,7 +10,6 @@ public record ProductName(String value) {
     }
 
     @Override
-    @NonNull
     public String toString() {
         return value;
     }

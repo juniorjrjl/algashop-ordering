@@ -4,7 +4,9 @@ import com.algaworks.algashop.ordering.domain.model.customer.BirthDate;
 import com.algaworks.algashop.ordering.domain.model.customer.Customer;
 import com.algaworks.algashop.ordering.domain.model.customer.LoyaltyPoints;
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableAssembler;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+import org.mapstruct.AnnotateWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -16,6 +18,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
+@AnnotateWith(NullMarked.class)
 @Mapper(componentModel = SPRING, uses = EmbeddableAssembler.class)
 public abstract class CustomerPersistenceEntityAssembler {
 
@@ -49,12 +52,13 @@ public abstract class CustomerPersistenceEntityAssembler {
     public abstract CustomerPersistenceEntity toDomain(@MappingTarget final CustomerPersistenceEntity entity,
                                        final Customer customer);
 
-    protected LocalDate map(final BirthDate birthDate) {
+    @Nullable
+    protected LocalDate map(@Nullable final BirthDate birthDate) {
         return isNull(birthDate) ? null : birthDate.value();
     }
 
     protected Integer map(final LoyaltyPoints loyaltyPoints) {
-        return isNull(loyaltyPoints) ? null : loyaltyPoints.value();
+        return loyaltyPoints.value();
     }
 
 }

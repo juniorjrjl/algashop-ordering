@@ -11,7 +11,6 @@ import com.algaworks.algashop.ordering.domain.model.customer.CustomerNotFoundExc
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerRegistrationService;
 import com.algaworks.algashop.ordering.domain.model.customer.Customers;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +26,7 @@ public class CustomerManagementApplicationService {
     private final CustomerDisassembler disassembler;
 
     @Transactional
-    public UUID create(@NonNull final CustomerInput input){
+    public UUID create(final CustomerInput input){
         final var customer = service.register(
                 new FullName(input.getFirstName(), input.getLastName()),
                 new BirthDate(input.getBirthDate()),
@@ -42,7 +41,7 @@ public class CustomerManagementApplicationService {
     }
 
     @Transactional
-    public void update(@NonNull final UUID rawId, @NonNull final CustomerUpdateInput input){
+    public void update(final UUID rawId, final CustomerUpdateInput input){
         final var customer = customers.ofId(new CustomerId(rawId))
                 .orElseThrow(CustomerNotFoundException::new);
         customer.changeFullName(new  FullName(input.getFirstName(), input.getLastName()));
@@ -57,14 +56,14 @@ public class CustomerManagementApplicationService {
     }
 
     @Transactional
-    public void archive(@NonNull final UUID rawId){
+    public void archive(final UUID rawId){
         final var customer = customers.ofId(new CustomerId(rawId))
                 .orElseThrow(CustomerNotFoundException::new);
         customer.archive();
         customers.add(customer);
     }
 
-    public void changeEmail(@NonNull final UUID rawId, @NonNull final String email){
+    public void changeEmail(final UUID rawId, final String email){
         final var customer = customers.ofId(new CustomerId(rawId))
                 .orElseThrow(CustomerNotFoundException::new);
         service.changeEmail(customer, new Email(email));
@@ -72,7 +71,7 @@ public class CustomerManagementApplicationService {
     }
 
     @Transactional(readOnly = true)
-    public CustomerOutput findById(@NonNull final UUID rawId){
+    public CustomerOutput findById(final UUID rawId){
         final var customer = customers.ofId(new CustomerId(rawId))
                 .orElseThrow(CustomerNotFoundException::new);
         return disassembler.toOutput(customer);

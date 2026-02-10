@@ -25,7 +25,9 @@ public class ShoppingCart implements AggregateRoot<ShoppingCartId> {
 
     private ShoppingCartId id;
     private CustomerId customerId;
+    @Nullable
     private Money totalAmount;
+    @Nullable
     private Quantity totalItems;
     private OffsetDateTime createdAt;
     private Set<ShoppingCartItem> items;
@@ -49,7 +51,7 @@ public class ShoppingCart implements AggregateRoot<ShoppingCartId> {
                          final CustomerId customerId,
                          final OffsetDateTime createdAt,
                          final Set<ShoppingCartItem> items,
-                         final Long version) {
+                         @Nullable final Long version) {
         this.setId(id);
         this.setCustomerId(customerId);
         this.setCreatedAt(createdAt);
@@ -127,8 +129,8 @@ public class ShoppingCart implements AggregateRoot<ShoppingCartId> {
 
     public boolean isEmpty(){
         return this.items.isEmpty() &&
-                this.totalAmount.equals(Money.ZERO) &&
-                this.totalItems.equals(Quantity.ZERO);
+                requireNonNull(this.totalAmount).equals(Money.ZERO) &&
+                requireNonNull(this.totalItems).equals(Quantity.ZERO);
     }
 
     public boolean containsUnavailable(){
@@ -143,10 +145,12 @@ public class ShoppingCart implements AggregateRoot<ShoppingCartId> {
         return customerId;
     }
 
+    @Nullable
     public Money totalAmount() {
         return totalAmount;
     }
 
+    @Nullable
     public Quantity totalItems() {
         return totalItems;
     }
@@ -159,6 +163,7 @@ public class ShoppingCart implements AggregateRoot<ShoppingCartId> {
         return Collections.unmodifiableSet(items);
     }
 
+    @Nullable
     public Long version() {
         return version;
     }

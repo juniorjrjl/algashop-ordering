@@ -27,7 +27,7 @@ public class CheckoutApplicationService {
     private final ShippingInputDisassembler shippingInputDisassembler;
     private final BillingInputDisassembler  billingInputDisassembler;
 
-    public String checkout(@NonNull final CheckoutInput input){
+    public String checkout(final CheckoutInput input){
         requireNonNull(input);
 
         final var shoppingCart = shoppingCarts.ofId(new ShoppingCartId(input.getShoppingCartId()))

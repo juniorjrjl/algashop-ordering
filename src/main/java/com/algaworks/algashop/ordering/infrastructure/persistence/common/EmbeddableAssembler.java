@@ -11,6 +11,9 @@ import com.algaworks.algashop.ordering.domain.model.commons.ZipCode;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.product.ProductId;
 import com.algaworks.algashop.ordering.domain.model.product.ProductName;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+import org.mapstruct.AnnotateWith;
 import org.mapstruct.Mapper;
 
 import java.math.BigDecimal;
@@ -20,52 +23,55 @@ import static java.util.Objects.isNull;
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
 @Mapper(componentModel = SPRING)
+@AnnotateWith(NullMarked.class)
 public interface EmbeddableAssembler {
 
     AddressEmbeddable map(final Address address);
 
     default String map(final Document document){
-        return  isNull(document) ? null : document.value();
+        return  document.value();
     }
 
     default String map(final Email email) {
-        return isNull(email) ? null : email.value();
+        return email.value();
     }
 
     default String toFirstName(final FullName fullName) {
-        return isNull(fullName) ? null : fullName.firstName();
+        return fullName.firstName();
     }
 
     default String toLastName(final FullName fullName) {
-        return isNull(fullName) ? null : fullName.lastName();
+        return fullName.lastName();
     }
 
-    default BigDecimal map(final Money money) {
+    @Nullable
+    default BigDecimal map(@Nullable final Money money) {
         return isNull(money) ? null : money.value();
     }
 
     default String map(final Phone phone){
-        return  isNull(phone) ? null : phone.value();
+        return phone.value();
     }
 
-    default Integer map(final Quantity quantity) {
+    @Nullable
+    default Integer map(@Nullable final Quantity quantity) {
         return isNull(quantity) ? null : quantity.value();
     }
 
     default String map(final ZipCode zipCode){
-        return isNull(zipCode) ? null : zipCode.value();
+        return zipCode.value();
     }
 
     default String map(final ProductName productName) {
-        return isNull(productName) ? null : productName.value();
+        return productName.value();
     }
 
     default UUID map(final CustomerId customerId) {
-        return isNull(customerId) ? null : customerId.value();
+        return customerId.value();
     }
 
     default UUID map(final ProductId productId){
-        return  isNull(productId) ? null : productId.value();
+        return productId.value();
     }
 
 }

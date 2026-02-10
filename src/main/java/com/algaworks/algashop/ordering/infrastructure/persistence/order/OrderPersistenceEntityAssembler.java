@@ -81,7 +81,7 @@ public abstract class OrderPersistenceEntityAssembler {
     }
 
     public CustomerPersistenceEntity getCustomerReference(final CustomerId customerId){
-        return customerRepository.getReferenceById(embeddableAssembler.map(customerId));
+        return getCustomerRepository().getReferenceById(embeddableAssembler.map(customerId));
     }
 
     @IterableMapping(nullValueMappingStrategy = RETURN_DEFAULT)
@@ -98,13 +98,13 @@ public abstract class OrderPersistenceEntityAssembler {
 
     @Mapping(target = "cost", expression = "java(getEmbeddableAssembler().map(shipping.cost()))")
     @Mapping(target = "address", expression = "java(getEmbeddableAssembler().map(shipping.address()))")
-    abstract ShippingEmbeddable map(final Shipping shipping);
+    abstract ShippingEmbeddable map(@Nullable final Shipping shipping);
 
     @Mapping(target = "firstName", source = "fullName.firstName")
     @Mapping(target = "lastName", source = "fullName.lastName")
     @Mapping(target = "document", expression = "java(getEmbeddableAssembler().map(recipient.document()))")
     @Mapping(target = "phone", expression = "java(getEmbeddableAssembler().map(recipient.phone()))")
-    abstract RecipientEmbeddable map(final Recipient recipient);
+    abstract RecipientEmbeddable map(@Nullable final Recipient recipient);
 
     @Mapping(target = "firstName", source = "fullName.firstName")
     @Mapping(target = "lastName", source = "fullName.lastName")
@@ -112,11 +112,11 @@ public abstract class OrderPersistenceEntityAssembler {
     @Mapping(target = "phone", expression = "java(getEmbeddableAssembler().map(billing.phone()))")
     @Mapping(target = "email", expression = "java(getEmbeddableAssembler().map(billing.email()))")
     @Mapping(target = "address", expression = "java(getEmbeddableAssembler().map(billing.address()))")
-    abstract BillingEmbeddable map(final Billing billing);
+    abstract BillingEmbeddable map(@Nullable final Billing billing);
 
-    abstract String map(final OrderStatus status);
+    abstract String map(@Nullable final OrderStatus status);
 
-    abstract String map(final PaymentMethod method);
+    abstract String map(@Nullable final PaymentMethod method);
 
     protected Long map(final OrderItemId orderItemId) {
         return orderItemId.value().toLong();

@@ -1,8 +1,5 @@
 package com.algaworks.algashop.ordering.domain.model.customer;
 
-import org.jspecify.annotations.NonNull;
-
-import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
 public record LoyaltyPoints(Integer value) implements Comparable<LoyaltyPoints> {
@@ -15,13 +12,13 @@ public record LoyaltyPoints(Integer value) implements Comparable<LoyaltyPoints> 
     }
 
     public LoyaltyPoints {
-        if (isNull(value) || value < 0){
+        if (value < 0){
             throw new IllegalArgumentException();
         }
     }
 
     public LoyaltyPoints add(final Integer value){
-        if (isNull(value) || value < 0){
+        if (value < 0){
             throw new IllegalArgumentException();
         }
         return new LoyaltyPoints(this.value() + value);
@@ -32,7 +29,6 @@ public record LoyaltyPoints(Integer value) implements Comparable<LoyaltyPoints> 
     }
 
     @Override
-    @NonNull
     public String toString() {
         return value.toString();
     }

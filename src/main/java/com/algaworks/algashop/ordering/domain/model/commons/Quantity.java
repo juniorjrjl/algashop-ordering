@@ -1,7 +1,6 @@
 package com.algaworks.algashop.ordering.domain.model.commons;
 
 import com.algaworks.algashop.ordering.domain.model.RichComparable;
-import org.jspecify.annotations.NonNull;
 
 import static java.util.Objects.requireNonNull;
 
@@ -19,7 +18,7 @@ public record Quantity(Integer value) implements RichComparable<Quantity> {
         return new Quantity(value + toAdd.value());
     }
 
-    public int compareTo(final @NonNull Quantity toCompare){
+    public int compareTo(final Quantity toCompare){
         return value.compareTo(toCompare.value());
     }
 
@@ -35,7 +34,6 @@ public record Quantity(Integer value) implements RichComparable<Quantity> {
     }
 
     @Override
-    @NonNull
     public String toString() {
         return value.toString();
     }

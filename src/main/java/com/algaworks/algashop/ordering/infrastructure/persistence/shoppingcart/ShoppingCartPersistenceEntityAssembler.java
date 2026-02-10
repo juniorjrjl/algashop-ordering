@@ -8,8 +8,10 @@ import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartIte
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableAssembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.mapstruct.AfterMapping;
+import org.mapstruct.AnnotateWith;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,13 +21,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Set;
 import java.util.UUID;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
-import static org.mapstruct.InjectionStrategy.CONSTRUCTOR;
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 import static org.mapstruct.NullValueMappingStrategy.RETURN_DEFAULT;
 
-@Mapper(componentModel = SPRING, injectionStrategy = CONSTRUCTOR)
+@Mapper(componentModel = SPRING)
+@AnnotateWith(NullMarked.class)
 public abstract class ShoppingCartPersistenceEntityAssembler {
 
     @Nullable
@@ -72,7 +73,7 @@ public abstract class ShoppingCartPersistenceEntityAssembler {
     }
 
     public CustomerPersistenceEntity getCustomerReference(final CustomerId customerId){
-        return getCustomerRepository().getReferenceById(embeddableAssembler.map(customerId));
+        return getCustomerRepository().getReferenceById(getEmbeddableAssembler().map(customerId));
     }
 
     @IterableMapping(nullValueMappingStrategy = RETURN_DEFAULT)
@@ -89,11 +90,11 @@ public abstract class ShoppingCartPersistenceEntityAssembler {
     protected abstract ShoppingCartItemPersistenceEntity fromDomain(final ShoppingCartItem item);
 
     protected UUID map(final ShoppingCartId shoppingCartId) {
-        return isNull(shoppingCartId) ? null : shoppingCartId.value();
+        return shoppingCartId.value();
     }
 
     protected UUID map(final ShoppingCartItemId shoppingCartItemId) {
-        return isNull(shoppingCartItemId) ? null : shoppingCartItemId.value();
+        return shoppingCartItemId.value();
     }
 
 }

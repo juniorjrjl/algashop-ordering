@@ -9,7 +9,9 @@ import com.algaworks.algashop.ordering.domain.model.customer.BirthDate;
 import com.algaworks.algashop.ordering.domain.model.customer.Customer;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.customer.LoyaltyPoints;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+import org.mapstruct.AnnotateWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
+@AnnotateWith(NullMarked.class)
 @Mapper(componentModel = SPRING)
 public abstract class CustomerDisassembler {
 
@@ -61,7 +64,8 @@ public abstract class CustomerDisassembler {
         return requireNonNull(fullName).lastName();
     }
 
-    protected LocalDate map(final BirthDate birthDate){
+    @Nullable
+    protected LocalDate map(@Nullable final BirthDate birthDate){
         return isNull(birthDate) ? null : birthDate.value();
     }
 

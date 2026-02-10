@@ -8,7 +8,6 @@ import com.algaworks.algashop.ordering.domain.model.order.OrderId;
 import com.algaworks.algashop.ordering.domain.model.order.OrderNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.order.Orders;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +22,7 @@ public class CustomerLoyaltyPointsApplicationService {
     private final Orders orders;
 
     @Transactional
-    public void addLoyaltyPoints(@NonNull final UUID rawCustomerId, @NonNull final String rawOrderId){
+    public void addLoyaltyPoints(final UUID rawCustomerId, final String rawOrderId){
         final var customer = customers.ofId(new CustomerId(rawCustomerId))
                 .orElseThrow(CustomerNotFoundException::new);
         final var order = orders.ofId(new OrderId(rawOrderId))

@@ -7,6 +7,7 @@ import com.algaworks.algashop.ordering.domain.model.commons.Quantity;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import lombok.Builder;
 import lombok.Setter;
+import org.jspecify.annotations.Nullable;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -33,15 +34,23 @@ public class Order implements AggregateRoot<OrderId> {
     private CustomerId customerId;
     private Money totalAmount;
     private Quantity totalItems;
+    @Nullable
     private OffsetDateTime placedAt;
+    @Nullable
     private OffsetDateTime paidAt;
+    @Nullable
     private OffsetDateTime canceledAt;
+    @Nullable
     private OffsetDateTime readyAt;
+    @Nullable
     private Billing billing;
+    @Nullable
     private Shipping shipping;
     private OrderStatus orderStatus;
+    @Nullable
     private PaymentMethod paymentMethod;
     private Set<OrderItem> items;
+    @Nullable
     @Setter(PRIVATE)
     private Long version;
 
@@ -50,16 +59,16 @@ public class Order implements AggregateRoot<OrderId> {
                  final CustomerId customerId,
                  final Money totalAmount,
                  final Quantity totalItems,
-                 final OffsetDateTime placedAt,
-                 final OffsetDateTime paidAt,
-                 final OffsetDateTime canceledAt,
-                 final OffsetDateTime readyAt,
-                 final Billing billing,
-                 final Shipping shipping,
+                 @Nullable final OffsetDateTime placedAt,
+                 @Nullable final OffsetDateTime paidAt,
+                 @Nullable final OffsetDateTime canceledAt,
+                 @Nullable final OffsetDateTime readyAt,
+                 @Nullable final Billing billing,
+                 @Nullable final Shipping shipping,
                  final OrderStatus orderStatus,
-                 final PaymentMethod paymentMethod,
+                 @Nullable final PaymentMethod paymentMethod,
                  final Set<OrderItem> items,
-                 final Long version) {
+                 @Nullable final Long version) {
         this.setId(id);
         this.setCustomerId(customerId);
         this.setTotalAmount(totalAmount);
@@ -212,26 +221,32 @@ public class Order implements AggregateRoot<OrderId> {
         return totalItems;
     }
 
+    @Nullable
     public OffsetDateTime placedAt() {
         return placedAt;
     }
 
+    @Nullable
     public OffsetDateTime paidAt() {
         return paidAt;
     }
 
+    @Nullable
     public OffsetDateTime canceledAt() {
         return canceledAt;
     }
 
+    @Nullable
     public OffsetDateTime readyAt() {
         return readyAt;
     }
 
+    @Nullable
     public Billing billing() {
         return billing;
     }
 
+    @Nullable
     public Shipping shipping() {
         return shipping;
     }
@@ -240,6 +255,7 @@ public class Order implements AggregateRoot<OrderId> {
         return orderStatus;
     }
 
+    @Nullable
     public PaymentMethod paymentMethod() {
         return paymentMethod;
     }
@@ -286,7 +302,7 @@ public class Order implements AggregateRoot<OrderId> {
         if (isNull(this.paymentMethod())){
             throw OrderCannotBePlacedException.noPaymentMethod(this.id);
         }
-        if (isNull(this.items()) || this.items.isEmpty()){
+        if (this.items.isEmpty()){
             throw OrderCannotBePlacedException.noShippingInfo(this.id);
         }
     }
@@ -329,27 +345,27 @@ public class Order implements AggregateRoot<OrderId> {
         this.totalItems = totalItems;
     }
 
-    private void setPlacedAt(final OffsetDateTime placedAt) {
+    private void setPlacedAt(@Nullable final OffsetDateTime placedAt) {
         this.placedAt = placedAt;
     }
 
-    private void setPaidAt(final OffsetDateTime paidAt) {
+    private void setPaidAt(@Nullable final OffsetDateTime paidAt) {
         this.paidAt = paidAt;
     }
 
-    private void setCanceledAt(final OffsetDateTime canceledAt) {
+    private void setCanceledAt(@Nullable final OffsetDateTime canceledAt) {
         this.canceledAt = canceledAt;
     }
 
-    private void setReadyAt(final OffsetDateTime readyAt) {
+    private void setReadyAt(@Nullable final OffsetDateTime readyAt) {
         this.readyAt = readyAt;
     }
 
-    private void setBilling(final Billing billing) {
+    private void setBilling(@Nullable final Billing billing) {
         this.billing = billing;
     }
 
-    private void setShipping(final Shipping shipping) {
+    private void setShipping(@Nullable final Shipping shipping) {
         this.shipping = shipping;
     }
 
@@ -358,7 +374,7 @@ public class Order implements AggregateRoot<OrderId> {
         this.orderStatus = orderStatus;
     }
 
-    private void setPaymentMethod(final PaymentMethod paymentMethod) {
+    private void setPaymentMethod(@Nullable final PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
@@ -367,6 +383,7 @@ public class Order implements AggregateRoot<OrderId> {
         this.items = items;
     }
 
+    @Nullable
     public Long version(){
         return this.version;
     }

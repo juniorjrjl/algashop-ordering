@@ -1,12 +1,11 @@
 package com.algaworks.algashop.ordering.domain.model.shoppingcart;
 
+import com.algaworks.algashop.ordering.domain.model.DomainService;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerAlreadyHaveShoppingCartException;
+import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.customer.Customers;
-import com.algaworks.algashop.ordering.domain.model.DomainService;
-import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
 
 import static java.util.Objects.requireNonNull;
 
@@ -17,7 +16,7 @@ public class ShoppingService {
     private final Customers customers;
     private final ShoppingCarts shoppingCarts;
 
-    public @NonNull ShoppingCart startShopping(@NonNull final CustomerId customerId){
+    public ShoppingCart startShopping(final CustomerId customerId){
         requireNonNull(customerId);
         if (!customers.exists(customerId)){
             throw new CustomerNotFoundException();

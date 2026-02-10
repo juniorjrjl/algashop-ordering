@@ -1,21 +1,20 @@
 package com.algaworks.algashop.ordering.domain.model.order;
 
-import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
-import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartItem;
-import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartCantProceedToCheckoutException;
 import com.algaworks.algashop.ordering.domain.model.DomainService;
 import com.algaworks.algashop.ordering.domain.model.product.Product;
-import org.jspecify.annotations.NonNull;
+import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
+import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartCantProceedToCheckoutException;
+import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartItem;
 
 import java.util.Set;
 
 @DomainService
 public class CheckoutService {
 
-    public Order checkout(@NonNull final ShoppingCart shoppingCart,
-                          @NonNull final Billing billing,
-                          @NonNull final Shipping shipping,
-                          @NonNull final PaymentMethod paymentMethod) {
+    public Order checkout(final ShoppingCart shoppingCart,
+                          final Billing billing,
+                          final Shipping shipping,
+                          final PaymentMethod paymentMethod) {
         validateShoppingCart(shoppingCart);
         final var order = buildDraftOrder(shoppingCart, billing, shipping, paymentMethod);
         addItems(order, shoppingCart.items());
@@ -23,7 +22,7 @@ public class CheckoutService {
         return order;
     }
 
-    private static @NonNull Order buildDraftOrder(final ShoppingCart shoppingCart,
+    private static Order buildDraftOrder(final ShoppingCart shoppingCart,
                                                   final Billing billing,
                                                   final Shipping shipping,
                                                   final PaymentMethod paymentMethod) {

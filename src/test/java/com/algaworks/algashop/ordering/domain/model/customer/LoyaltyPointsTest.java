@@ -4,7 +4,6 @@ import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.tag.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,7 +23,6 @@ class LoyaltyPointsTest {
 
     @ParameterizedTest
     @ValueSource(ints = {-1, -100})
-    @NullSource
     void shouldNotGenerate(final Integer invalidValue){
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> new LoyaltyPoints(invalidValue));
@@ -42,7 +40,6 @@ class LoyaltyPointsTest {
 
     @ParameterizedTest
     @ValueSource(ints = {-1, -100})
-    @NullSource
     void shouldNotAddValue(final Integer invalidValue){
         final var value = customFaker.number().numberBetween(1, 20);
         final var loyaltyPoints = new LoyaltyPoints(value);

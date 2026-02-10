@@ -2,6 +2,7 @@ package com.algaworks.algashop.ordering.domain.model;
 
 public interface RichComparable<T> extends Comparable<T> {
 
+    @Override
     int compareTo(final T toCompare);
 
     default boolean isLessThan(final T toCompare){

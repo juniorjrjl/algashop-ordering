@@ -15,8 +15,6 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
-import static java.util.Objects.isNull;
-
 @Entity
 @Table(name = "ORDER_ITEMS")
 @Getter
@@ -40,7 +38,7 @@ public class OrderItemPersistenceEntity {
     private OrderPersistenceEntity order;
 
     public Long getOrderId(){
-        return isNull(order) ? null : order.getId();
+        return order.getId();
     }
 
     @Override

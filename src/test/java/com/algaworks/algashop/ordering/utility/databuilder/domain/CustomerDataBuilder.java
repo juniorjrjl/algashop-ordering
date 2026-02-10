@@ -13,6 +13,7 @@ import com.algaworks.algashop.ordering.domain.model.commons.Phone;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;
+import org.jspecify.annotations.Nullable;
 
 import java.time.OffsetDateTime;
 import java.util.function.Supplier;
@@ -44,7 +45,7 @@ public class CustomerDataBuilder {
     @With
     private Supplier<OffsetDateTime> registeredAt = OffsetDateTime::now;
     @With
-    private Supplier<OffsetDateTime> archivedAt = () -> null;
+    private Supplier<@Nullable OffsetDateTime> archivedAt = () -> null;
     @With
     private Supplier<LoyaltyPoints> loyaltyPoints = () -> customFaker.customer().loyaltyPoints(100, 9999);
     @With

@@ -10,6 +10,9 @@ import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
 import com.algaworks.algashop.ordering.domain.model.order.Recipient;
 import com.algaworks.algashop.ordering.domain.model.order.Shipping;
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableDisassembler;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+import org.mapstruct.AnnotateWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -22,6 +25,7 @@ import static java.util.Objects.isNull;
 import static org.mapstruct.InjectionStrategy.CONSTRUCTOR;
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
+@AnnotateWith(NullMarked.class)
 @Mapper(componentModel = SPRING, uses = EmbeddableDisassembler.class, injectionStrategy = CONSTRUCTOR)
 public interface OrderPersistenceEntityDisassembler {
 
@@ -33,15 +37,15 @@ public interface OrderPersistenceEntityDisassembler {
                                                 final OrderItemPersistenceEntity item);
 
     default OrderId toOrderId(final Long value){
-        return isNull(value) ? null : new OrderId(value);
+        return new OrderId(value);
     }
 
     default OrderItemId toOrderItemId(final Long value){
-        return isNull(value) ? null : new OrderItemId(value);
+        return new OrderItemId(value);
     }
 
     default Set<OrderItem> toDomain(final Set<OrderItemPersistenceEntity> items){
-        if (isNull(items) || items.isEmpty()) {
+        if (items.isEmpty()) {
             return new HashSet<>();
         }
         return items.stream()
@@ -53,12 +57,13 @@ public interface OrderPersistenceEntityDisassembler {
         return toDomain(Order.existing(), aggregateRoot).build();
     }
 
-    default PaymentMethod mapPaymentMethod(final String method) {
+    @Nullable
+    default PaymentMethod mapPaymentMethod(@Nullable final String method) {
         return isNull(method) ? null : PaymentMethod.valueOf(method);
     }
 
     default OrderStatus mapOrderStatus(final String status) {
-        return isNull(status) ? null : OrderStatus.valueOf(status);
+        return OrderStatus.valueOf(status);
     }
 
     @Mapping(target = "fullName", expression = "java(embeddableDisassembler.toFullName(recipient.getFirstName(), recipient.getLastName()))")

@@ -54,7 +54,7 @@ public class ShoppingCartItem {
         this.setPrice(price);
         this.setQuantity(quantity);
         this.setAvailable(available);
-        this.recalculateTotals();
+        this.setTotalAmount(this.price.multiply(this.quantity));
     }
 
     public ShoppingCartItemId id() {

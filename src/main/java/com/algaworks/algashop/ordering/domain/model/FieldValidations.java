@@ -3,7 +3,6 @@ package com.algaworks.algashop.ordering.domain.model;
 import lombok.NoArgsConstructor;
 import org.apache.commons.validator.routines.EmailValidator;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -18,7 +17,7 @@ public class FieldValidations {
     }
 
     public static boolean emailIsInValid(final String email) {
-        return (isNull(email) || email.isBlank() || !EmailValidator.getInstance().isValid(email));
+        return (email.isBlank() || !EmailValidator.getInstance().isValid(email));
     }
 
     public static void requiresNonBlank(final String value) {

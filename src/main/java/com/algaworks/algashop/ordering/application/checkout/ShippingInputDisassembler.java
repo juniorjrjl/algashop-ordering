@@ -4,7 +4,9 @@ import com.algaworks.algashop.ordering.application.common.CommonDisassembler;
 import com.algaworks.algashop.ordering.domain.model.order.Recipient;
 import com.algaworks.algashop.ordering.domain.model.order.Shipping;
 import com.algaworks.algashop.ordering.domain.model.order.ShippingCostService;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+import org.mapstruct.AnnotateWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static java.util.Objects.requireNonNull;
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
+@AnnotateWith(NullMarked.class)
 @Mapper(componentModel = SPRING)
 public abstract class ShippingInputDisassembler {
 

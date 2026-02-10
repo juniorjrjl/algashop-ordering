@@ -12,7 +12,6 @@ import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.product.ProductId;
 import com.algaworks.algashop.ordering.domain.model.product.ProductName;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 import org.mapstruct.AnnotateWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

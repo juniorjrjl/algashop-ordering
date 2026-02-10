@@ -3,14 +3,13 @@ package com.algaworks.algashop.ordering.application.checkout;
 import com.algaworks.algashop.ordering.domain.model.commons.ZipCode;
 import com.algaworks.algashop.ordering.domain.model.order.CheckoutService;
 import com.algaworks.algashop.ordering.domain.model.order.Orders;
-import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
 import com.algaworks.algashop.ordering.domain.model.order.OriginAddressService;
+import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
 import com.algaworks.algashop.ordering.domain.model.order.ShippingCostService;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartId;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFound;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCarts;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 import static java.util.Objects.requireNonNull;

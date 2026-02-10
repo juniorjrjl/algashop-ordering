@@ -1,7 +1,6 @@
 package com.algaworks.algashop.ordering.domain.model.customer;
 
 import com.algaworks.algashop.ordering.domain.model.IdGenerator;
-import org.jspecify.annotations.NonNull;
 
 import java.util.UUID;
 

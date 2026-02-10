@@ -25,7 +25,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import static jakarta.persistence.CascadeType.ALL;
-import static java.util.Objects.isNull;
 
 @Entity
 @Table(name = "SHOPPING_CARTS")
@@ -81,7 +80,7 @@ public class ShoppingCartPersistenceEntity {
     }
 
     public void addCartToItems() {
-        if (isNull(this.items) || this.items.isEmpty()) {
+        if (this.items.isEmpty()) {
             return;
         }
         this.items.forEach(i -> i.setShoppingCart(this));

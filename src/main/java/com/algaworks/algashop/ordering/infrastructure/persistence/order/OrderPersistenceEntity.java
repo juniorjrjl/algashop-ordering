@@ -27,7 +27,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import static jakarta.persistence.CascadeType.ALL;
-import static java.util.Objects.isNull;
 
 @Entity
 @Table(name = "ORDERS")
@@ -112,7 +111,7 @@ public class OrderPersistenceEntity{
     private Set<OrderItemPersistenceEntity> items = new HashSet<>();
 
     public void addOrderToItems(){
-        if (isNull(this.items) || this.items.isEmpty()) {
+        if (this.items.isEmpty()) {
             return;
         }
         items.forEach(i -> i.setOrder(this));

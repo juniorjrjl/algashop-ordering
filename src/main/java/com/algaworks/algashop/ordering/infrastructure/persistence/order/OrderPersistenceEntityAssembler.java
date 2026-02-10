@@ -13,8 +13,10 @@ import com.algaworks.algashop.ordering.domain.model.order.Shipping;
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableAssembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.mapstruct.AfterMapping;
+import org.mapstruct.AnnotateWith;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -27,6 +29,7 @@ import static java.util.Objects.requireNonNull;
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 import static org.mapstruct.NullValueMappingStrategy.RETURN_DEFAULT;
 
+@AnnotateWith(NullMarked.class)
 @Mapper(componentModel = SPRING)
 public abstract class OrderPersistenceEntityAssembler {
 
@@ -81,7 +84,7 @@ public abstract class OrderPersistenceEntityAssembler {
     }
 
     public CustomerPersistenceEntity getCustomerReference(final CustomerId customerId){
-        return getCustomerRepository().getReferenceById(embeddableAssembler.map(customerId));
+        return getCustomerRepository().getReferenceById(getEmbeddableAssembler().map(customerId));
     }
 
     @IterableMapping(nullValueMappingStrategy = RETURN_DEFAULT)
@@ -104,7 +107,7 @@ public abstract class OrderPersistenceEntityAssembler {
     @Mapping(target = "lastName", source = "fullName.lastName")
     @Mapping(target = "document", expression = "java(getEmbeddableAssembler().map(recipient.document()))")
     @Mapping(target = "phone", expression = "java(getEmbeddableAssembler().map(recipient.phone()))")
-    abstract RecipientEmbeddable map(@Nullable final Recipient recipient);
+    abstract RecipientEmbeddable map(final Recipient recipient);
 
     @Mapping(target = "firstName", source = "fullName.firstName")
     @Mapping(target = "lastName", source = "fullName.lastName")
@@ -114,7 +117,7 @@ public abstract class OrderPersistenceEntityAssembler {
     @Mapping(target = "address", expression = "java(getEmbeddableAssembler().map(billing.address()))")
     abstract BillingEmbeddable map(@Nullable final Billing billing);
 
-    abstract String map(@Nullable final OrderStatus status);
+    abstract String map(final OrderStatus status);
 
     abstract String map(@Nullable final PaymentMethod method);
 

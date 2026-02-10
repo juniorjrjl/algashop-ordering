@@ -8,6 +8,7 @@ import com.algaworks.algashop.ordering.infrastructure.persistence.customer.Custo
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;
+import org.jspecify.annotations.Nullable;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -50,11 +51,11 @@ public class CustomerPersistenceEntityDataBuilder {
     @With
     private Supplier<AddressEmbeddable> address = () -> AddressEmbeddableDataBuilder.builder().build();
     @With
-    private Supplier<UUID> createdBy = IdGenerator::generateUUID;
+    private Supplier<@Nullable UUID> createdBy = IdGenerator::generateUUID;
     @With
-    private Supplier<OffsetDateTime> lastModifiedAt = OffsetDateTime::now;
+    private Supplier<@Nullable OffsetDateTime> lastModifiedAt = OffsetDateTime::now;
     @With
-    private Supplier<UUID> lastModifiedBy = IdGenerator::generateUUID;
+    private Supplier<@Nullable UUID> lastModifiedBy = IdGenerator::generateUUID;
 
     public static CustomerPersistenceEntityDataBuilder builder() {
         return new CustomerPersistenceEntityDataBuilder();

@@ -14,6 +14,7 @@ import com.algaworks.algashop.ordering.domain.model.order.OrderId;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;
+import org.jspecify.annotations.Nullable;
 
 import java.time.OffsetDateTime;
 import java.util.HashSet;
@@ -38,9 +39,9 @@ public class OrderDataBuilder {
     @With
     private Supplier<OffsetDateTime> placedAt = OffsetDateTime::now;
     @With
-    private Supplier<OffsetDateTime> paidAt = OffsetDateTime::now;
+    private Supplier<@Nullable OffsetDateTime> paidAt = OffsetDateTime::now;
     @With
-    private Supplier<OffsetDateTime> canceledAt = OffsetDateTime::now;
+    private Supplier<@Nullable OffsetDateTime> canceledAt = OffsetDateTime::now;
     @With
     private Supplier<OffsetDateTime> readyAt = OffsetDateTime::now;
     @With

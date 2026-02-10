@@ -7,11 +7,14 @@ import com.algaworks.algashop.ordering.domain.model.commons.FullName;
 import com.algaworks.algashop.ordering.domain.model.commons.Money;
 import com.algaworks.algashop.ordering.domain.model.commons.Phone;
 import com.algaworks.algashop.ordering.domain.model.commons.ZipCode;
+import org.jspecify.annotations.NullMarked;
+import org.mapstruct.AnnotateWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
+@AnnotateWith(NullMarked.class)
 @Mapper(componentModel = SPRING)
 public interface CommonDisassembler {
 

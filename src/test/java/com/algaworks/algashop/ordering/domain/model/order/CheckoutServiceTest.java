@@ -86,19 +86,31 @@ class CheckoutServiceTest {
                     customFaker.options().option(PaymentMethod.class)
             ),
             Arguments.of(
-                    ShoppingCartDataBuilder.builder().build(),
+                    ShoppingCartDataBuilder.builder()
+                            .withItems(() -> ShoppingCartItemDataBuilder.builder()
+                                    .withAvailable(() -> true)
+                                    .buildSet(1))
+                            .build(),
                     null,
                     customFaker.order().shipping(),
                     customFaker.options().option(PaymentMethod.class)
             ),
             Arguments.of(
-                    ShoppingCartDataBuilder.builder().build(),
+                    ShoppingCartDataBuilder.builder()
+                            .withItems(() -> ShoppingCartItemDataBuilder.builder()
+                                    .withAvailable(() -> true)
+                                    .buildSet(1))
+                            .build(),
                     customFaker.order().billing(),
                     null,
                     customFaker.options().option(PaymentMethod.class)
             ),
             Arguments.of(
-                    ShoppingCartDataBuilder.builder().build(),
+                    ShoppingCartDataBuilder.builder()
+                            .withItems(() -> ShoppingCartItemDataBuilder.builder()
+                                    .withAvailable(() -> true)
+                                    .buildSet(1))
+                            .build(),
                     customFaker.order().billing(),
                     customFaker.order().shipping(),
                     null
@@ -112,7 +124,7 @@ class CheckoutServiceTest {
                                                     final Shipping shipping,
                                                     final PaymentMethod paymentMethod) {
         assertThatExceptionOfType(NullPointerException.class)
-                .isThrownBy(() -> service.checkout(null, billing, shipping, paymentMethod));
+                .isThrownBy(() -> service.checkout(shoppingCart, billing, shipping, paymentMethod));
     }
 
     private static Stream<ShoppingCart> givenUnprocessableShoppingCartWhenCheckoutThenThrowException(){

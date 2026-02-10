@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.domain.model.commons;
 
 import com.algaworks.algashop.ordering.domain.model.RichComparable;
+import org.jspecify.annotations.NonNull;
 
 import java.math.BigDecimal;
 
@@ -41,6 +42,7 @@ public record Money(BigDecimal value) implements RichComparable<Money> {
         return new Money(value.divide(toDivide.value(), HALF_EVEN));
     }
 
+    @Override
     public int compareTo(final Money toCompare){
         return value.compareTo(toCompare.value());
     }

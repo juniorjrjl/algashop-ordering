@@ -182,6 +182,7 @@ public class ShoppingCart implements AggregateRoot<ShoppingCartId> {
     private void recalculateTotals() {
         final var totalItemsAmount = this.items.stream()
                 .map(ShoppingCartItem::totalAmount)
+                .filter(Objects::nonNull)
                 .reduce(Money.ZERO, Money::add);
 
         final var totalItemsQuantity = this.items.stream()
@@ -200,7 +201,7 @@ public class ShoppingCart implements AggregateRoot<ShoppingCartId> {
         this.customerId = requireNonNull(customerId);
     }
 
-    private void setTotalAmount(final Money totalAmount) {
+    private void setTotalAmount(@Nullable final Money totalAmount) {
         this.totalAmount = requireNonNull(totalAmount);
     }
 

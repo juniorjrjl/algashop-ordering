@@ -18,6 +18,7 @@ public record Quantity(Integer value) implements RichComparable<Quantity> {
         return new Quantity(value + toAdd.value());
     }
 
+    @Override
     public int compareTo(final Quantity toCompare){
         return value.compareTo(toCompare.value());
     }

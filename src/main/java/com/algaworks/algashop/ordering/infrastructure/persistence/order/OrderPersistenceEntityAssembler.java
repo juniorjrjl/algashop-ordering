@@ -1,10 +1,10 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.order;
 
+import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.order.Billing;
 import com.algaworks.algashop.ordering.domain.model.order.Order;
 import com.algaworks.algashop.ordering.domain.model.order.OrderId;
 import com.algaworks.algashop.ordering.domain.model.order.OrderItem;
-import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.order.OrderItemId;
 import com.algaworks.algashop.ordering.domain.model.order.OrderStatus;
 import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
@@ -13,7 +13,7 @@ import com.algaworks.algashop.ordering.domain.model.order.Shipping;
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableAssembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
@@ -23,26 +23,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
 
+import static java.util.Objects.requireNonNull;
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 import static org.mapstruct.NullValueMappingStrategy.RETURN_DEFAULT;
 
 @Mapper(componentModel = SPRING)
 public abstract class OrderPersistenceEntityAssembler {
 
-    protected EmbeddableAssembler embeddableAssembler;
-    protected CustomerPersistenceEntityRepository customerRepository;
+    @Nullable
+    private EmbeddableAssembler embeddableAssembler;
+    @Nullable
+    private CustomerPersistenceEntityRepository customerRepository;
 
     @Autowired
-    public void setEmbeddableAssembler(final EmbeddableAssembler embeddableAssembler,
-                                       final CustomerPersistenceEntityRepository customerRepository) {
+    public void setEmbeddableAssembler(final EmbeddableAssembler embeddableAssembler) {
         this.embeddableAssembler = embeddableAssembler;
+    }
+
+    @Autowired
+    public void setCustomerRepository(final CustomerPersistenceEntityRepository customerRepository) {
         this.customerRepository = customerRepository;
+    }
+
+    public EmbeddableAssembler getEmbeddableAssembler() {
+        return requireNonNull(embeddableAssembler, "embeddableAssembler must be injected by Spring");
+    }
+
+    public CustomerPersistenceEntityRepository getCustomerRepository() {
+        return requireNonNull(customerRepository, "customerRepository must be injected by Spring");
     }
 
     @Mapping(target = "id", expression = "java(map(order.id()))")
     @Mapping(target = "customer", expression = "java(getCustomerReference(order.customerId()))")
-    @Mapping(target = "totalAmount", expression = "java(embeddableAssembler.map(order.totalAmount()))")
-    @Mapping(target = "totalItems", expression = "java(embeddableAssembler.map(order.totalItems()))")
+    @Mapping(target = "totalAmount", expression = "java(getEmbeddableAssembler().map(order.totalAmount()))")
+    @Mapping(target = "totalItems", expression = "java(getEmbeddableAssembler().map(order.totalItems()))")
     @Mapping(target = "orderStatus", expression = "java(map(order.orderStatus()))")
     @Mapping(target = "paymentMethod", expression = "java(map(order.paymentMethod()))")
     @Mapping(target = "placedAt", expression = "java(order.placedAt())")
@@ -60,7 +74,7 @@ public abstract class OrderPersistenceEntityAssembler {
                                                final Order order);
 
     @AfterMapping
-    protected OrderPersistenceEntity itemsSetup(@MappingTarget final @NonNull OrderPersistenceEntity entity,
+    protected OrderPersistenceEntity itemsSetup(@MappingTarget final OrderPersistenceEntity entity,
                                               final Order order) {
         entity.addOrderToItems();
         return entity;
@@ -74,41 +88,41 @@ public abstract class OrderPersistenceEntityAssembler {
     abstract Set<OrderItemPersistenceEntity> fromDomain(final Set<OrderItem> items);
 
     @Mapping(target = "id", expression = "java(map(item.id()))")
-    @Mapping(target = "productId", expression = "java(embeddableAssembler.map(item.productId()))")
-    @Mapping(target = "productName", expression = "java(embeddableAssembler.map(item.productName()))")
-    @Mapping(target = "price", expression = "java(embeddableAssembler.map(item.price()))")
-    @Mapping(target = "quantity", expression = "java(embeddableAssembler.map(item.quantity()))")
-    @Mapping(target = "totalAmount", expression = "java(embeddableAssembler.map(item.totalAmount()))")
+    @Mapping(target = "productId", expression = "java(getEmbeddableAssembler().map(item.productId()))")
+    @Mapping(target = "productName", expression = "java(getEmbeddableAssembler().map(item.productName()))")
+    @Mapping(target = "price", expression = "java(getEmbeddableAssembler().map(item.price()))")
+    @Mapping(target = "quantity", expression = "java(getEmbeddableAssembler().map(item.quantity()))")
+    @Mapping(target = "totalAmount", expression = "java(getEmbeddableAssembler().map(item.totalAmount()))")
     @Mapping(target = "order", ignore = true)
     abstract OrderItemPersistenceEntity fromDomain(final OrderItem item);
 
-    @Mapping(target = "cost", expression = "java(embeddableAssembler.map(shipping.cost()))")
-    @Mapping(target = "address", expression = "java(embeddableAssembler.map(shipping.address()))")
+    @Mapping(target = "cost", expression = "java(getEmbeddableAssembler().map(shipping.cost()))")
+    @Mapping(target = "address", expression = "java(getEmbeddableAssembler().map(shipping.address()))")
     abstract ShippingEmbeddable map(final Shipping shipping);
 
     @Mapping(target = "firstName", source = "fullName.firstName")
     @Mapping(target = "lastName", source = "fullName.lastName")
-    @Mapping(target = "document", expression = "java(embeddableAssembler.map(recipient.document()))")
-    @Mapping(target = "phone", expression = "java(embeddableAssembler.map(recipient.phone()))")
+    @Mapping(target = "document", expression = "java(getEmbeddableAssembler().map(recipient.document()))")
+    @Mapping(target = "phone", expression = "java(getEmbeddableAssembler().map(recipient.phone()))")
     abstract RecipientEmbeddable map(final Recipient recipient);
 
     @Mapping(target = "firstName", source = "fullName.firstName")
     @Mapping(target = "lastName", source = "fullName.lastName")
-    @Mapping(target = "document", expression = "java(embeddableAssembler.map(billing.document()))")
-    @Mapping(target = "phone", expression = "java(embeddableAssembler.map(billing.phone()))")
-    @Mapping(target = "email", expression = "java(embeddableAssembler.map(billing.email()))")
-    @Mapping(target = "address", expression = "java(embeddableAssembler.map(billing.address()))")
+    @Mapping(target = "document", expression = "java(getEmbeddableAssembler().map(billing.document()))")
+    @Mapping(target = "phone", expression = "java(getEmbeddableAssembler().map(billing.phone()))")
+    @Mapping(target = "email", expression = "java(getEmbeddableAssembler().map(billing.email()))")
+    @Mapping(target = "address", expression = "java(getEmbeddableAssembler().map(billing.address()))")
     abstract BillingEmbeddable map(final Billing billing);
 
     abstract String map(final OrderStatus status);
 
     abstract String map(final PaymentMethod method);
 
-    protected Long map(final @NonNull OrderItemId orderItemId) {
+    protected Long map(final OrderItemId orderItemId) {
         return orderItemId.value().toLong();
     }
 
-    protected Long map(final @NonNull OrderId orderId) {
+    protected Long map(final OrderId orderId) {
         return orderId.value().toLong();
     }
 

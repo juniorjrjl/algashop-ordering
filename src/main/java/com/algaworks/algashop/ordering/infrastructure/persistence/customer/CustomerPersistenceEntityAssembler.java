@@ -4,6 +4,7 @@ import com.algaworks.algashop.ordering.domain.model.customer.BirthDate;
 import com.algaworks.algashop.ordering.domain.model.customer.Customer;
 import com.algaworks.algashop.ordering.domain.model.customer.LoyaltyPoints;
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableAssembler;
+import org.jspecify.annotations.Nullable;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -12,11 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDate;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.requireNonNull;
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
 @Mapper(componentModel = SPRING, uses = EmbeddableAssembler.class)
 public abstract class CustomerPersistenceEntityAssembler {
 
+    @Nullable
     protected EmbeddableAssembler embeddableAssembler;
 
     @Autowired
@@ -24,17 +27,21 @@ public abstract class CustomerPersistenceEntityAssembler {
         this.embeddableAssembler = embeddableAssembler;
     }
 
-    @Mapping(target = "id", expression = "java(embeddableAssembler.map(customer.id()))")
-    @Mapping(target = "firstName", expression = "java(embeddableAssembler.toFirstName(customer.fullName()))")
-    @Mapping(target = "lastName", expression = "java(embeddableAssembler.toLastName(customer.fullName()))")
+    public EmbeddableAssembler getEmbeddableAssembler() {
+        return requireNonNull(embeddableAssembler, "embeddableAssembler must be injected by Spring");
+    }
+
+    @Mapping(target = "id", expression = "java(getEmbeddableAssembler().map(customer.id()))")
+    @Mapping(target = "firstName", expression = "java(getEmbeddableAssembler().toFirstName(customer.fullName()))")
+    @Mapping(target = "lastName", expression = "java(getEmbeddableAssembler().toLastName(customer.fullName()))")
     @Mapping(target = "birthDate", expression = "java(map(customer.birthDate()))")
-    @Mapping(target = "email", expression = "java(embeddableAssembler.map(customer.email()))")
-    @Mapping(target = "phone", expression = "java(embeddableAssembler.map(customer.phone()))")
-    @Mapping(target = "document", expression = "java(embeddableAssembler.map(customer.document()))")
+    @Mapping(target = "email", expression = "java(getEmbeddableAssembler().map(customer.email()))")
+    @Mapping(target = "phone", expression = "java(getEmbeddableAssembler().map(customer.phone()))")
+    @Mapping(target = "document", expression = "java(getEmbeddableAssembler().map(customer.document()))")
     @Mapping(target = "registeredAt", expression = "java(customer.registeredAt())")
     @Mapping(target = "archivedAt", expression = "java(customer.archivedAt())")
     @Mapping(target = "loyaltyPoints", expression = "java(map(customer.loyaltyPoints()))")
-    @Mapping(target = "address", expression = "java(embeddableAssembler.map(customer.address()))")
+    @Mapping(target = "address", expression = "java(getEmbeddableAssembler().map(customer.address()))")
     @Mapping(target = "version", expression = "java(customer.version())")
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "lastModifiedAt", ignore = true)

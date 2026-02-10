@@ -9,6 +9,7 @@ import com.algaworks.algashop.ordering.domain.model.customer.BirthDate;
 import com.algaworks.algashop.ordering.domain.model.customer.Customer;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.customer.LoyaltyPoints;
+import org.jspecify.annotations.Nullable;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,16 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 @Mapper(componentModel = SPRING)
 public abstract class CustomerDisassembler {
 
-    protected CommonAssembler commonModelDisassembler;
+    @Nullable
+    private CommonAssembler commonModelDisassembler;
 
     @Autowired
     public void setCommonModelDisassembler(final CommonAssembler commonModelDisassembler) {
         this.commonModelDisassembler = commonModelDisassembler;
+    }
+
+    public CommonAssembler getCommonModelDisassembler() {
+        return requireNonNull(commonModelDisassembler, "commonModelDisassembler must be injected by Spring");
     }
 
     @Mapping(target = "id", expression = "java(map(customer.id()))")
@@ -40,7 +46,7 @@ public abstract class CustomerDisassembler {
     @Mapping(target = "registeredAt", expression = "java(customer.registeredAt())")
     @Mapping(target = "archivedAt", expression = "java(customer.archivedAt())")
     @Mapping(target = "loyaltyPoints", expression = "java(map(customer.loyaltyPoints()))")
-    @Mapping(target = "address", expression = "java(commonModelDisassembler.toAddressData(customer.address()))")
+    @Mapping(target = "address", expression = "java(getCommonModelDisassembler().toAddressData(customer.address()))")
     abstract CustomerOutput toOutput(final Customer customer);
 
     protected UUID map(final CustomerId customerId) {

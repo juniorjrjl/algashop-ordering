@@ -2,11 +2,13 @@ package com.algaworks.algashop.ordering.domain.model.commons;
 
 import com.algaworks.algashop.ordering.domain.model.FieldValidations;
 import lombok.Builder;
+import org.jspecify.annotations.Nullable;
 
 import static java.util.Objects.requireNonNull;
 
 public record Address(
         String street,
+        @Nullable
         String complement,
         String neighborhood,
         String number,

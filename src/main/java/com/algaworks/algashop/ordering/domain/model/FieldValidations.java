@@ -27,4 +27,10 @@ public class FieldValidations {
         }
     }
 
+    public static void requiresNonBlank(final String value, final String message) {
+        if (requireNonNull(value).isBlank()) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
 }

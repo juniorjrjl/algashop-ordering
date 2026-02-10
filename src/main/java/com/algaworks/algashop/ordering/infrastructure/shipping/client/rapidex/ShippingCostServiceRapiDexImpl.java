@@ -1,6 +1,6 @@
 package com.algaworks.algashop.ordering.infrastructure.shipping.client.rapidex;
 
-import com.algaworks.algashop.ordering.domain.model.order.shipping.ShippingCostService;
+import com.algaworks.algashop.ordering.domain.model.order.ShippingCostService;
 import com.algaworks.algashop.ordering.domain.model.commons.Money;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

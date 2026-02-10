@@ -3,7 +3,7 @@ package com.algaworks.algashop.ordering.application.checkout;
 import com.algaworks.algashop.ordering.application.common.CommonDisassembler;
 import com.algaworks.algashop.ordering.domain.model.order.Recipient;
 import com.algaworks.algashop.ordering.domain.model.order.Shipping;
-import com.algaworks.algashop.ordering.domain.model.order.shipping.ShippingCostService;
+import com.algaworks.algashop.ordering.domain.model.order.ShippingCostService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;

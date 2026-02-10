@@ -1,5 +1,7 @@
 package com.algaworks.algashop.ordering.domain.model.order.shipping;
 
+import com.algaworks.algashop.ordering.domain.model.order.OriginAddressService;
+import com.algaworks.algashop.ordering.domain.model.order.ShippingCostService;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.infrastructure.DeliveryCostResponseDataBuilder;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;

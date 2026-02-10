@@ -8,6 +8,7 @@ import com.algaworks.algashop.ordering.domain.model.commons.Money;
 import com.algaworks.algashop.ordering.domain.model.commons.Phone;
 import com.algaworks.algashop.ordering.domain.model.commons.ZipCode;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
@@ -26,6 +27,9 @@ public interface CommonDisassembler {
 
     Email toEmail(final String value);
 
+    @Mapping(target = "add", ignore = true)
+    @Mapping(target = "multiply", ignore = true)
+    @Mapping(target = "divide", ignore = true)
     Money toMoney(final String value);
 
 }

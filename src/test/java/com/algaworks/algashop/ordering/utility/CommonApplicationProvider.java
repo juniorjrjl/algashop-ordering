@@ -1,10 +1,14 @@
 package com.algaworks.algashop.ordering.utility;
 
 import com.algaworks.algashop.ordering.application.checkout.BillingData;
+import com.algaworks.algashop.ordering.application.checkout.CheckoutInput;
 import com.algaworks.algashop.ordering.application.checkout.RecipientData;
 import com.algaworks.algashop.ordering.application.checkout.ShippingInput;
 import com.algaworks.algashop.ordering.application.common.AddressData;
+import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
 import net.datafaker.providers.base.AbstractProvider;
+
+import java.util.UUID;
 
 public class CommonApplicationProvider extends AbstractProvider<CustomFaker> {
 
@@ -60,6 +64,15 @@ public class CommonApplicationProvider extends AbstractProvider<CustomFaker> {
                 .lastName(faker.name().lastName())
                 .document(faker.cpf().valid())
                 .phone(faker.phoneNumber().phoneNumber())
+                .build();
+    }
+
+    public CheckoutInput checkout(){
+        return CheckoutInput.builder()
+                .shoppingCartId(UUID.randomUUID())
+                .paymentMethod(faker.options().option(PaymentMethod.class).name())
+                .shipping(shipping())
+                .billing(billing())
                 .build();
     }
 

@@ -1,9 +1,11 @@
 package com.algaworks.algashop.ordering.application.checkout;
 
+import com.algaworks.algashop.ordering.domain.model.commons.ZipCode;
 import com.algaworks.algashop.ordering.domain.model.customer.Customer;
 import com.algaworks.algashop.ordering.domain.model.customer.Customers;
 import com.algaworks.algashop.ordering.domain.model.order.OrderId;
 import com.algaworks.algashop.ordering.domain.model.order.Orders;
+import com.algaworks.algashop.ordering.domain.model.order.shipping.OriginAddressService;
 import com.algaworks.algashop.ordering.domain.model.order.shipping.ShippingCostService;
 import com.algaworks.algashop.ordering.domain.model.product.ProductCatalogService;
 import com.algaworks.algashop.ordering.domain.model.product.ProductId;
@@ -24,7 +26,6 @@ import java.util.Optional;
 
 import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -32,6 +33,8 @@ class BuyNowApplicationServiceTest extends AbstractApplicationTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
 
+    @MockitoBean
+    private OriginAddressService originAddressService;
     @MockitoBean
     private ProductCatalogService productCatalogService;
     @MockitoBean
@@ -70,11 +73,17 @@ class BuyNowApplicationServiceTest extends AbstractApplicationTest {
                 .build();
         when(productCatalogService.ofId(new ProductId(input.getProductId()))).thenReturn(Optional.of(product));
 
+        final var originAddress = customFaker.common().address();
+        when(originAddressService.originAddress()).thenReturn(originAddress);
         final var calculationResult = new ShippingCostService.CalculationResult(
                 customFaker.common().money(),
                 LocalDate.ofInstant(customFaker.timeAndDate().future(), UTC)
         );
-        when(shippingCostService.calculate(any())).thenReturn(calculationResult);
+        final var calculationRequest = new ShippingCostService.CalculationRequest(
+                originAddress.zipCode(),
+                new ZipCode(input.getShipping().getAddress().getZipCode())
+        );
+        when(shippingCostService.calculate(calculationRequest)).thenReturn(calculationResult);
 
         final var actual = service.buyNow(input);
         assertThat(actual).isNotBlank();

@@ -6,6 +6,7 @@ import com.algaworks.algashop.ordering.domain.model.commons.Document;
 import com.algaworks.algashop.ordering.domain.model.commons.Email;
 import com.algaworks.algashop.ordering.domain.model.commons.FullName;
 import com.algaworks.algashop.ordering.domain.model.commons.Phone;
+import com.algaworks.algashop.ordering.domain.model.AbstractEventSourceEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +19,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PRIVATE;
 
-public class Customer implements AggregateRoot<CustomerId> {
+public class Customer extends AbstractEventSourceEntity implements AggregateRoot<CustomerId>{
 
     private CustomerId id;
     private FullName fullName;
@@ -76,7 +77,7 @@ public class Customer implements AggregateRoot<CustomerId> {
                                            final Document document,
                                            final Boolean promotionNotificationsAllowed,
                                            final Address address){
-        return new Customer(
+        final var customer = new Customer(
                 new CustomerId(),
                 fullName,
                 birthDate,
@@ -91,6 +92,12 @@ public class Customer implements AggregateRoot<CustomerId> {
                 false,
                 null
         );
+        final var registeredEvent = new CustomerRegisteredEvent(customer.id(),
+                customer.fullName(),
+                customer.email(),
+                customer.registeredAt());
+        customer.publishDomainEvent(registeredEvent);
+        return customer;
     }
 
     public Address address() {
@@ -161,6 +168,7 @@ public class Customer implements AggregateRoot<CustomerId> {
                         .complement(null)
                 .build());
         this.setArchived(true);
+        this.publishDomainEvent(new CustomerArchivedEvent(this.id(), requireNonNull(this.archivedAt())));
     }
 
     public void enablePromotionNotifications(){

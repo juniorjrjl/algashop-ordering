@@ -6,6 +6,7 @@ import com.algaworks.algashop.ordering.domain.model.customer.LoyaltyPoints;
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableAssembler;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.AnnotateWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -51,6 +52,13 @@ public abstract class CustomerPersistenceEntityAssembler {
     @Mapping(target = "lastModifiedBy", ignore = true)
     public abstract CustomerPersistenceEntity toDomain(@MappingTarget final CustomerPersistenceEntity entity,
                                        final Customer customer);
+
+    @AfterMapping
+    protected CustomerPersistenceEntity copyEvents(@MappingTarget final CustomerPersistenceEntity entity,
+                                                   final Customer customer){
+        entity.addEvents(customer.domainEvents());
+        return entity;
+    }
 
     @Nullable
     protected LocalDate map(@Nullable final BirthDate birthDate) {

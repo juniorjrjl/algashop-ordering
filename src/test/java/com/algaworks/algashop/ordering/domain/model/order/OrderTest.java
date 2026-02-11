@@ -41,7 +41,8 @@ class OrderTest {
                 "totalAmount",
                 "totalItems",
                 "orderStatus",
-                "items"
+                "items",
+                "domainEvents"
         };
         assertWith(order,
                 o -> assertThat(o.id()).isNotNull(),

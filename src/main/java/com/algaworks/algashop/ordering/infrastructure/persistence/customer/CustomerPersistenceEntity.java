@@ -15,10 +15,12 @@ import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -30,7 +32,7 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerPersistenceEntity {
+public class CustomerPersistenceEntity extends AbstractAggregateRoot<CustomerPersistenceEntity> {
 
     @Id
     private UUID id;
@@ -68,4 +70,13 @@ public class CustomerPersistenceEntity {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    public Collection<Object> geEvents(){
+        return super.domainEvents();
+    }
+
+    public void addEvents(final Collection<Object> events) {
+        events.forEach(this::registerEvent);
+    }
+
 }

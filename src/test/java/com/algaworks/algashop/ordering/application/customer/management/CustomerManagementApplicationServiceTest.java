@@ -1,13 +1,17 @@
 package com.algaworks.algashop.ordering.application.customer.management;
 
+import com.algaworks.algashop.ordering.application.customer.notification.CustomerNotificationApplicationService;
 import com.algaworks.algashop.ordering.domain.model.commons.Document;
 import com.algaworks.algashop.ordering.domain.model.commons.Email;
 import com.algaworks.algashop.ordering.domain.model.commons.FullName;
 import com.algaworks.algashop.ordering.domain.model.commons.Phone;
+import com.algaworks.algashop.ordering.domain.model.customer.CustomerArchivedEvent;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerArchivedException;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerEmailInUseException;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerNotFoundException;
+import com.algaworks.algashop.ordering.domain.model.customer.CustomerRegisteredEvent;
 import com.algaworks.algashop.ordering.domain.model.customer.Customers;
+import com.algaworks.algashop.ordering.infrastructure.listener.customer.CustomerEventListener;
 import com.algaworks.algashop.ordering.utility.AbstractApplicationTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.application.CustomerInputDataBuilder;
@@ -17,17 +21,27 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertWith;
+import static org.assertj.core.api.Assertions.in;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 class CustomerManagementApplicationServiceTest extends AbstractApplicationTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
+
+    @MockitoSpyBean
+    private CustomerEventListener listener;
+
+    @MockitoSpyBean
+    private CustomerNotificationApplicationService notificationApplicationService;
 
     private final CustomerManagementApplicationService service;
     private final Customers customers;
@@ -46,6 +60,10 @@ class CustomerManagementApplicationServiceTest extends AbstractApplicationTest {
         final var input = CustomerInputDataBuilder.builder().build();
         final var actual = service.create(input);
         assertThat(actual).isNotNull();
+        verify(listener).listen(any(CustomerRegisteredEvent.class));
+        final var eventInput = new CustomerNotificationApplicationService.
+                NotifyNewRegistrationInput(actual, input.getFirstName(), input.getEmail());
+        verify(notificationApplicationService).notifyNewRegistration(eventInput);
     }
 
     @Test
@@ -113,6 +131,7 @@ class CustomerManagementApplicationServiceTest extends AbstractApplicationTest {
                 a -> assertThat(a.getNumber()).isEqualTo("Anonymous"),
                 a -> assertThat(a.getComplement()).isNull()
         );
+        verify(listener).listen(any(CustomerArchivedEvent.class));
     }
 
     @Test

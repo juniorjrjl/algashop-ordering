@@ -77,4 +77,24 @@ class CustomerTest {
         assertThat(customer.loyaltyPoints()).isEqualTo(firstPoints.add(secondPoints));
     }
 
+    @Test
+    void givenCreateBrandNewCustomerShouldGenerateCustomerRegisteredEvent(){
+        final var customer = CustomerDataBuilder.builder().buildNew();
+        assertThat(customer.domainEvents().size()).isOne();
+        assertThat(customer.domainEvents())
+                .contains(new CustomerRegisteredEvent(customer.id(), customer.fullName(), customer.email(), customer.registeredAt()));
+    }
+
+    @Test
+    void givenUnarchivedCustomerWhenArchivedShouldGenerateCustomerArchivedEvent(){
+        final var customer = CustomerDataBuilder.builder()
+                .withArchived(() -> false)
+                .withArchivedAt(() -> null)
+                .buildExisting();
+        customer.archive();
+        assertThat(customer.domainEvents().size()).isOne();
+        assertThat(customer.domainEvents())
+                .contains(new CustomerArchivedEvent(customer.id(), customer.archivedAt()));
+    }
+
 }

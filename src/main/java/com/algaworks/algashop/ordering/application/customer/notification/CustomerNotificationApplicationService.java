@@ -6,9 +6,6 @@ public interface CustomerNotificationApplicationService {
 
     void notifyNewRegistration(final NotifyNewRegistrationInput input);
 
-    record NotifyNewRegistrationInput(
-            UUID customerId,
-            String firstName,
-            String email) {}
+
 
 }

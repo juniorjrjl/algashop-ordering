@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.infrastructure.listener.customer;
 
 import com.algaworks.algashop.ordering.application.customer.notification.CustomerNotificationApplicationService;
+import com.algaworks.algashop.ordering.application.customer.notification.NotifyNewRegistrationInput;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerArchivedEvent;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerRegisteredEvent;
 import lombok.RequiredArgsConstructor;
@@ -13,17 +14,17 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CustomerEventListener {
 
-    private final CustomerNotificationApplicationService customerNotificationApplicationService;
+    private final CustomerNotificationApplicationService notificationApplicationService;
 
     @EventListener(CustomerRegisteredEvent.class)
     public void listen(final CustomerRegisteredEvent event){
         log.info("CustomerRegisteredEvent received: {}", event);
-        final var input = new CustomerNotificationApplicationService.NotifyNewRegistrationInput(
+        final var input = new NotifyNewRegistrationInput(
                 event.customerId().value(),
                 event.fullName().firstName(),
                 event.email().value()
         );
-        customerNotificationApplicationService.notifyNewRegistration(input);
+        notificationApplicationService.notifyNewRegistration(input);
     }
 
     @EventListener(CustomerArchivedEvent.class)

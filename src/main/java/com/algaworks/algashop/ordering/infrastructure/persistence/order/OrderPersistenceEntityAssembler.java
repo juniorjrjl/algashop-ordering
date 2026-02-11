@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 import static org.mapstruct.NullValueMappingStrategy.RETURN_DEFAULT;
@@ -70,15 +71,17 @@ public abstract class OrderPersistenceEntityAssembler {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "lastModifiedAt", ignore = true)
     @Mapping(target = "lastModifiedBy", ignore = true)
-    @Mapping(target = "billing", expression = "java(map(order.billing()))")
-    @Mapping(target = "shipping", expression = "java(map(order.shipping()))")
+    @Mapping(target = "billing", expression = "java(mapNullable(order.billing()))")
+    @Mapping(target = "shipping", expression = "java(mapNullable(order.shipping()))")
     @Mapping(target = "items", expression = "java(fromDomain(order.items()))")
+    @Mapping(target = "events", ignore = true)
     public abstract OrderPersistenceEntity fromDomain(@MappingTarget final OrderPersistenceEntity entity,
                                                final Order order);
 
     @AfterMapping
     protected OrderPersistenceEntity itemsSetup(@MappingTarget final OrderPersistenceEntity entity,
                                               final Order order) {
+        entity.addEvents(order.domainEvents());
         entity.addOrderToItems();
         return entity;
     }
@@ -99,9 +102,14 @@ public abstract class OrderPersistenceEntityAssembler {
     @Mapping(target = "order", ignore = true)
     abstract OrderItemPersistenceEntity fromDomain(final OrderItem item);
 
+    @Nullable
+    protected ShippingEmbeddable mapNullable(@Nullable final Shipping shipping){
+        return isNull(shipping) ? null : map(shipping);
+    }
+
     @Mapping(target = "cost", expression = "java(getEmbeddableAssembler().map(shipping.cost()))")
     @Mapping(target = "address", expression = "java(getEmbeddableAssembler().map(shipping.address()))")
-    abstract ShippingEmbeddable map(@Nullable final Shipping shipping);
+    abstract ShippingEmbeddable map(final Shipping shipping);
 
     @Mapping(target = "firstName", source = "fullName.firstName")
     @Mapping(target = "lastName", source = "fullName.lastName")
@@ -109,13 +117,18 @@ public abstract class OrderPersistenceEntityAssembler {
     @Mapping(target = "phone", expression = "java(getEmbeddableAssembler().map(recipient.phone()))")
     abstract RecipientEmbeddable map(final Recipient recipient);
 
+    @Nullable
+    protected BillingEmbeddable mapNullable(@Nullable final Billing billing){
+        return isNull(billing) ? null : map(billing);
+    }
+
     @Mapping(target = "firstName", source = "fullName.firstName")
     @Mapping(target = "lastName", source = "fullName.lastName")
     @Mapping(target = "document", expression = "java(getEmbeddableAssembler().map(billing.document()))")
     @Mapping(target = "phone", expression = "java(getEmbeddableAssembler().map(billing.phone()))")
     @Mapping(target = "email", expression = "java(getEmbeddableAssembler().map(billing.email()))")
     @Mapping(target = "address", expression = "java(getEmbeddableAssembler().map(billing.address()))")
-    abstract BillingEmbeddable map(@Nullable final Billing billing);
+    abstract BillingEmbeddable map(final Billing billing);
 
     abstract String map(final OrderStatus status);
 

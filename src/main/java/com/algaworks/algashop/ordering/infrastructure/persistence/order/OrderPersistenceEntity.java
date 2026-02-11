@@ -17,10 +17,12 @@ import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -35,7 +37,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Setter
 @ToString
 @NoArgsConstructor
-public class OrderPersistenceEntity{
+public class OrderPersistenceEntity  extends AbstractAggregateRoot<OrderPersistenceEntity> {
 
     @Id
     private Long id;
@@ -127,4 +129,13 @@ public class OrderPersistenceEntity{
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    public Collection<Object> getEvents(){
+        return super.domainEvents();
+    }
+
+    public void addEvents(final Collection<Object> events) {
+        events.forEach(this::registerEvent);
+    }
+
 }

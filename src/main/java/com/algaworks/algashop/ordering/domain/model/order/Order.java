@@ -136,21 +136,29 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
         this.verifyIfCanChangeToPlace();
         this.changeStatus(PLACED);
         this.setPlacedAt(OffsetDateTime.now());
+        final var event = new OrderPlacedEvent(this.id(), this.customerId(), requireNonNull(this.placedAt()));
+        this.publishDomainEvent(event);
     }
 
     public void markAsPaid() {
         this.changeStatus(PAID);
         this.setPaidAt(OffsetDateTime.now());
+        final var event = new OrderPaidEvent(this.id(), this.customerId(), requireNonNull(this.paidAt()));
+        this.publishDomainEvent(event);
     }
 
     public void markAsReady() {
         this.changeStatus(READY);
         this.setReadyAt(OffsetDateTime.now());
+        final var event = new OrderReadyEvent(this.id(), this.customerId(), requireNonNull(this.readyAt()));
+        this.publishDomainEvent(event);
     }
 
     public void cancel() {
         this.changeStatus(CANCELED);
         this.setCanceledAt(OffsetDateTime.now());
+        final var event = new OrderCanceledEvent(this.id(), this.customerId(), requireNonNull(this.readyAt()));
+        this.publishDomainEvent(event);
     }
 
     public void changePaymentMethod(final PaymentMethod newPaymentMethod){

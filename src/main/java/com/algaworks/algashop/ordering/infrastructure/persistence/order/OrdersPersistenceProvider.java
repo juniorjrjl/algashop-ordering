@@ -44,6 +44,7 @@ public class OrdersPersistenceProvider implements Orders {
                 e -> update(aggregateRoot, e),
                 () -> insert(aggregateRoot)
         );
+        aggregateRoot.clearDomainEvents();
     }
 
     @Override

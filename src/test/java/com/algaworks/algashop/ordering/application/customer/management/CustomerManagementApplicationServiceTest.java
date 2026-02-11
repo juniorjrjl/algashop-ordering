@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.application.customer.management;
 
 import com.algaworks.algashop.ordering.application.customer.notification.CustomerNotificationApplicationService;
+import com.algaworks.algashop.ordering.application.customer.notification.NotifyNewRegistrationInput;
 import com.algaworks.algashop.ordering.domain.model.commons.Document;
 import com.algaworks.algashop.ordering.domain.model.commons.Email;
 import com.algaworks.algashop.ordering.domain.model.commons.FullName;
@@ -61,8 +62,7 @@ class CustomerManagementApplicationServiceTest extends AbstractApplicationTest {
         final var actual = service.create(input);
         assertThat(actual).isNotNull();
         verify(listener).listen(any(CustomerRegisteredEvent.class));
-        final var eventInput = new CustomerNotificationApplicationService.
-                NotifyNewRegistrationInput(actual, input.getFirstName(), input.getEmail());
+        final var eventInput = new NotifyNewRegistrationInput(actual, input.getFirstName(), input.getEmail());
         verify(notificationApplicationService).notifyNewRegistration(eventInput);
     }
 

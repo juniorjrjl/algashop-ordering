@@ -1,10 +1,18 @@
 package com.algaworks.algashop.ordering.application.order.management;
 
+import com.algaworks.algashop.ordering.application.order.notification.NotifyOrderCanceledInput;
+import com.algaworks.algashop.ordering.application.order.notification.NotifyOrderPaidInput;
+import com.algaworks.algashop.ordering.application.order.notification.NotifyOrderReadyInput;
+import com.algaworks.algashop.ordering.application.order.notification.OrderNotificationApplicationService;
 import com.algaworks.algashop.ordering.domain.model.customer.Customer;
 import com.algaworks.algashop.ordering.domain.model.customer.Customers;
+import com.algaworks.algashop.ordering.domain.model.order.OrderCanceledEvent;
+import com.algaworks.algashop.ordering.domain.model.order.OrderPaidEvent;
+import com.algaworks.algashop.ordering.domain.model.order.OrderReadyEvent;
 import com.algaworks.algashop.ordering.domain.model.order.OrderStatus;
 import com.algaworks.algashop.ordering.domain.model.order.OrderStatusCannotBeChangedException;
 import com.algaworks.algashop.ordering.domain.model.order.Orders;
+import com.algaworks.algashop.ordering.infrastructure.listener.order.OrderEventListener;
 import com.algaworks.algashop.ordering.utility.AbstractApplicationTest;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.OrderDataBuilder;
@@ -15,6 +23,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import static com.algaworks.algashop.ordering.domain.model.order.OrderStatus.CANCELED;
 import static com.algaworks.algashop.ordering.domain.model.order.OrderStatus.PAID;
@@ -22,6 +31,9 @@ import static com.algaworks.algashop.ordering.domain.model.order.OrderStatus.PLA
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 @SpringBootTest
 class OrderManagementApplicationServiceTest  extends AbstractApplicationTest {
@@ -29,6 +41,12 @@ class OrderManagementApplicationServiceTest  extends AbstractApplicationTest {
     private final Customers customers;
     private final Orders orders;
     private final OrderManagementApplicationService service;
+
+    @MockitoSpyBean
+    private OrderEventListener listener;
+
+    @MockitoSpyBean
+    private OrderNotificationApplicationService notificationApplicationService;
 
     private Customer customer;
 
@@ -60,7 +78,8 @@ class OrderManagementApplicationServiceTest  extends AbstractApplicationTest {
         service.cancel(order.id().value().toLong());
         final var actual = orders.ofId(order.id()).orElseThrow();
         assertThat(actual.isCanceled()).isTrue();
-
+        verify(listener).listen(any(OrderCanceledEvent.class));
+        verify(notificationApplicationService).notifyOrderCanceled(any(NotifyOrderCanceledInput.class));
     }
 
     @Test
@@ -72,7 +91,7 @@ class OrderManagementApplicationServiceTest  extends AbstractApplicationTest {
         orders.add(order);
         assertThatExceptionOfType(OrderStatusCannotBeChangedException.class)
                 .isThrownBy(() -> service.cancel(order.id().value().toLong()));
-
+        verifyNoInteractions(listener, notificationApplicationService);
     }
 
 
@@ -86,7 +105,8 @@ class OrderManagementApplicationServiceTest  extends AbstractApplicationTest {
         service.markAsReady(order.id().value().toLong());
         final var actual = orders.ofId(order.id()).orElseThrow();
         assertThat(actual.isReady()).isTrue();
-
+        verify(listener).listen(any(OrderReadyEvent.class));
+        verify(notificationApplicationService).notifyOrderReady(any(NotifyOrderReadyInput.class));
     }
 
     @ParameterizedTest
@@ -99,6 +119,7 @@ class OrderManagementApplicationServiceTest  extends AbstractApplicationTest {
         orders.add(order);
         assertThatExceptionOfType(OrderStatusCannotBeChangedException.class)
                 .isThrownBy(() -> service.markAsReady(order.id().value().toLong()));
+        verifyNoInteractions(listener, notificationApplicationService);
     }
 
     @Test
@@ -111,7 +132,8 @@ class OrderManagementApplicationServiceTest  extends AbstractApplicationTest {
         service.markAsPaid(order.id().value().toLong());
         final var actual = orders.ofId(order.id()).orElseThrow();
         assertThat(actual.isPaid()).isTrue();
-
+        verify(listener).listen(any(OrderPaidEvent.class));
+        verify(notificationApplicationService).notifyOrderPaid(any(NotifyOrderPaidInput.class));
     }
 
     @ParameterizedTest
@@ -124,6 +146,7 @@ class OrderManagementApplicationServiceTest  extends AbstractApplicationTest {
         orders.add(order);
         assertThatExceptionOfType(OrderStatusCannotBeChangedException.class)
                 .isThrownBy(() -> service.markAsPaid(order.id().value().toLong()));
+        verifyNoInteractions(listener, notificationApplicationService);
     }
 
 }

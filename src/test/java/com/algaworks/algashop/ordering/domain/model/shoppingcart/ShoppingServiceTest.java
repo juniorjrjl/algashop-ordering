@@ -1,29 +1,30 @@
 package com.algaworks.algashop.ordering.domain.model.shoppingcart;
 
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerAlreadyHaveShoppingCartException;
+import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.customer.Customers;
-import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
+import com.algaworks.algashop.ordering.utility.MockitoWithResetExtension;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartDataBuilder;
 import com.algaworks.algashop.ordering.utility.tag.UnitTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertWith;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @UnitTest
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(MockitoWithResetExtension.class)
 class ShoppingServiceTest {
 
     @Mock
@@ -44,7 +45,7 @@ class ShoppingServiceTest {
     @Test
     void givenCustomerIdNonStoredWhenStartShoppingThenThrowException() {
         final var customerId = new CustomerId();
-        when(customers.exists(any(CustomerId.class))).thenReturn(false);
+        when(customers.exists(customerId)).thenReturn(false);
         assertThatExceptionOfType(CustomerNotFoundException.class)
                 .isThrownBy(() -> service.startShopping(customerId));
         verifyNoInteractions(shoppingCarts);

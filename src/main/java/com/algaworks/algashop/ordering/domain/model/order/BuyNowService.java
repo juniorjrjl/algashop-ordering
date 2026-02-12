@@ -19,11 +19,11 @@ public class BuyNowService {
     }
 
     private static Order buildOrder(final Product product,
-                                             final CustomerId customerId,
-                                             final Billing billing,
-                                             final Shipping shipping,
-                                             final Quantity quantity,
-                                             final PaymentMethod paymentMethod) {
+                                    final CustomerId customerId,
+                                    final Billing billing,
+                                    final Shipping shipping,
+                                    final Quantity quantity,
+                                    final PaymentMethod paymentMethod) {
         final var order = Order.draft(customerId);
         order.changeBilling(billing);
         order.changeShipping(shipping);

@@ -10,12 +10,10 @@ import com.algaworks.algashop.ordering.domain.model.order.OrderPaidEvent;
 import com.algaworks.algashop.ordering.domain.model.order.OrderPlacedEvent;
 import com.algaworks.algashop.ordering.domain.model.order.OrderReadyEvent;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-@Slf4j
 @RequiredArgsConstructor
 public class OrderEventListener {
 

@@ -37,7 +37,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Setter
 @ToString
 @NoArgsConstructor
-public class OrderPersistenceEntity  extends AbstractAggregateRoot<OrderPersistenceEntity> {
+public class OrderPersistenceEntity extends AbstractAggregateRoot<OrderPersistenceEntity> {
 
     @Id
     private Long id;

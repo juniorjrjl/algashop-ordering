@@ -38,13 +38,20 @@ public class ShoppingCart extends AbstractEventSourceEntity implements Aggregate
     private Long version;
 
     public static ShoppingCart startShopping(final CustomerId customerId){
-        return new ShoppingCart(
+        final var shoppingCart = new ShoppingCart(
                 new ShoppingCartId(),
                 customerId,
                 OffsetDateTime.now(),
                 new HashSet<>(),
                 null
         );
+        final var event = new ShoppingCartCreatedEvent(
+                shoppingCart.id(),
+                shoppingCart.customerId,
+                shoppingCart.createdAt
+        );
+        shoppingCart.publishDomainEvent(event);
+        return shoppingCart;
     }
 
     @Builder(builderClassName = "ExistingOrderBuilder", builderMethodName = "existing")
@@ -78,6 +85,13 @@ public class ShoppingCart extends AbstractEventSourceEntity implements Aggregate
                                 .build())
                 );
         this.recalculateTotals();
+        final var event = new ShoppingCartItemAddedEvent(
+                this.id(),
+                this.customerId,
+                product.id(),
+                OffsetDateTime.now()
+        );
+        this.publishDomainEvent(event);
     }
 
     public void removeItem(final ShoppingCartItemId itemId){
@@ -87,6 +101,13 @@ public class ShoppingCart extends AbstractEventSourceEntity implements Aggregate
                 .collect(Collectors.toSet());
         this.setItems(updatedItems);
         this.recalculateTotals();
+        final var event = new ShoppingCartItemRemovedEvent(
+                this.id(),
+                this.customerId,
+                toRemove.productId(),
+                OffsetDateTime.now()
+        );
+        this.publishDomainEvent(event);
     }
 
     public void refreshItem(final Product product){
@@ -126,6 +147,12 @@ public class ShoppingCart extends AbstractEventSourceEntity implements Aggregate
         this.setTotalAmount(Money.ZERO);
         this.setTotalItems(Quantity.ZERO);
         this.setItems(new HashSet<>());
+        final var event = new ShoppingCartEmptiedEvent(
+                this.id(),
+                this.customerId,
+                OffsetDateTime.now()
+        );
+        this.publishDomainEvent(event);
     }
 
     public boolean isEmpty(){

@@ -62,6 +62,7 @@ public abstract class ShoppingCartPersistenceEntityAssembler {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "lastModifiedAt", ignore = true)
     @Mapping(target = "lastModifiedBy", ignore = true)
+    @Mapping(target = "events", ignore = true)
     public abstract ShoppingCartPersistenceEntity fromDomain(@MappingTarget final ShoppingCartPersistenceEntity entity,
                                                              final ShoppingCart shoppingCart);
 
@@ -69,6 +70,7 @@ public abstract class ShoppingCartPersistenceEntityAssembler {
     public ShoppingCartPersistenceEntity itemsSetup(@MappingTarget final ShoppingCartPersistenceEntity entity,
                                                              final ShoppingCart shoppingCart){
         entity.addCartToItems();
+        entity.addEvents(shoppingCart.domainEvents());
         return entity;
     }
 

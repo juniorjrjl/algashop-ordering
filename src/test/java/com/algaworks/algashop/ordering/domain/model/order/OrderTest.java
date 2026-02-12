@@ -186,8 +186,13 @@ class OrderTest {
         final var order = OrderDataBuilder.builder(Order.draft(new CustomerId()))
                 .withShipping(() -> customFaker.order().shipping())
                 .buildExisting();
+        final var expectedTotalAmount = new Money(order
+                .totalAmount()
+                .value()
+                .subtract(order.shipping().cost().value()));
         order.changeShipping(shipping);
         assertThat(order.shipping()).isEqualTo(shipping);
+        assertThat(order.totalAmount()).isEqualTo(expectedTotalAmount.add(shipping.cost()));
     }
 
     @Test

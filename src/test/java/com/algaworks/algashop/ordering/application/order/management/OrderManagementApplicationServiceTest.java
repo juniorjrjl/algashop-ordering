@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.application.order.management;
 
+import com.algaworks.algashop.ordering.application.customer.loyaltypoints.CustomerLoyaltyPointsApplicationService;
 import com.algaworks.algashop.ordering.application.order.notification.NotifyOrderCanceledInput;
 import com.algaworks.algashop.ordering.application.order.notification.NotifyOrderPaidInput;
 import com.algaworks.algashop.ordering.application.order.notification.NotifyOrderReadyInput;
@@ -25,6 +26,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
+import java.util.UUID;
+
 import static com.algaworks.algashop.ordering.domain.model.order.OrderStatus.CANCELED;
 import static com.algaworks.algashop.ordering.domain.model.order.OrderStatus.PAID;
 import static com.algaworks.algashop.ordering.domain.model.order.OrderStatus.PLACED;
@@ -47,6 +50,9 @@ class OrderManagementApplicationServiceTest  extends AbstractApplicationTest {
 
     @MockitoSpyBean
     private OrderNotificationApplicationService notificationApplicationService;
+
+    @MockitoSpyBean
+    private CustomerLoyaltyPointsApplicationService customerLoyaltyPointsApplicationService;
 
     private Customer customer;
 
@@ -107,6 +113,10 @@ class OrderManagementApplicationServiceTest  extends AbstractApplicationTest {
         assertThat(actual.isReady()).isTrue();
         verify(listener).listen(any(OrderReadyEvent.class));
         verify(notificationApplicationService).notifyOrderReady(any(NotifyOrderReadyInput.class));
+        verify(customerLoyaltyPointsApplicationService).addLoyaltyPoints(
+                any(UUID.class),
+                any(String.class)
+        );
     }
 
     @ParameterizedTest

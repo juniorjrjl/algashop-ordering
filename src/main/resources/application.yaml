@@ -22,3 +22,7 @@ algashop:
       provider: RAPIDEX
     rapidex:
       url: http://localhost:8780
+  free-shipping:
+    min-basic-loyalty-points: 200
+    min-basic-sales-amount-in-year: 2
+    min-premium-loyalty-points: 2000

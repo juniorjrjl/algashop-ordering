@@ -1,8 +1,10 @@
 package com.algaworks.algashop.ordering.domain.model.customer;
 
+import com.algaworks.algashop.ordering.domain.model.RichComparable;
+
 import static java.util.Objects.requireNonNull;
 
-public record LoyaltyPoints(Integer value) implements Comparable<LoyaltyPoints> {
+public record LoyaltyPoints(Integer value) implements RichComparable<LoyaltyPoints> {
 
     public static final LoyaltyPoints ZERO = new LoyaltyPoints();
     public static final LoyaltyPoints BASE_POINTS = new LoyaltyPoints(5);

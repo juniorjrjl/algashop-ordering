@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest
-class CustomerEventListenerIT {
+class CustomerEventListenerTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
 
@@ -38,7 +38,7 @@ class CustomerEventListenerIT {
     private CustomerNotificationApplicationService notificationApplicationService;
 
     @Autowired
-    CustomerEventListenerIT(final ApplicationEventPublisher applicationEventPublisher) {
+    CustomerEventListenerTest(final ApplicationEventPublisher applicationEventPublisher) {
         this.applicationEventPublisher = applicationEventPublisher;
     }
 

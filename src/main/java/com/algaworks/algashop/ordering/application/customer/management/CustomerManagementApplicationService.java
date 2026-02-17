@@ -23,7 +23,6 @@ public class CustomerManagementApplicationService {
     private final CustomerRegistrationService service;
     private final Customers customers;
     private final CommonDisassembler commonModelAssembler;
-    private final CustomerDisassembler disassembler;
 
     @Transactional
     public UUID create(final CustomerInput input){
@@ -68,13 +67,6 @@ public class CustomerManagementApplicationService {
                 .orElseThrow(CustomerNotFoundException::new);
         service.changeEmail(customer, new Email(email));
         customers.add(customer);
-    }
-
-    @Transactional(readOnly = true)
-    public CustomerOutput findById(final UUID rawId){
-        final var customer = customers.ofId(new CustomerId(rawId))
-                .orElseThrow(CustomerNotFoundException::new);
-        return disassembler.toOutput(customer);
     }
 
 }

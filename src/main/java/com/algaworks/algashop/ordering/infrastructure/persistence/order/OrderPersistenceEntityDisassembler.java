@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.order;
 
+import com.algaworks.algashop.ordering.application.order.query.OrderDetailOutput;
 import com.algaworks.algashop.ordering.domain.model.order.Billing;
 import com.algaworks.algashop.ordering.domain.model.order.Order;
 import com.algaworks.algashop.ordering.domain.model.order.OrderId;
@@ -10,6 +11,7 @@ import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
 import com.algaworks.algashop.ordering.domain.model.order.Recipient;
 import com.algaworks.algashop.ordering.domain.model.order.Shipping;
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableDisassembler;
+import io.hypersistence.tsid.TSID;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.mapstruct.AnnotateWith;
@@ -29,12 +31,19 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 @Mapper(componentModel = SPRING, uses = EmbeddableDisassembler.class, injectionStrategy = CONSTRUCTOR)
 public interface OrderPersistenceEntityDisassembler {
 
+    @Mapping(target = "id", expression = "java(toOrderIdString(entity.getId()))")
+    OrderDetailOutput toDetailOutput(final OrderPersistenceEntity entity);
+
     @Mapping(target = "customerId", source = "customer.id")
     Order.ExistingOrderBuilder toDomain(@MappingTarget final Order.ExistingOrderBuilder builder,
                                         final OrderPersistenceEntity aggregateRoot);
 
     OrderItem.ExistingOrderItemBuilder toDomain(@MappingTarget final OrderItem.ExistingOrderItemBuilder builder,
                                                 final OrderItemPersistenceEntity item);
+
+    default String toOrderIdString(final Long orderId) {
+        return new TSID(orderId).toString();
+    }
 
     default OrderId toOrderId(final Long value){
         return new OrderId(value);

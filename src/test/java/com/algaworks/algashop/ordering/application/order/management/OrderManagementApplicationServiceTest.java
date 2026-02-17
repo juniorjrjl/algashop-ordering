@@ -39,7 +39,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
 @SpringBootTest
-class OrderManagementApplicationServiceTest  extends AbstractApplicationTest {
+class OrderManagementApplicationServiceTest extends AbstractApplicationTest {
 
     private final Customers customers;
     private final Orders orders;

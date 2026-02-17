@@ -6,9 +6,11 @@ import com.algaworks.algashop.ordering.domain.model.commons.Document;
 import com.algaworks.algashop.ordering.domain.model.commons.Email;
 import com.algaworks.algashop.ordering.domain.model.commons.FullName;
 import com.algaworks.algashop.ordering.domain.model.commons.Phone;
+import com.algaworks.algashop.ordering.domain.model.customer.Customer;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerArchivedEvent;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerArchivedException;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerEmailInUseException;
+import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerRegisteredEvent;
 import com.algaworks.algashop.ordering.domain.model.customer.Customers;
@@ -66,41 +68,27 @@ class CustomerManagementApplicationServiceTest extends AbstractApplicationTest {
     }
 
     @Test
-    void shouldFindById(){
-        final var input = CustomerInputDataBuilder.builder().build();
-        final var id = service.create(input);
-        final var actual = service.findById(id);
-        assertThat(actual).usingRecursiveComparison()
-                .ignoringFields("id", "registeredAt", "archived", "archivedAt", "loyaltyPoints")
-                .isEqualTo(input);
-    }
-
-    @Test
-    void givenNonStoredIdWhenFindByIdThenThrowException(){
-        assertThatExceptionOfType(CustomerNotFoundException.class)
-                .isThrownBy(() -> service.findById(UUID.randomUUID()));
-    }
-
-    @Test
     void shouldUpdate(){
         final var inserted = CustomerInputDataBuilder.builder().build();
         final var id = service.create(inserted);
         final var input = CustomerUpdateInputDataBuilder.builder().build();
         service.update(id, input);
-        final var actual = service.findById(id);
+        final var actual = customers.ofId(new CustomerId(id)).orElseThrow();
         assertThat(actual).extracting(
-                CustomerOutput::getFirstName,
-                CustomerOutput::getLastName,
-                CustomerOutput::getPhone,
-                CustomerOutput::isPromotionNotificationsAllowed,
-                CustomerOutput::getAddress
+                c -> c.fullName().firstName(),
+                c -> c.fullName().lastName(),
+                c -> c.phone().value(),
+                Customer::isPromotionNotificationsAllowed
         ).containsExactly(
                 input.getFirstName(),
                 input.getLastName(),
                 input.getPhone(),
-                input.isPromotionNotificationsAllowed(),
-                input.getAddress()
+                input.isPromotionNotificationsAllowed()
         );
+        assertThat(actual.address()).usingRecursiveComparison()
+                .ignoringFields("zipCode")
+                .isEqualTo(input.getAddress());
+        assertThat(actual.address().zipCode().value()).isEqualTo(input.getAddress().getZipCode());
     }
 
     @Test
@@ -115,20 +103,19 @@ class CustomerManagementApplicationServiceTest extends AbstractApplicationTest {
                 .buildNew();
         customers.add(customer);
         service.archive(customer.id().value());
-        final var actual = service.findById(customer.id().value());
+        final var actual = customers.ofId(customer.id()).orElseThrow();
         assertWith(actual,
-                a -> assertThat(a.getArchived()).isTrue(),
-                a -> assertThat(a.getArchivedAt()).isNotNull(),
-                a -> assertThat(a.getFirstName()).isEqualTo(FullName.ANONYMOUS.firstName()),
-                a -> assertThat(a.getLastName()).isEqualTo(FullName.ANONYMOUS.lastName()),
-                a -> assertThat(a.getPhone()).isEqualTo(Phone.ANONYMOUS.value()),
-                a -> assertThat(a.getDocument()).isEqualTo(Document.ANONYMOUS.value()),
-                a -> assertThat(a.getEmail()).isEqualTo(Email.ANONYMOUS.value()),
-                a -> assertThat(a.getBirthDate()).isNull()
+                a -> assertThat(a.isArchived()).isTrue(),
+                a -> assertThat(a.archivedAt()).isNotNull(),
+                a -> assertThat(a.fullName()).isEqualTo(FullName.ANONYMOUS),
+                a -> assertThat(a.phone()).isEqualTo(Phone.ANONYMOUS),
+                a -> assertThat(a.document()).isEqualTo(Document.ANONYMOUS),
+                a -> assertThat(a.email()).isEqualTo(Email.ANONYMOUS),
+                a -> assertThat(a.birthDate()).isNull()
         );
-        assertWith(actual.getAddress(),
-                a -> assertThat(a.getNumber()).isEqualTo("Anonymous"),
-                a -> assertThat(a.getComplement()).isNull()
+        assertWith(actual.address(),
+                a -> assertThat(a.number()).isEqualTo("Anonymous"),
+                a -> assertThat(a.complement()).isNull()
         );
         verify(listener).listen(any(CustomerArchivedEvent.class));
     }
@@ -146,8 +133,8 @@ class CustomerManagementApplicationServiceTest extends AbstractApplicationTest {
         customers.add(customer);
         final var newEmail = customFaker.internet().safeEmailAddress();
         service.changeEmail(customer.id().value(), newEmail);
-        final var actual = service.findById(customer.id().value());
-        assertThat(actual.getEmail()).isEqualTo(newEmail);
+        final var actual = customers.ofId(customer.id()).orElseThrow();
+        assertThat(actual.email().value()).isEqualTo(newEmail);
     }
 
     @Test

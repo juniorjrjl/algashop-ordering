@@ -7,7 +7,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface CustomerPersistenceEntityRepository extends JpaRepository<CustomerPersistenceEntity, UUID> {
+public interface CustomerPersistenceEntityRepository
+        extends JpaRepository<CustomerPersistenceEntity, UUID> {
 
     Optional<CustomerPersistenceEntity> findByEmail(final String email);
 

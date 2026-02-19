@@ -10,6 +10,7 @@ import com.algaworks.algashop.ordering.domain.model.commons.Money;
 import com.algaworks.algashop.ordering.domain.model.product.Product;
 import com.algaworks.algashop.ordering.domain.model.commons.Quantity;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -30,6 +31,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOf
 class ShoppingCartTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
+    }
 
     @Test
     void givenValidProductsAndQuantitiesWhenAddItemShouldAllowIt(){

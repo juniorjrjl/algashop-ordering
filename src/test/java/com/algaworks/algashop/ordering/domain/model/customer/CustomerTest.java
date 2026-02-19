@@ -7,6 +7,7 @@ import com.algaworks.algashop.ordering.domain.model.commons.Document;
 import com.algaworks.algashop.ordering.domain.model.commons.Email;
 import com.algaworks.algashop.ordering.domain.model.commons.FullName;
 import com.algaworks.algashop.ordering.domain.model.commons.Phone;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -24,6 +25,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOf
 class CustomerTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
+    }
 
     @Test
     void givenUnarchivedCustomerWhenArchiveShouldAnonymize(){

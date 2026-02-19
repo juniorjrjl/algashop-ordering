@@ -3,6 +3,7 @@ package com.algaworks.algashop.ordering.domain.model.customer;
 import com.algaworks.algashop.ordering.domain.model.commons.Email;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.MockitoWithResetExtension;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,6 +24,11 @@ class CustomerRegistrationServiceTest {
 
     @InjectMocks
     private CustomerRegistrationService service;
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
+    }
 
     @Test
     void shouldRegister(){

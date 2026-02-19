@@ -20,6 +20,7 @@ import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.application.CustomerInputDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.application.CustomerUpdateInputDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -55,6 +56,11 @@ class CustomerManagementApplicationServiceTest extends AbstractApplicationTest {
         super(jdbcTemplate);
         this.service = service;
         this.customers = customers;
+    }
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.algaworks.algashop.ordering.infrastructure.persistence.order;
 
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
 import com.algaworks.algashop.ordering.utility.AbstractDBTest;
+import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.CustomerPersistenceEntityDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.OrderPersistenceEntityDataBuilder;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
@@ -30,6 +31,7 @@ class OrderPersistenceEntityRepositoryTest extends AbstractDBTest {
 
     @BeforeEach
     void setup(){
+        CustomFaker.getInstance().reseed();
         this.customerEntity = CustomerPersistenceEntityDataBuilder.builder().withArchived(() -> false).build();
         this.customerEntity = customerRepository.save(customerEntity);
     }

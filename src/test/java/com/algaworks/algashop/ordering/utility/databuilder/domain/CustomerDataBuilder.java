@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.utility.databuilder.domain;
 
 import com.algaworks.algashop.ordering.domain.model.customer.Customer;
+import com.algaworks.algashop.ordering.domain.model.order.Order;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.domain.model.commons.Address;
 import com.algaworks.algashop.ordering.domain.model.customer.BirthDate;
@@ -16,7 +17,10 @@ import lombok.With;
 import org.jspecify.annotations.Nullable;
 
 import java.time.OffsetDateTime;
+import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -83,6 +87,11 @@ public class CustomerDataBuilder {
                 .promotionNotificationsAllowed(promotionNotificationsAllowed.get())
                 .address(address.get())
                 .build();
+    }
+
+    public Set<Customer> buildExistingList(final int amount){
+        return Stream.generate(this::buildExisting)
+                .limit(amount).collect(Collectors.toSet());
     }
 
 }

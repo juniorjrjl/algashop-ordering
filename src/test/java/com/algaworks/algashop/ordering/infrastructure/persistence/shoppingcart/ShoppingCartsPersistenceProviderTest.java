@@ -6,6 +6,7 @@ import com.algaworks.algashop.ordering.infrastructure.persistence.common.Embedda
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
 import com.algaworks.algashop.ordering.utility.AbstractDBTest;
+import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.CustomerPersistenceEntityDataBuilder;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
@@ -50,6 +51,7 @@ class ShoppingCartsPersistenceProviderTest extends AbstractDBTest {
 
     @BeforeEach
     void setup(){
+        CustomFaker.getInstance().reseed();
         this.customerEntity = CustomerPersistenceEntityDataBuilder.builder().withArchived(() -> false).build();
         this.customerEntity = customerRepository.save(customerEntity);
     }

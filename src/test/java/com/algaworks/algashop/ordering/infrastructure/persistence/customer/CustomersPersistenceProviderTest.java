@@ -3,8 +3,10 @@ package com.algaworks.algashop.ordering.infrastructure.persistence.customer;
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableAssemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableDisassemblerImpl;
 import com.algaworks.algashop.ordering.utility.AbstractDBTest;
+import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -37,6 +39,11 @@ class CustomersPersistenceProviderTest extends AbstractDBTest {
         super(jdbcTemplate);
         this.persistenceProvider = persistenceProvider;
         this.repository = repository;
+    }
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
     }
 
     @Test

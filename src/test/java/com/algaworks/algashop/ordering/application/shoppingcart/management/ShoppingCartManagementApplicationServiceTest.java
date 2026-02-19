@@ -22,8 +22,10 @@ import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNot
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCarts;
 import com.algaworks.algashop.ordering.infrastructure.listener.shoppingcart.ShoppingCartEventListener;
 import com.algaworks.algashop.ordering.utility.AbstractApplicationTest;
+import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBuilder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.internal.verification.Times;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +73,11 @@ class ShoppingCartManagementApplicationServiceTest extends AbstractApplicationTe
         this.shoppingCarts = shoppingCarts;
         this.customers = customers;
         this.service = service;
+    }
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
     }
 
     @Test

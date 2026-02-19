@@ -73,6 +73,7 @@ tasks.withType<Test>().configureEach {
 tasks.withType<Test> {
 	useJUnitPlatform()
 	finalizedBy(tasks.jacocoTestReport)
+	systemProperty("test.seed", System.getProperty("test.seed") ?: "")
 }
 
 tasks.register<Test>("integrationTest"){
@@ -85,6 +86,7 @@ tasks.register<Test>("integrationTest"){
 	useJUnitPlatform{
 		includeTags("IntegrationTest")
 	}
+	systemProperty("test.seed", System.getProperty("test.seed") ?: "")
 }
 
 tasks.register<Test>("unitTest"){
@@ -97,6 +99,7 @@ tasks.register<Test>("unitTest"){
 	useJUnitPlatform{
 		includeTags("UnitTest")
 	}
+	systemProperty("test.seed", System.getProperty("test.seed") ?: "")
 }
 
 tasks.jacocoTestReport {

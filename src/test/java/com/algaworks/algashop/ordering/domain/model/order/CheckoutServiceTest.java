@@ -39,6 +39,7 @@ class CheckoutServiceTest {
 
     @BeforeEach
     void setUp() {
+        CustomFaker.getInstance().reseed();
         final var freeShippingConfig = new FreeShippingConfig(100, 2, 2000);
         final var freeShippingSpecification = new CustomerHaveFreeShippingSpecification(
                 orders,

@@ -3,6 +3,7 @@ package com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
 import com.algaworks.algashop.ordering.utility.AbstractDBTest;
+import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.CustomerPersistenceEntityDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.ShoppingCartPersistenceEntityDataBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +31,7 @@ class ShoppingCartPersistenceEntityRepositoryTest extends AbstractDBTest {
 
     @BeforeEach
     void setup(){
+        CustomFaker.getInstance().reseed();
         this.customerEntity = CustomerPersistenceEntityDataBuilder.builder().withArchived(() -> false).build();
         this.customerEntity = customerRepository.save(customerEntity);
     }

@@ -5,6 +5,7 @@ import com.algaworks.algashop.ordering.infrastructure.persistence.common.Embedda
 import com.algaworks.algashop.ordering.infrastructure.persistence.order.OrderPersistenceEntityAssemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.order.OrderPersistenceEntityDisassemblerImpl;
 import com.algaworks.algashop.ordering.utility.AbstractDBTest;
+import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.OrderDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.CustomerPersistenceEntityDataBuilder;
 import com.algaworks.algashop.ordering.domain.model.commons.Money;
@@ -54,6 +55,7 @@ class OrdersTest extends AbstractDBTest {
 
     @BeforeEach
     void setup(){
+        CustomFaker.getInstance().reseed();
         this.customerEntity = CustomerPersistenceEntityDataBuilder.builder().withArchived(() -> false).build();
         this.customerEntity = customerRepository.save(customerEntity);
     }

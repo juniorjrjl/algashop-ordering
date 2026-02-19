@@ -1,7 +1,9 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.customer;
 
 import com.algaworks.algashop.ordering.utility.AbstractDBTest;
+import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.CustomerPersistenceEntityDataBuilder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,6 +20,11 @@ class CustomerPersistenceEntityRepositoryTest extends AbstractDBTest {
                                             final JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate);
         this.repository = repository;
+    }
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
     }
 
     @Test

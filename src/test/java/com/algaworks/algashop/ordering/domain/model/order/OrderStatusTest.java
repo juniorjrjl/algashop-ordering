@@ -1,6 +1,8 @@
 package com.algaworks.algashop.ordering.domain.model.order;
 
+import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.tag.UnitTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -14,6 +16,11 @@ import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 
 @UnitTest
 class OrderStatusTest {
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
+    }
 
     private static final List<Arguments> canChangeTo = List.of(
             Arguments.of(DRAFT, PLACED),

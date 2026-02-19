@@ -4,6 +4,7 @@ import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBuilder;
 import com.algaworks.algashop.ordering.utility.tag.UnitTest;
 import com.algaworks.algashop.ordering.domain.model.product.ProductId;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,6 +14,11 @@ import static org.assertj.core.api.Assertions.assertWith;
 class OrderItemTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
+    }
 
     @Test
     void shouldCreateBrandNew(){

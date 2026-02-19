@@ -4,6 +4,7 @@ import com.algaworks.algashop.ordering.domain.model.DomainException;
 import com.algaworks.algashop.ordering.domain.model.commons.Document;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.tag.UnitTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -18,6 +19,11 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 class DocumentTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
+    }
 
     @Test
     void shouldCreateDocument(){

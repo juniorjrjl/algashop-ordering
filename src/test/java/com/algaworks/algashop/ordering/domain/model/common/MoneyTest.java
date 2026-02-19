@@ -3,6 +3,7 @@ package com.algaworks.algashop.ordering.domain.model.common;
 import com.algaworks.algashop.ordering.domain.model.commons.Money;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.tag.UnitTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -19,6 +20,11 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 class MoneyTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
+    }
 
     private static final List<BigDecimal> shouldCreateWithBigDecimal = List.of(
             new BigDecimal(Double.toString(customFaker.number().randomDouble(9,1, 1000))),

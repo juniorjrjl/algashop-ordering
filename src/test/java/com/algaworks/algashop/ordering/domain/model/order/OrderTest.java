@@ -8,6 +8,7 @@ import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.OrderDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBuilder;
 import com.algaworks.algashop.ordering.utility.tag.UnitTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -30,6 +31,11 @@ import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 class OrderTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
+    }
 
     @Test
     void shouldCreateDraft(){

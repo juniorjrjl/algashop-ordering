@@ -2,6 +2,7 @@ package com.algaworks.algashop.ordering.domain.model.customer;
 
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +21,11 @@ class CustomerRegistrationServiceIntegrationTest {
     @Autowired
     CustomerRegistrationServiceIntegrationTest(final CustomerRegistrationService service) {
         this.service = service;
+    }
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
     }
 
     @Test

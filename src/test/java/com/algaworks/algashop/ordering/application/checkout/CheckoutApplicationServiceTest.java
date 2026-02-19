@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.application.checkout;
 
+import com.algaworks.algashop.ordering.application.customer.query.CustomerFilter;
 import com.algaworks.algashop.ordering.domain.model.commons.ZipCode;
 import com.algaworks.algashop.ordering.domain.model.customer.Customer;
 import com.algaworks.algashop.ordering.domain.model.customer.Customers;
@@ -12,6 +13,7 @@ import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartCan
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFound;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCarts;
 import com.algaworks.algashop.ordering.utility.AbstractApplicationTest;
+import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartItemDataBuilder;
@@ -66,6 +68,7 @@ class CheckoutApplicationServiceTest extends AbstractApplicationTest {
 
     @BeforeEach
     void setup(){
+        CustomFaker.getInstance().reseed();
         customer = CustomerDataBuilder.builder().buildNew();
         customers.add(customer);
     }

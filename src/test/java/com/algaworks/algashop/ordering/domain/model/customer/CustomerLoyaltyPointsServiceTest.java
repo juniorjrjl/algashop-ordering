@@ -22,6 +22,7 @@ class CustomerLoyaltyPointsServiceTest {
 
     @BeforeEach
     void setup(){
+        CustomFaker.getInstance().reseed();
         service = new CustomerLoyaltyPointsService();
     }
 

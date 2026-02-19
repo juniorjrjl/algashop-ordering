@@ -6,6 +6,7 @@ import com.algaworks.algashop.ordering.domain.model.order.Order;
 import com.algaworks.algashop.ordering.domain.model.order.OrderStatus;
 import com.algaworks.algashop.ordering.domain.model.order.Orders;
 import com.algaworks.algashop.ordering.utility.AbstractApplicationTest;
+import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.OrderDataBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,6 +56,7 @@ class OrderQueryServiceTest extends AbstractApplicationTest {
 
     @BeforeEach
     void beforeEach(){
+        CustomFaker.getInstance().reseed();
         customer = CustomerDataBuilder.builder().buildNew();
         customers.add(customer);
     }

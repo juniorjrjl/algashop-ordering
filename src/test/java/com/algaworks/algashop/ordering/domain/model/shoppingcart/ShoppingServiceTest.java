@@ -4,6 +4,7 @@ import com.algaworks.algashop.ordering.domain.model.customer.CustomerAlreadyHave
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.customer.Customers;
+import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.MockitoWithResetExtension;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartDataBuilder;
@@ -34,6 +35,11 @@ class ShoppingServiceTest {
 
     @InjectMocks
     private ShoppingService service;
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
+    }
 
     @Test
     void givenNullableCustomerIdWhenStartShoppingThenThrowException() {

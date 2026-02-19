@@ -6,6 +6,7 @@ import com.algaworks.algashop.ordering.domain.model.commons.FullName;
 import com.algaworks.algashop.ordering.domain.model.commons.Phone;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.tag.UnitTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -18,6 +19,11 @@ import static org.assertj.core.api.Assertions.assertWith;
 class BillingTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
+    }
 
     @Test
     void shouldCreate(){

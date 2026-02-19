@@ -20,6 +20,7 @@ import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBu
 import com.algaworks.algashop.ordering.utility.databuilder.domain.OrderDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.OrderItemDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBuilder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -50,6 +51,11 @@ class CustomerLoyaltyPointsApplicationServiceTest extends AbstractApplicationTes
         this.service = service;
         this.customers = customers;
         this.orders = orders;
+    }
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
     }
 
     @Test

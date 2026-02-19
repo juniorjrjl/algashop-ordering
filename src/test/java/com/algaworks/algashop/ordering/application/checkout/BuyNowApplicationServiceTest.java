@@ -46,7 +46,6 @@ class BuyNowApplicationServiceTest extends AbstractApplicationTest {
     private final Orders orders;
     private final Customers customers;
 
-
     @Autowired
     public BuyNowApplicationServiceTest(final JdbcTemplate jdbcTemplate,
                                         final BuyNowApplicationService service,
@@ -60,6 +59,7 @@ class BuyNowApplicationServiceTest extends AbstractApplicationTest {
 
     @BeforeEach
     void setup(){
+        CustomFaker.getInstance().reseed();
         customer = CustomerDataBuilder.builder().buildNew();
         customers.add(customer);
     }

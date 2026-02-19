@@ -4,6 +4,7 @@ import com.algaworks.algashop.ordering.domain.model.commons.Address;
 import com.algaworks.algashop.ordering.domain.model.commons.ZipCode;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.tag.UnitTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -40,6 +41,11 @@ class AddressTest {
                     customFaker.common().zipCode()
             )
     );
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
+    }
 
     @ParameterizedTest
     @FieldSource

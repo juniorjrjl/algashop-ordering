@@ -3,6 +3,7 @@ package com.algaworks.algashop.ordering.infrastructure.persistence.order;
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableAssemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableDisassemblerImpl;
 import com.algaworks.algashop.ordering.utility.AbstractDBTest;
+import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.OrderDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.CustomerPersistenceEntityDataBuilder;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
@@ -52,6 +53,7 @@ class OrdersPersistenceProviderTest extends AbstractDBTest {
 
     @BeforeEach
     void setup(){
+        CustomFaker.getInstance().reseed();
         this.customerEntity = CustomerPersistenceEntityDataBuilder.builder().withArchived(() -> false).build();
         this.customerEntity = customerRepository.save(customerEntity);
     }

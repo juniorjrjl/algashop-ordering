@@ -2,6 +2,7 @@ package com.algaworks.algashop.ordering.domain.model.product;
 
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.tag.UnitTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.FieldSource;
@@ -15,6 +16,11 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 class ProductNameTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
+    }
 
     private static final List<Arguments> shouldCreate = List.of(
             Arguments.of(customFaker.lorem().word()),

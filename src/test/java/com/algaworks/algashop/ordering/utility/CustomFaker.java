@@ -10,24 +10,43 @@ import java.util.List;
 import java.util.Random;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @Slf4j
 public class CustomFaker extends Faker {
 
     private static CustomFaker customFaker = null;
+    private static long initialSeed;
 
-    private CustomFaker() {
-        final var random = new Random();
-        final var randomSeed = random.nextLong();
-        log.info("Random seed: {}", randomSeed);
-        super(new Random(randomSeed));
+    private CustomFaker(final long seed) {
+        super(new  Random(seed));
+    }
+
+    private static long getSeed(){
+        final var seed = System.getProperty("test.seed");
+        initialSeed = (nonNull(seed) && !seed.isBlank())
+                ? Long.parseLong(seed)
+                : new Random().nextLong();
+        return initialSeed;
     }
 
     public static CustomFaker getInstance() {
-        if (isNull(customFaker)){
-            customFaker = new CustomFaker();
+        if (isNull(customFaker)) {
+            initialSeed = getSeed();
+
+            log.info("****************************************************");
+            log.info("Execution Seed: {}", initialSeed);
+            log.info("To repeat this exact data, use: -Dtest.seed={}", initialSeed);
+            log.info("****************************************************");
+
+            customFaker = new CustomFaker(initialSeed);
         }
         return customFaker;
+    }
+
+    public void reseed() {
+        log.debug("Resetting Faker instance to initial seed...");
+        customFaker = new CustomFaker(initialSeed);
     }
 
     public CommonApplicationProvider commonApplication(){

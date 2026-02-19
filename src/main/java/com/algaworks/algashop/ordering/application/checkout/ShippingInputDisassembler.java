@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.application.checkout;
 
 import com.algaworks.algashop.ordering.application.common.CommonDisassembler;
+import com.algaworks.algashop.ordering.application.order.query.RecipientData;
 import com.algaworks.algashop.ordering.domain.model.order.Recipient;
 import com.algaworks.algashop.ordering.domain.model.order.Shipping;
 import com.algaworks.algashop.ordering.domain.model.order.ShippingCostService;

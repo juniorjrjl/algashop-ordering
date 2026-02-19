@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.application.checkout;
 
 import com.algaworks.algashop.ordering.application.common.CommonDisassembler;
+import com.algaworks.algashop.ordering.application.order.query.BillingData;
 import com.algaworks.algashop.ordering.domain.model.order.Billing;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;

@@ -43,6 +43,7 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
 	annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
+	annotationProcessor("org.hibernate.orm:hibernate-processor")
 
 	implementation("org.springframework.boot:spring-boot-h2console:4.0.1")
 	runtimeOnly("com.h2database:h2")

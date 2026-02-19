@@ -1,8 +1,8 @@
 package com.algaworks.algashop.ordering.utility;
 
-import com.algaworks.algashop.ordering.application.checkout.BillingData;
+import com.algaworks.algashop.ordering.application.order.query.BillingData;
 import com.algaworks.algashop.ordering.application.checkout.CheckoutInput;
-import com.algaworks.algashop.ordering.application.checkout.RecipientData;
+import com.algaworks.algashop.ordering.application.order.query.RecipientData;
 import com.algaworks.algashop.ordering.application.checkout.ShippingInput;
 import com.algaworks.algashop.ordering.application.common.AddressData;
 import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;

@@ -21,6 +21,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -118,6 +120,11 @@ public class OrderDataBuilder {
                 .paymentMethod(paymentMethod.get())
                 .items(genItems)
                 .build();
+    }
+
+    public Set<Order> buildExistingList(final int amount){
+        return Stream.generate(this::buildExisting)
+                .limit(amount).collect(Collectors.toSet());
     }
 
 }

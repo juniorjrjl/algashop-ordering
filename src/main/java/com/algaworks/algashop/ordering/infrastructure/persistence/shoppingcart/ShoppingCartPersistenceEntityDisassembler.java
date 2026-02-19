@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart;
 
+import com.algaworks.algashop.ordering.application.shoppingcart.query.ShoppingCartOutput;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartId;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartItem;
@@ -22,6 +23,9 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 @AnnotateWith(NullMarked.class)
 @Mapper(componentModel = SPRING, uses = EmbeddableDisassembler.class, injectionStrategy = CONSTRUCTOR)
 public interface ShoppingCartPersistenceEntityDisassembler {
+
+    @Mapping(target = "customerId", source = "customer.id")
+    ShoppingCartOutput toOutput(final ShoppingCartPersistenceEntity entity);
 
     @Mapping(target = "customerId", source = "entity.customer.id")
     ShoppingCart toDomain(@MappingTarget final ShoppingCart.ExistingOrderBuilder builder,

@@ -1,7 +1,7 @@
 plugins {
 	id("idea")
 	java
-	id("org.springframework.boot") version "4.0.1"
+	id("org.springframework.boot") version "4.0.3"
 	id("io.spring.dependency-management") version "1.1.7"
 	jacoco
 }
@@ -30,33 +30,34 @@ repositories {
 val mapstructVersion = "1.6.3"
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-webmvc")
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-restclient")
 	implementation("com.fasterxml.uuid:java-uuid-generator:5.2.0")
 	implementation("commons-validator:commons-validator:1.10.1")
 	implementation("io.hypersistence:hypersistence-tsid:2.1.4")
-	implementation("org.mapstruct:mapstruct:$mapstructVersion")
+	implementation("org.mapstruct:mapstruct:${mapstructVersion}")
+	implementation("org.springframework.boot:spring-boot-h2console")
+	implementation("org.springframework.boot:spring-boot-starter-webmvc")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-restclient")
 
 	compileOnly("org.projectlombok:lombok")
 
+	annotationProcessor("org.hibernate.orm:hibernate-processor")
 	annotationProcessor("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
 	annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
-	annotationProcessor("org.hibernate.orm:hibernate-processor")
 
-	implementation("org.springframework.boot:spring-boot-h2console:4.0.1")
 	runtimeOnly("com.h2database:h2")
 
 	testCompileOnly("org.projectlombok:lombok")
 
 	testAnnotationProcessor("org.projectlombok:lombok")
 
-	testImplementation("org.wiremock.integrations:wiremock-spring-boot:4.0.9")
-	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
-	testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
-	testImplementation("net.datafaker:datafaker:2.5.2")
+	testImplementation("net.datafaker:datafaker:2.5.4")
 	testImplementation("org.assertj:assertj-core:3.27.7")
+	testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+	testImplementation("org.wiremock.integrations:wiremock-spring-boot:4.0.9")
+
 	mockitoAgent("org.mockito:mockito-core"){
 		isTransitive = false
 	}

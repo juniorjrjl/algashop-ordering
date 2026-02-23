@@ -4,12 +4,8 @@ import com.algaworks.algashop.ordering.domain.model.DomainService;
 import com.algaworks.algashop.ordering.domain.model.commons.Money;
 import com.algaworks.algashop.ordering.domain.model.commons.Quantity;
 import com.algaworks.algashop.ordering.domain.model.customer.Customer;
-import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
-import com.algaworks.algashop.ordering.domain.model.customer.LoyaltyPoints;
 import com.algaworks.algashop.ordering.domain.model.product.Product;
 import lombok.RequiredArgsConstructor;
-
-import java.time.Year;
 
 @DomainService
 @RequiredArgsConstructor

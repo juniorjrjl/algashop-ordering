@@ -1,7 +1,6 @@
 package com.algaworks.algashop.ordering.domain.model.commons;
 
 import com.algaworks.algashop.ordering.domain.model.RichComparable;
-import org.jspecify.annotations.NonNull;
 
 import java.math.BigDecimal;
 

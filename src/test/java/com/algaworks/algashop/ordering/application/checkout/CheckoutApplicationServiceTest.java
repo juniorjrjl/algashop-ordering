@@ -1,6 +1,5 @@
 package com.algaworks.algashop.ordering.application.checkout;
 
-import com.algaworks.algashop.ordering.application.customer.query.CustomerFilter;
 import com.algaworks.algashop.ordering.domain.model.commons.ZipCode;
 import com.algaworks.algashop.ordering.domain.model.customer.Customer;
 import com.algaworks.algashop.ordering.domain.model.customer.Customers;

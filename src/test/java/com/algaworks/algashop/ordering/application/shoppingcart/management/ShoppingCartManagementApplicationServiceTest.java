@@ -18,7 +18,7 @@ import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartEmp
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartId;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartItemAddedEvent;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartItemRemovedEvent;
-import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFound;
+import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCarts;
 import com.algaworks.algashop.ordering.infrastructure.listener.shoppingcart.ShoppingCartEventListener;
 import com.algaworks.algashop.ordering.utility.AbstractApplicationTest;
@@ -143,7 +143,7 @@ class ShoppingCartManagementApplicationServiceTest extends AbstractApplicationTe
                 .productId(UUID.randomUUID())
                 .quantity(customFaker.number().positive())
                 .build();
-        assertThatExceptionOfType(ShoppingCartNotFound.class)
+        assertThatExceptionOfType(ShoppingCartNotFoundException.class)
                 .isThrownBy(() -> service.addItem(input));
         verifyNoInteractions(eventListener, notificationApplicationService);
     }
@@ -156,7 +156,7 @@ class ShoppingCartManagementApplicationServiceTest extends AbstractApplicationTe
                 .quantity(customFaker.number().positive())
                 .build();
         when(productCatalogService.ofId(new ProductId(input.getProductId()))).thenReturn(Optional.empty());
-        assertThatExceptionOfType(ShoppingCartNotFound.class)
+        assertThatExceptionOfType(ShoppingCartNotFoundException.class)
                 .isThrownBy(() -> service.addItem(input));
         verifyNoInteractions(eventListener, notificationApplicationService);
     }
@@ -208,7 +208,7 @@ class ShoppingCartManagementApplicationServiceTest extends AbstractApplicationTe
 
     @Test
     void givenNonStoredShoppingCartWhenRemoveItemThenThrowException(){
-        assertThatExceptionOfType(ShoppingCartNotFound.class)
+        assertThatExceptionOfType(ShoppingCartNotFoundException.class)
                 .isThrownBy(() -> service.removeItem(UUID.randomUUID(), UUID.randomUUID()));
         verifyNoInteractions(eventListener, notificationApplicationService);
     }
@@ -253,7 +253,7 @@ class ShoppingCartManagementApplicationServiceTest extends AbstractApplicationTe
 
     @Test
     void givenNonStoredShoppingCartWhenEmptyThenThrowException(){
-        assertThatExceptionOfType(ShoppingCartNotFound.class)
+        assertThatExceptionOfType(ShoppingCartNotFoundException.class)
                 .isThrownBy(() -> service.empty(UUID.randomUUID()));
         verifyNoInteractions(eventListener, notificationApplicationService);
     }
@@ -269,7 +269,7 @@ class ShoppingCartManagementApplicationServiceTest extends AbstractApplicationTe
 
     @Test
     void givenNonStoredShoppingCartWhenDeleteThenThrowException(){
-        assertThatExceptionOfType(ShoppingCartNotFound.class)
+        assertThatExceptionOfType(ShoppingCartNotFoundException.class)
                 .isThrownBy(() -> service.delete(UUID.randomUUID()));
     }
 

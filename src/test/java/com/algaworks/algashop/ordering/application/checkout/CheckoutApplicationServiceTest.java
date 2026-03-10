@@ -9,7 +9,7 @@ import com.algaworks.algashop.ordering.domain.model.order.OriginAddressService;
 import com.algaworks.algashop.ordering.domain.model.order.ShippingCostService;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartCantProceedToCheckoutException;
-import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFound;
+import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCarts;
 import com.algaworks.algashop.ordering.utility.AbstractApplicationTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
@@ -108,7 +108,7 @@ class CheckoutApplicationServiceTest extends AbstractApplicationTest {
     void givenNonStoredShoppingCartWhenCheckoutThenThrowException(){
         final var input = customFaker.commonApplication()
                 .checkout();
-        assertThatExceptionOfType(ShoppingCartNotFound.class)
+        assertThatExceptionOfType(ShoppingCartNotFoundException.class)
                 .isThrownBy(() -> service.checkout(input));
     }
 

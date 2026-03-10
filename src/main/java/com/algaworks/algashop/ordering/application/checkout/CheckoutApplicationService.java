@@ -9,7 +9,7 @@ import com.algaworks.algashop.ordering.domain.model.order.OriginAddressService;
 import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
 import com.algaworks.algashop.ordering.domain.model.order.ShippingCostService;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartId;
-import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFound;
+import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCarts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class CheckoutApplicationService {
         requireNonNull(input);
 
         final var shoppingCart = shoppingCarts.ofId(new ShoppingCartId(input.getShoppingCartId()))
-                .orElseThrow(ShoppingCartNotFound::new);
+                .orElseThrow(ShoppingCartNotFoundException::new);
         final var customer = customers.ofId(shoppingCart.customerId())
                 .orElseThrow(CustomerNotFoundException::new);
         final var billing = billingInputDisassembler.toDomainModel(input.getBilling());

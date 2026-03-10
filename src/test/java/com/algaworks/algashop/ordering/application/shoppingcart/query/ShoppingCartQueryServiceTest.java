@@ -2,7 +2,7 @@ package com.algaworks.algashop.ordering.application.shoppingcart.query;
 
 import com.algaworks.algashop.ordering.domain.model.customer.Customer;
 import com.algaworks.algashop.ordering.domain.model.customer.Customers;
-import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFound;
+import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCarts;
 import com.algaworks.algashop.ordering.utility.AbstractApplicationTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
@@ -60,7 +60,7 @@ class ShoppingCartQueryServiceTest extends AbstractApplicationTest {
 
     @Test
     void givenNoStoredShoppingCartWhenFindByIdThenThrowException(){
-        assertThatExceptionOfType(ShoppingCartNotFound.class)
+        assertThatExceptionOfType(ShoppingCartNotFoundException.class)
                 .isThrownBy(() -> queryService.findById(UUID.randomUUID()));
     }
 
@@ -77,7 +77,7 @@ class ShoppingCartQueryServiceTest extends AbstractApplicationTest {
 
     @Test
     void givenNoStoredShoppingCartWhenFindByCustomerIdThenThrowException(){
-        assertThatExceptionOfType(ShoppingCartNotFound.class)
+        assertThatExceptionOfType(ShoppingCartNotFoundException.class)
                 .isThrownBy(() -> queryService.findByCustomerId(UUID.randomUUID()));
     }
 

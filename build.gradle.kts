@@ -28,6 +28,7 @@ repositories {
 }
 
 val mapstructVersion = "1.6.3"
+val restAssuredVersion = "6.0.0"
 
 dependencies {
 	implementation("com.fasterxml.uuid:java-uuid-generator:5.2.0")
@@ -37,6 +38,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-h2console")
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-restclient")
 
 	compileOnly("org.projectlombok:lombok")
@@ -52,6 +54,8 @@ dependencies {
 
 	testAnnotationProcessor("org.projectlombok:lombok")
 
+	testImplementation("io.rest-assured:rest-assured:$restAssuredVersion")
+	testImplementation("io.rest-assured:spring-mock-mvc:$restAssuredVersion")
 	testImplementation("net.datafaker:datafaker:2.5.4")
 	testImplementation("org.assertj:assertj-core:3.27.7")
 	testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")

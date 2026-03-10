@@ -9,7 +9,7 @@ import com.algaworks.algashop.ordering.domain.model.product.ProductId;
 import com.algaworks.algashop.ordering.domain.model.product.ProductNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartId;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartItemId;
-import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFound;
+import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCarts;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingService;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class ShoppingCartManagementApplicationService {
     @Transactional
     public void addItem(final ShoppingCartItemInput input){
         final var shoppingCart = shoppingCarts.ofId(new ShoppingCartId(input.getShoppingCartId()))
-                .orElseThrow(ShoppingCartNotFound::new);
+                .orElseThrow(ShoppingCartNotFoundException::new);
         final var product = productCatalogService.ofId(new ProductId(input.getProductId()))
                 .orElseThrow(ProductNotFoundException::new);
         product.checkOutOfStock();
@@ -52,7 +52,7 @@ public class ShoppingCartManagementApplicationService {
     @Transactional
     public void removeItem(final UUID rawId, final UUID rawShoppingCartItemId){
         final var shoppingCart = shoppingCarts.ofId(new ShoppingCartId(rawId))
-                .orElseThrow(ShoppingCartNotFound::new);
+                .orElseThrow(ShoppingCartNotFoundException::new);
         shoppingCart.removeItem(new ShoppingCartItemId(rawShoppingCartItemId));
         shoppingCarts.add(shoppingCart);
     }
@@ -60,7 +60,7 @@ public class ShoppingCartManagementApplicationService {
     @Transactional
     public void empty(final UUID rawId){
         final var shoppingCart = shoppingCarts.ofId(new ShoppingCartId(rawId))
-                .orElseThrow(ShoppingCartNotFound::new);
+                .orElseThrow(ShoppingCartNotFoundException::new);
         shoppingCart.empty();
         shoppingCarts.add(shoppingCart);
     }
@@ -68,7 +68,7 @@ public class ShoppingCartManagementApplicationService {
     @Transactional
     public void delete(final UUID rawId){
         final var shoppingCart = shoppingCarts.ofId(new ShoppingCartId(rawId))
-                .orElseThrow(ShoppingCartNotFound::new);
+                .orElseThrow(ShoppingCartNotFoundException::new);
         shoppingCarts.remove(shoppingCart);
     }
 

@@ -32,7 +32,7 @@ public class CustomerInput {
     @NotNull
     private LocalDate birthDate;
     @NotNull
-    private boolean promotionNotificationsAllowed;
+    private Boolean promotionNotificationsAllowed;
     @NotNull
     @Valid
     private AddressData address;

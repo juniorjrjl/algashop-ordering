@@ -32,7 +32,7 @@ public class CustomerManagementApplicationService {
                 new Email(input.getEmail()),
                 new Phone(input.getPhone()),
                 new Document(input.getDocument()),
-                input.isPromotionNotificationsAllowed(),
+                input.getPromotionNotificationsAllowed(),
                 commonModelAssembler.toAddress(input.getAddress())
         );
         customers.add(customer);
@@ -46,7 +46,7 @@ public class CustomerManagementApplicationService {
         customer.changeFullName(new  FullName(input.getFirstName(), input.getLastName()));
         customer.changePhone(new  Phone(input.getPhone()));
         customer.changeAddress(commonModelAssembler.toAddress(input.getAddress()));
-        if (input.isPromotionNotificationsAllowed()){
+        if (input.getPromotionNotificationsAllowed()){
             customer.enablePromotionNotifications();
         } else {
             customer.disablePromotionNotifications();

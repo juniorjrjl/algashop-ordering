@@ -89,7 +89,7 @@ class CustomerManagementApplicationServiceTest extends AbstractApplicationTest {
                 input.getFirstName(),
                 input.getLastName(),
                 input.getPhone(),
-                input.isPromotionNotificationsAllowed()
+                input.getPromotionNotificationsAllowed()
         );
         assertThat(actual.address()).usingRecursiveComparison()
                 .ignoringFields("zipCode")

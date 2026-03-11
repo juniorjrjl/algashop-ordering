@@ -2,6 +2,7 @@ package com.algaworks.algashop.ordering.presentation;
 
 import com.algaworks.algashop.ordering.application.customer.management.CustomerInput;
 import com.algaworks.algashop.ordering.application.customer.management.CustomerManagementApplicationService;
+import com.algaworks.algashop.ordering.application.customer.management.CustomerUpdateInput;
 import com.algaworks.algashop.ordering.application.customer.query.CustomerFilter;
 import com.algaworks.algashop.ordering.application.customer.query.CustomerOutput;
 import com.algaworks.algashop.ordering.application.customer.query.CustomerQueryService;
@@ -9,19 +10,21 @@ import com.algaworks.algashop.ordering.application.customer.query.CustomerSummar
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RequiredArgsConstructor
 @RestController
@@ -37,10 +40,23 @@ public class CustomerController {
                                  final HttpServletResponse response) {
         final var customerId = applicationService.create(input);
         final var builder = ServletUriComponentsBuilder.fromCurrentRequest()
-                        .path("/{customerId}")
+                        .path("/{id}")
                         .buildAndExpand(customerId);
         response.setHeader("Location", builder.toUriString());
         return queryService.findById(customerId);
+    }
+
+    @PutMapping(version = "1", path = "/{id}")
+    public CustomerOutput update(@PathVariable final UUID id,
+                                 @RequestBody @Valid final CustomerUpdateInput input){
+        applicationService.update(id, input);
+        return queryService.findById(id);
+    }
+
+    @DeleteMapping(version = "1", path = "/{id}")
+    @ResponseStatus(NO_CONTENT)
+    public void delete(@PathVariable final UUID id){
+        applicationService.archive(id);
     }
 
     @GetMapping(version = "1")

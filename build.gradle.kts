@@ -1,9 +1,10 @@
 plugins {
 	id("idea")
 	java
-	id("org.springframework.boot") version "4.0.3"
+	id("org.springframework.boot") version "4.0.5"
 	id("io.spring.dependency-management") version "1.1.7"
 	jacoco
+	id("org.springframework.cloud.contract") version "5.0.2"
 }
 
 group = "com.algaworks.algashop"
@@ -26,6 +27,8 @@ configurations {
 repositories {
 	mavenCentral()
 }
+
+extra["springCloudVersion"] = "2025.1.0"
 
 val mapstructVersion = "1.6.3"
 val restAssuredVersion = "6.0.0"
@@ -54,6 +57,7 @@ dependencies {
 
 	testAnnotationProcessor("org.projectlombok:lombok")
 
+	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-verifier")
 	testImplementation("io.rest-assured:rest-assured:$restAssuredVersion")
 	testImplementation("io.rest-assured:spring-mock-mvc:$restAssuredVersion")
 	testImplementation("net.datafaker:datafaker:2.5.4")
@@ -67,6 +71,16 @@ dependencies {
 	}
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+	}
+}
+
+contracts {
+	packageWithBaseClasses = "com.algaworks.algashop.ordering.contract.base"
 }
 
 tasks.withType<Test>().configureEach {
@@ -113,4 +127,9 @@ tasks.jacocoTestReport {
 		csv.required = false
 		html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
 	}
+}
+
+tasks.contractTest {
+	useJUnitPlatform()
+
 }

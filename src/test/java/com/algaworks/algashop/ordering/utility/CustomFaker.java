@@ -73,6 +73,10 @@ public class CustomFaker extends Faker {
         return getProvider(JsonProvider.class, JsonProvider::new);
     }
 
+    public NumericProvider numeric(){
+        return getProvider(NumericProvider.class, NumericProvider::new);
+    }
+
     @SafeVarargs
     public final <E extends Enum<E>> E option(final Class<E> enumeration, final E... exceptedValues) {
         final var options = enumeration.getEnumConstants();

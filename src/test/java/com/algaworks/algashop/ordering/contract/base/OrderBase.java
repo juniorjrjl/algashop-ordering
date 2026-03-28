@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.contract.base;
 
 import com.algaworks.algashop.ordering.application.order.query.OrderQueryService;
+import com.algaworks.algashop.ordering.domain.model.order.OrderNotFoundException;
 import com.algaworks.algashop.ordering.presentation.OrderController;
 import com.algaworks.algashop.ordering.utility.databuilder.presentation.OrderDetailOutputDataBuilder;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -14,7 +15,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(OrderController.class)
@@ -34,7 +34,10 @@ public class OrderBase {
                         .build()
         );
         RestAssuredMockMvc.enableLoggingOfRequestAndResponseIfValidationFails();
-        when(queryService.findById(anyString())).thenReturn(OrderDetailOutputDataBuilder.builder().build());
+        when(queryService.findById("01226N0640J7Q")).thenReturn(OrderDetailOutputDataBuilder.builder()
+                        .withId(() -> "01226N0640J7Q")
+                .build());
+        when(queryService.findById("01226N0693HDH")).thenThrow(new OrderNotFoundException());
     }
 
 }

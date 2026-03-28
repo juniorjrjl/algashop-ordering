@@ -9,12 +9,12 @@ Contract.make {
         headers {
             accept APPLICATION_JSON_VALUE
         }
-        url(value(stub("/api/v1/orders/${anyNonBlankString()}"), test("/api/v1/orders/01226N0640J7Q")))
+        url("/api/v1/orders/01226N0640J7Q")
     }
     response {
         status OK()
         body([
-                id: anyNonBlankString(),
+                id: "01226N0640J7Q",
                 customer: [
                         id: anyUuid(),
                         firstName: anyNonBlankString(),

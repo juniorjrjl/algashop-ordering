@@ -10,7 +10,6 @@ import com.algaworks.algashop.ordering.domain.model.order.Orders;
 import com.algaworks.algashop.ordering.domain.model.order.OriginAddressService;
 import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
 import com.algaworks.algashop.ordering.domain.model.order.ShippingCostService;
-import com.algaworks.algashop.ordering.domain.model.product.Product;
 import com.algaworks.algashop.ordering.domain.model.product.ProductCatalogService;
 import com.algaworks.algashop.ordering.domain.model.product.ProductId;
 import com.algaworks.algashop.ordering.domain.model.product.ProductNotFoundException;
@@ -33,9 +32,12 @@ public class BuyNowApplicationService {
 
     @Transactional
     public String buyNow(final BuyNowInput input){
-        final var product = findProduct(new ProductId(input.getProductId()));
-        final var customer = customers.ofId(new CustomerId(input.getCustomerId()))
-                .orElseThrow(CustomerNotFoundException::new);
+        final var productId = new ProductId(input.getProductId());
+        final var product = productCatalogService.ofId(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+        final var customerId = new CustomerId(input.getCustomerId());
+        final var customer = customers.ofId(customerId)
+                .orElseThrow(() -> new CustomerNotFoundException(customerId));
 
         final var billing = billingInputDisassembler.toDomainModel(input.getBilling());
         final var calculateResult = calculateShippingCost(input.getShipping());
@@ -45,10 +47,6 @@ public class BuyNowApplicationService {
         final var order = service.buyNow(product, customer, billing, shipping, quantity, paymentMethod);
         orders.add(order);
         return order.id().toString();
-    }
-
-    private Product findProduct(final ProductId productId){
-        return productCatalogService.ofId(productId).orElseThrow(ProductNotFoundException::new);
     }
 
     private ShippingCostService.CalculationResult calculateShippingCost(final ShippingInput shippingInput){

@@ -55,4 +55,10 @@ public final class ErrorMessage {
     public static final String ERROR_SHOPPING_CART_DOES_NOT_CONTAIN_PRODUCT
             = "Shopping cart %s does not contain product %s";
 
+    public static final String ERROR_CUSTOMER_NOT_FOUND
+            = "Customer %S was not found";
+
+    public static final String ERROR_PRODUCT_NOT_FOUND
+            = "Product %S was not found";
+
 }

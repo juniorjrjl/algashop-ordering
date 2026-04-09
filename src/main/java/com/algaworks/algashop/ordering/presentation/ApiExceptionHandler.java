@@ -22,7 +22,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.net.URI;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.HttpStatus.BAD_GATEWAY;
 import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.GATEWAY_TIMEOUT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_CONTENT;
@@ -63,9 +65,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
-    @ExceptionHandler(DomainException.class)
-    public ProblemDetail handleDomainException(final DomainException ex,
-                                               final WebRequest request) {
+    @ExceptionHandler({DomainException.class, UnprocessableEntityException.class})
+    public ProblemDetail handleUnprocessableEntityException(final Exception ex,
+                                                            final WebRequest request) {
         final var problemDetail = ProblemDetail.forStatus(UNPROCESSABLE_CONTENT);
         problemDetail.setTitle("Unprocessable Entity");
         problemDetail.setDetail(ex.getMessage());
@@ -81,6 +83,28 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         problemDetail.setTitle("Conflict");
         problemDetail.setDetail(ex.getMessage());
         problemDetail.setType(URI.create("/errors/conflict"));
+        log.error(ex.getMessage(), ex);
+        return problemDetail;
+    }
+
+    @ExceptionHandler(GatewayTimeoutException.class)
+    public ProblemDetail handleGatewayTimeoutException(final GatewayTimeoutException ex,
+                                                       final WebRequest request) {
+        final var problemDetail = ProblemDetail.forStatus(GATEWAY_TIMEOUT);
+        problemDetail.setTitle("Gateway Timeout");
+        problemDetail.setDetail(ex.getMessage());
+        problemDetail.setType(URI.create("/errors/gateway-timeout"));
+        log.error(ex.getMessage(), ex);
+        return problemDetail;
+    }
+
+    @ExceptionHandler(BadGatewayException.class)
+    public ProblemDetail handleBadGatewayException(final BadGatewayException ex,
+                                                       final WebRequest request) {
+        final var problemDetail = ProblemDetail.forStatus(BAD_GATEWAY);
+        problemDetail.setTitle("Bad Gateway");
+        problemDetail.setDetail(ex.getMessage());
+        problemDetail.setType(URI.create("/errors/bad-gateway"));
         log.error(ex.getMessage(), ex);
         return problemDetail;
     }

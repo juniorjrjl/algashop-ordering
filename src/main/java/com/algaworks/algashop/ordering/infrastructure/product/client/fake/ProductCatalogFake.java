@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@Component
+//@Component
 public class ProductCatalogFake implements ProductCatalogService {
     @Override
     public Optional<Product> ofId(final ProductId productId) {

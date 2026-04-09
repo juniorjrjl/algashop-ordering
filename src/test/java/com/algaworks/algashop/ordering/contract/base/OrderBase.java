@@ -7,7 +7,7 @@ import com.algaworks.algashop.ordering.application.checkout.CheckoutInput;
 import com.algaworks.algashop.ordering.application.order.query.OrderFilter;
 import com.algaworks.algashop.ordering.application.order.query.OrderQueryService;
 import com.algaworks.algashop.ordering.domain.model.order.OrderNotFoundException;
-import com.algaworks.algashop.ordering.presentation.OrderController;
+import com.algaworks.algashop.ordering.presentation.order.OrderController;
 import com.algaworks.algashop.ordering.utility.databuilder.application.OrderSummaryOutputDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.presentation.OrderDetailOutputDataBuilder;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;

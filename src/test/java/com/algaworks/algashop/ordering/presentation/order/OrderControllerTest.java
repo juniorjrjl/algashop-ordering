@@ -18,13 +18,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.wiremock.spring.ConfigureWireMock;
+import org.wiremock.spring.EnableWireMock;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.cloud.contract.spec.internal.HttpStatus.BAD_GATEWAY;
 import static org.springframework.cloud.contract.spec.internal.HttpStatus.CREATED;
 import static org.springframework.cloud.contract.spec.internal.HttpStatus.GATEWAY_TIMEOUT;
 import static org.springframework.cloud.contract.spec.internal.HttpStatus.UNPROCESSABLE_ENTITY;
@@ -32,11 +33,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
 
 @IntegrationTest
-@SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = {
-                "algashop.integrations.shipping.provider=FAKE"
-        })
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@EnableWireMock({@ConfigureWireMock(name = "rapiDexApi", port = 8780)})
 class OrderControllerTest {
 
     private static boolean databaseInitialized;
@@ -168,7 +166,7 @@ class OrderControllerTest {
             .then()
                 .assertThat()
                 .contentType(APPLICATION_PROBLEM_JSON_VALUE)
-                .statusCode(BAD_GATEWAY);
+                .statusCode(UNPROCESSABLE_ENTITY);
     }
 
 }

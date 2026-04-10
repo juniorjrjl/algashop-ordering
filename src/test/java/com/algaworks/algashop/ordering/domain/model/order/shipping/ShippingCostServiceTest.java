@@ -1,6 +1,5 @@
 package com.algaworks.algashop.ordering.domain.model.order.shipping;
 
-import com.algaworks.algashop.ordering.domain.model.order.OriginAddressService;
 import com.algaworks.algashop.ordering.domain.model.order.ShippingCostService;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.infrastructure.DeliveryCostResponseDataBuilder;
@@ -25,13 +24,10 @@ class ShippingCostServiceTest {
     private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     private final ShippingCostService shippingCostService;
-    private final OriginAddressService originAddressService;
 
     @Autowired
-    ShippingCostServiceTest(final ShippingCostService shippingCostService,
-                            final OriginAddressService originAddressService) {
+    ShippingCostServiceTest(final ShippingCostService shippingCostService) {
         this.shippingCostService = shippingCostService;
-        this.originAddressService = originAddressService;
     }
 
     @Test

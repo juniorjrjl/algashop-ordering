@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeliveryCostRequest {
 
-    private String origimZipCode;
+    private String originZipCode;
     private String destinationZipCode;
 
 }

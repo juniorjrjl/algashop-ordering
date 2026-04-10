@@ -5,6 +5,7 @@ import com.algaworks.algashop.ordering.application.customer.management.CustomerM
 import com.algaworks.algashop.ordering.application.customer.management.CustomerUpdateInput;
 import com.algaworks.algashop.ordering.application.customer.query.CustomerFilter;
 import com.algaworks.algashop.ordering.application.customer.query.CustomerQueryService;
+import com.algaworks.algashop.ordering.application.shoppingcart.query.ShoppingCartQueryService;
 import com.algaworks.algashop.ordering.domain.model.DomainException;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerEmailInUseException;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerNotFoundException;
@@ -33,6 +34,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
+import static com.algaworks.algashop.ordering.utility.HamcrestUtil.sameInstant;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -61,6 +63,8 @@ class CustomerControllerTest {
     private CustomerManagementApplicationService applicationService;
     @MockitoBean
     private CustomerQueryService queryService;
+    @MockitoBean
+    private ShoppingCartQueryService shoppingCartQueryService;
 
     @Autowired
     CustomerControllerTest(final WebApplicationContext context) {
@@ -213,7 +217,7 @@ class CustomerControllerTest {
                     .status(OK)
                     .body(
                             "id", Matchers.is(output.getId().toString()),
-                            "registeredAt", Matchers.is(output.getRegisteredAt().toString()),
+                            "registeredAt", sameInstant(output.getRegisteredAt()),
                             "firstName", Matchers.is(output.getFirstName()),
                             "lastName", Matchers.is(output.getLastName()),
                             "email", Matchers.is(output.getEmail()),

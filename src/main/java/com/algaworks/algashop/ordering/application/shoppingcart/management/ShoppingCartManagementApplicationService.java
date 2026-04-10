@@ -40,10 +40,14 @@ public class ShoppingCartManagementApplicationService {
 
     @Transactional
     public void addItem(final ShoppingCartItemInput input){
-        final var shoppingCart = shoppingCarts.ofId(new ShoppingCartId(input.getShoppingCartId()))
-                .orElseThrow(ShoppingCartNotFoundException::new);
-        final var product = productCatalogService.ofId(new ProductId(input.getProductId()))
-                .orElseThrow(ProductNotFoundException::new);
+        final var shoppingCartId = new ShoppingCartId(input.getShoppingCartId());
+        final var shoppingCart = shoppingCarts.ofId(shoppingCartId)
+                .orElseThrow(() -> new ShoppingCartNotFoundException(shoppingCartId));
+
+        final var productId = new ProductId(input.getProductId());
+        final var product = productCatalogService.ofId(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+
         product.checkOutOfStock();
         shoppingCart.addItem(product, new Quantity(input.getQuantity()));
         shoppingCarts.add(shoppingCart);

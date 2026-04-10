@@ -6,6 +6,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
+import java.time.ZoneOffset;
+import java.util.TimeZone;
+
 import static lombok.AccessLevel.PRIVATE;
 
 @SpringBootApplication
@@ -14,6 +17,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class OrderingApplication {
 
 	static void main(String[] args) {
+		TimeZone.setDefault(TimeZone.getTimeZone(ZoneOffset.UTC));
 		SpringApplication.run(OrderingApplication.class, args);
 	}
 

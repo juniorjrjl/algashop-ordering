@@ -53,23 +53,18 @@ public class OrderPersistenceEntity extends AbstractAggregateRoot<OrderPersisten
     private OffsetDateTime paidAt;
     private OffsetDateTime canceledAt;
     private OffsetDateTime readyAt;
-
     @CreatedBy
     private UUID createdBy;
     @LastModifiedDate
     private OffsetDateTime lastModifiedAt;
     @LastModifiedBy
     private UUID lastModifiedBy;
-
     @Version
     private Long version;
-
     @Embedded
     private BillingEmbeddable billing;
-
     @Embedded
     private ShippingEmbeddable shipping;
-
     @ToString.Exclude
     @OneToMany(mappedBy = "order", cascade = ALL,  orphanRemoval = true)
     private Set<OrderItemPersistenceEntity> items = new HashSet<>();

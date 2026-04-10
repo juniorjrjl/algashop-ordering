@@ -89,6 +89,10 @@ public abstract class ShoppingCartPersistenceEntityAssembler {
     @Mapping(target = "totalAmount", expression = "java(getEmbeddableAssembler().map(item.totalAmount()))")
     @Mapping(target = "available", source = "item.available")
     @Mapping(target = "shoppingCart", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "lastModifiedAt", ignore = true)
+    @Mapping(target = "lastModifiedBy", ignore = true)
     protected abstract ShoppingCartItemPersistenceEntity fromDomain(final ShoppingCartItem item);
 
     protected UUID map(final ShoppingCartId shoppingCartId) {

@@ -6,8 +6,10 @@ import com.algaworks.algashop.ordering.utility.CustomFaker;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;
+import org.jspecify.annotations.Nullable;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -35,6 +37,14 @@ public class ShoppingCartItemPersistenceEntityDataBuilder {
     private Supplier<Integer> quantity = () -> customFaker.number().randomDigit();
     @With
     private Supplier<Boolean> available = () -> customFaker.bool().bool();
+    @With
+    private Supplier<@Nullable UUID> createdBy  = IdGenerator::generateUUID;
+    @With
+    private Supplier<@Nullable OffsetDateTime> createdAt  = OffsetDateTime::now;
+    @With
+    private Supplier<@Nullable OffsetDateTime> lastModifiedAt  = OffsetDateTime::now;
+    @With
+    private Supplier<@Nullable UUID> lastModifiedBy = IdGenerator::generateUUID;
 
     public static ShoppingCartItemPersistenceEntityDataBuilder builder() {
         return new ShoppingCartItemPersistenceEntityDataBuilder();
@@ -51,7 +61,11 @@ public class ShoppingCartItemPersistenceEntityDataBuilder {
                 genQuantity,
                 genPrice.multiply(new BigDecimal(genQuantity.toString())),
                 available.get(),
-                null
+                null,
+                createdBy.get(),
+                createdAt.get(),
+                lastModifiedAt.get(),
+                lastModifiedBy.get()
         );
     }
 

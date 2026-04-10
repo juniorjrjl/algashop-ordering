@@ -5,13 +5,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -36,6 +42,14 @@ public class ShoppingCartItemPersistenceEntity {
     @JoinColumn
     @ManyToOne(optional = false)
     private ShoppingCartPersistenceEntity shoppingCart;
+    @CreatedBy
+    private UUID createdBy;
+    @CreatedDate
+    private OffsetDateTime createdAt;
+    @LastModifiedDate
+    private OffsetDateTime lastModifiedAt;
+    @LastModifiedBy
+    private UUID lastModifiedBy;
 
     @Override
     public boolean equals(final Object o) {

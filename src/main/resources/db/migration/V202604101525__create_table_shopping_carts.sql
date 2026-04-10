@@ -17,6 +17,10 @@ alter table public.shopping_carts add constraint fk_shopping_cart_customer_id fo
 create table shopping_cart_items (
     id uuid not null,
     available boolean,
+    created_by uuid,
+    created_at timestamp(6) with time zone,
+    last_modified_by uuid,
+    last_modified_at timestamp(6) with time zone,
     price numeric(38,2),
     quantity integer,
     total_amount numeric(38,2),

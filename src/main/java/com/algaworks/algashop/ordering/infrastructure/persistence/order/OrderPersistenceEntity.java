@@ -70,6 +70,10 @@ public class OrderPersistenceEntity extends AbstractAggregateRoot<OrderPersisten
     @Embedded
     private ShippingEmbeddable shipping;
 
+    @ToString.Exclude
+    @OneToMany(mappedBy = "order", cascade = ALL,  orphanRemoval = true)
+    private Set<OrderItemPersistenceEntity> items = new HashSet<>();
+
     public OrderPersistenceEntity(
             final Long id,
             final CustomerPersistenceEntity customer,
@@ -107,10 +111,6 @@ public class OrderPersistenceEntity extends AbstractAggregateRoot<OrderPersisten
         this.items = items;
         this.addOrderToItems();
     }
-
-    @ToString.Exclude
-    @OneToMany(mappedBy = "order", cascade = ALL,  orphanRemoval = true)
-    private Set<OrderItemPersistenceEntity> items = new HashSet<>();
 
     public void addOrderToItems(){
         if (this.items.isEmpty()) {

@@ -1,3 +1,9 @@
+/*buildscript {
+	dependencies {
+		classpath("org.flywaydb:flyway-database-postgresql:11.14.1")
+		classpath("org.flywaydb:flyway-database-postgresql:11.14.1")
+	}//plugin flyway
+}*/
 plugins {
 	id("idea")
 	java
@@ -5,6 +11,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.7"
 	jacoco
 	id("org.springframework.cloud.contract") version "5.0.2"
+	//id("org.flywaydb.flyway") version "12.3.0"
 }
 
 group = "com.algaworks.algashop"
@@ -38,25 +45,31 @@ dependencies {
 	implementation("commons-validator:commons-validator:1.10.1")
 	implementation("io.hypersistence:hypersistence-tsid:2.1.4")
 	implementation("org.mapstruct:mapstruct:${mapstructVersion}")
-	implementation("org.springframework.boot:spring-boot-h2console")
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-restclient")
+	implementation("org.springframework.boot:spring-boot-starter-flyway")
+
+	implementation("org.flywaydb:flyway-database-postgresql")
 
 	compileOnly("org.projectlombok:lombok")
+
+	runtimeOnly("org.postgresql:postgresql")
 
 	annotationProcessor("org.hibernate.orm:hibernate-processor")
 	annotationProcessor("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
 	annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
 
-	runtimeOnly("com.h2database:h2")
-
 	testCompileOnly("org.projectlombok:lombok")
 
 	testAnnotationProcessor("org.projectlombok:lombok")
 
+	testRuntimeOnly("com.h2database:h2")
+
+	testImplementation("org.springframework.boot:spring-boot-starter-flyway-test")
+	testImplementation("org.springframework.boot:spring-boot-h2console")
 	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-verifier")
 	testImplementation("io.rest-assured:rest-assured:$restAssuredVersion")
 	testImplementation("io.rest-assured:spring-mock-mvc:$restAssuredVersion")

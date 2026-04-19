@@ -65,7 +65,8 @@ public class ShoppingCartItemPersistenceEntityDataBuilder {
                 createdBy.get(),
                 createdAt.get(),
                 lastModifiedAt.get(),
-                lastModifiedBy.get()
+                lastModifiedBy.get(),
+                null
         );
     }
 

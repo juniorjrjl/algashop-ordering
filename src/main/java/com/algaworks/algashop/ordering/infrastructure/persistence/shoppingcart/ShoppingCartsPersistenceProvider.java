@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart;
 
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
+import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartItemId;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCarts;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartId;
@@ -72,6 +73,13 @@ public class ShoppingCartsPersistenceProvider implements ShoppingCarts {
         );
         repository.saveAndFlush(toInsert);
         PersistenceUtil.updateVersion(aggregateRoot, toInsert.getVersion());
+        toInsert.getItems().forEach(
+                e -> PersistenceUtil.updateValueObjectVersion(
+                        aggregateRoot,
+                        new ShoppingCartItemId(e.getId()),
+                        "changeItemVersion",
+                        e.getVersion()
+                        ));
     }
 
     private void update(final ShoppingCart aggregateRoot, final ShoppingCartPersistenceEntity entity) {
@@ -79,6 +87,13 @@ public class ShoppingCartsPersistenceProvider implements ShoppingCarts {
         entityManager.detach(updated);
         repository.saveAndFlush(updated);
         PersistenceUtil.updateVersion(aggregateRoot, entity.getVersion());
+        updated.getItems().forEach(
+                e -> PersistenceUtil.updateValueObjectVersion(
+                        aggregateRoot,
+                        new ShoppingCartItemId(e.getId()),
+                        "changeItemVersion",
+                        e.getVersion()
+                ));
     }
 
 }

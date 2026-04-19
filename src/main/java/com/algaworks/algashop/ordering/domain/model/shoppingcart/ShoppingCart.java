@@ -207,6 +207,15 @@ public class ShoppingCart extends AbstractEventSourceEntity implements Aggregate
         return Objects.hashCode(id);
     }
 
+    private void changeItemVersion(final ShoppingCartItemId itemId, final Long newVersion) {
+        final var toChange = this.items.stream().filter(i -> i.id().equals(itemId))
+                .findFirst();
+        if (toChange.isEmpty()) {
+            throw new ShoppingCartDoesNotContainOrderItemException(id, itemId);
+        }
+        toChange.get().changeVersion(newVersion);
+    }
+
     private void recalculateTotals() {
         final var totalItemsAmount = this.items.stream()
                 .map(ShoppingCartItem::totalAmount)

@@ -66,10 +66,7 @@ dependencies {
 
 	testAnnotationProcessor("org.projectlombok:lombok")
 
-	testRuntimeOnly("com.h2database:h2")
-
 	testImplementation("org.springframework.boot:spring-boot-starter-flyway-test")
-	testImplementation("org.springframework.boot:spring-boot-h2console")
 	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-verifier")
 	testImplementation("io.rest-assured:rest-assured:$restAssuredVersion")
 	testImplementation("io.rest-assured:spring-mock-mvc:$restAssuredVersion")

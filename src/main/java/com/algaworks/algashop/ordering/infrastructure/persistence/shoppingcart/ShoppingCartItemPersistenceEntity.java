@@ -50,6 +50,8 @@ public class ShoppingCartItemPersistenceEntity {
     private OffsetDateTime lastModifiedAt;
     @LastModifiedBy
     private UUID lastModifiedBy;
+    @Version
+    private Long version;
 
     @Override
     public boolean equals(final Object o) {

@@ -18,4 +18,20 @@ public class PersistenceUtil {
         version.setAccessible(false);
     }
 
+    @SneakyThrows
+    public static void updateValueObjectVersion(final AggregateRoot<?> aggregateRoot,
+                                                final Object valueObjectId,
+                                                final String methodName,
+                                                final Long version) {
+        final var changeVersionMethod = aggregateRoot.getClass().getDeclaredMethod(
+                methodName,
+                valueObjectId.getClass(),
+                Long.class
+        );
+        changeVersionMethod.setAccessible(true);
+        changeVersionMethod.invoke(aggregateRoot, valueObjectId, version);
+        changeVersionMethod.setAccessible(false);
+
+    }
+
 }

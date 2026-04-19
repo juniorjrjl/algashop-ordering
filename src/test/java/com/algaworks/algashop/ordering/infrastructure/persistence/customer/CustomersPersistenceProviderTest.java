@@ -9,7 +9,6 @@ import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +18,6 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED;
 
 @IntegrationTest
-@DataJpaTest
 @Import({
         CustomersPersistenceProvider.class,
         CustomerPersistenceEntityAssemblerImpl.class,

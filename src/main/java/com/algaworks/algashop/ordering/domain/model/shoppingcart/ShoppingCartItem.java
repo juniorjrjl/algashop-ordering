@@ -23,6 +23,8 @@ public class ShoppingCartItem {
     private Quantity quantity;
     private Money totalAmount;
     private Boolean available;
+    @Nullable
+    private Long version;
 
     @Builder(builderClassName = "BrandNewShoppingCartItemBuilder", builderMethodName = "brandNew")
     public static ShoppingCartItem brandNewOne(final ShoppingCartId shoppingCartId,
@@ -35,7 +37,8 @@ public class ShoppingCartItem {
                 product.name(),
                 product.price(),
                 quantity,
-                product.inStock()
+                product.inStock(),
+                null
         );
     }
 
@@ -46,7 +49,8 @@ public class ShoppingCartItem {
                              final ProductName name,
                              final Money price,
                              final Quantity quantity,
-                             final Boolean available) {
+                             final Boolean available,
+                             final Long version) {
         this.setId(id);
         this.setShoppingCartId(shoppingCartId);
         this.setProductId(productId);
@@ -54,6 +58,7 @@ public class ShoppingCartItem {
         this.setPrice(price);
         this.setQuantity(quantity);
         this.setAvailable(available);
+        this.setVersion(version);
         this.setTotalAmount(this.price.multiply(this.quantity));
     }
 
@@ -90,6 +95,10 @@ public class ShoppingCartItem {
         return available;
     }
 
+    public Long version() {
+        return version;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (!(o instanceof ShoppingCartItem that)) return false;
@@ -120,6 +129,10 @@ public class ShoppingCartItem {
         this.recalculateTotals();
     }
 
+    void changeVersion(final Long newVersion) {
+        this.version = newVersion;
+    }
+
     private void recalculateTotals(){
         this.setTotalAmount(this.price.multiply(this.quantity));
     }
@@ -143,6 +156,10 @@ public class ShoppingCartItem {
 
     private void setPrice(final Money price) {
         this.price = requireNonNull(price);
+    }
+
+    private void setVersion(final Long version) {
+        this.version = version;
     }
 
     private void setQuantity(final Quantity quantity) {

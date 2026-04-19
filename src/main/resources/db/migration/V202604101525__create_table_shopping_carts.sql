@@ -26,6 +26,7 @@ create table shopping_cart_items (
     total_amount numeric(38,2),
     product_id uuid,
     shopping_cart_id uuid not null,
+    version bigint,
     name varchar(255),
     primary key (id)
 );

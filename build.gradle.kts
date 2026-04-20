@@ -5,13 +5,13 @@
 	}//plugin flyway
 }*/
 plugins {
-	id("idea")
+	idea
 	java
-	id("org.springframework.boot") version "4.0.5"
-	id("io.spring.dependency-management") version "1.1.7"
 	jacoco
-	id("org.springframework.cloud.contract") version "5.0.2"
-	//id("org.flywaydb.flyway") version "12.3.0"
+	alias(libs.plugins.spring.boot)
+	alias(libs.plugins.spring.dependency.management)
+	alias(libs.plugins.spring.cloud.contract)
+	// alias(libs.plugins.flyway)
 }
 
 group = "com.algaworks.algashop"
@@ -35,57 +35,47 @@ repositories {
 	mavenCentral()
 }
 
-extra["springCloudVersion"] = "2025.1.0"
-
-val mapstructVersion = "1.6.3"
-val restAssuredVersion = "6.0.0"
 
 dependencies {
-	implementation("com.fasterxml.uuid:java-uuid-generator:5.2.0")
-	implementation("commons-validator:commons-validator:1.10.1")
-	implementation("io.hypersistence:hypersistence-tsid:2.1.4")
-	implementation("org.mapstruct:mapstruct:${mapstructVersion}")
-	implementation("org.springframework.boot:spring-boot-starter-webmvc")
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-validation")
-	implementation("org.springframework.boot:spring-boot-restclient")
-	implementation("org.springframework.boot:spring-boot-starter-flyway")
+	implementation(libs.java.uuid.generator)
+	implementation(libs.commons.validator)
+	implementation(libs.hypersistence.tsid)
+	implementation(libs.mapstruct)
+	implementation(libs.spring.boot.starter.webmvc)
+	implementation(libs.spring.boot.starter.data.jpa)
+	implementation(libs.spring.boot.starter.validation)
+	implementation(libs.spring.boot.restclient)
+	implementation(libs.spring.boot.starter.flyway)
+	implementation(libs.flyway.database.postgresql)
 
-	implementation("org.flywaydb:flyway-database-postgresql")
+	compileOnly(libs.lombok)
+	runtimeOnly(libs.postgresql)
 
-	compileOnly("org.projectlombok:lombok")
+	annotationProcessor(libs.hibernate.processor)
+	annotationProcessor(libs.lombok)
+	annotationProcessor(libs.lombok.mapstruct.binding)
+	annotationProcessor(libs.mapstruct.processor)
 
-	runtimeOnly("org.postgresql:postgresql")
+	testCompileOnly(libs.lombok)
+	testAnnotationProcessor(libs.lombok)
 
-	annotationProcessor("org.hibernate.orm:hibernate-processor")
-	annotationProcessor("org.projectlombok:lombok")
-	annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
-	annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
+	testImplementation(libs.spring.boot.starter.flyway.test)
+	testImplementation(libs.spring.cloud.starter.contract.verifier)
+	testImplementation(libs.rest.assured)
+	testImplementation(libs.rest.assured.spring.mock.mvc)
+	testImplementation(libs.datafaker)
+	testImplementation(libs.assertj.core)
+	testImplementation(libs.spring.boot.starter.data.jpa.test)
+	testImplementation(libs.spring.boot.starter.webmvc.test)
+	testImplementation(libs.wiremock.spring.boot)
 
-	testCompileOnly("org.projectlombok:lombok")
-
-	testAnnotationProcessor("org.projectlombok:lombok")
-
-	testImplementation("org.springframework.boot:spring-boot-starter-flyway-test")
-	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-verifier")
-	testImplementation("io.rest-assured:rest-assured:$restAssuredVersion")
-	testImplementation("io.rest-assured:spring-mock-mvc:$restAssuredVersion")
-	testImplementation("net.datafaker:datafaker:2.5.4")
-	testImplementation("org.assertj:assertj-core:3.27.7")
-	testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
-	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
-	testImplementation("org.wiremock.integrations:wiremock-spring-boot:4.0.9")
-
-	mockitoAgent("org.mockito:mockito-core"){
-		isTransitive = false
-	}
-
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	mockitoAgent(libs.mockito.core) { isTransitive = false }
+	testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 dependencyManagement {
 	imports {
-		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+		mavenBom(libs.spring.cloud.dependencies.get().toString())
 	}
 }
 

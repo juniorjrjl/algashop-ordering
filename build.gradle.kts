@@ -24,7 +24,7 @@ java {
 	}
 }
 
-val mockitoAgent: Configuration = configurations.create("mockitoAgent")
+val mockitoAgent = configurations.create("mockitoAgent")
 configurations {
 	compileOnly {
 		extendsFrom(configurations.annotationProcessor.get())

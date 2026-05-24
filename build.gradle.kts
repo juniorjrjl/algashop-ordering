@@ -91,6 +91,7 @@ tasks.withType<Test>().configureEach {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+	jvmArgs("-javaagent:${mockitoAgent.asPath}")
 	finalizedBy(tasks.jacocoTestReport)
 	systemProperty("test.seed", System.getProperty("test.seed") ?: "")
 }
@@ -98,6 +99,8 @@ tasks.withType<Test> {
 tasks.register<Test>("integrationTest"){
 	description = "Run unit tests."
 	group = "verification"
+
+	jvmArgs("-javaagent:${mockitoAgent.asPath}")
 
 	testClassesDirs = tasks.test.get().testClassesDirs
 	classpath = tasks.test.get().classpath
@@ -111,6 +114,8 @@ tasks.register<Test>("integrationTest"){
 tasks.register<Test>("unitTest"){
 	description = "Run unit tests."
 	group = "verification"
+
+	jvmArgs("-javaagent:${mockitoAgent.asPath}")
 
 	testClassesDirs = tasks.test.get().testClassesDirs
 	classpath = tasks.test.get().classpath

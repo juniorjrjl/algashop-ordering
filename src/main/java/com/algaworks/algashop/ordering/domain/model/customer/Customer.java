@@ -24,6 +24,7 @@ public class Customer extends AbstractEventSourceEntity implements AggregateRoot
     private CustomerId id;
     private FullName fullName;
     @Nullable
+    @Setter(PRIVATE)
     private BirthDate birthDate;
     private Email email;
     private Phone phone;
@@ -33,6 +34,7 @@ public class Customer extends AbstractEventSourceEntity implements AggregateRoot
     private boolean archived;
     private OffsetDateTime registeredAt;
     @Nullable
+    @Setter(PRIVATE)
     private OffsetDateTime archivedAt;
     private LoyaltyPoints loyaltyPoints;
     private Address address;
@@ -225,14 +227,6 @@ public class Customer extends AbstractEventSourceEntity implements AggregateRoot
         this.fullName = fullName;
     }
 
-    private void setBirthDate(@Nullable final BirthDate birthDate) {
-        if (isNull(birthDate)) {
-            this.birthDate = null;
-            return;
-        }
-        this.birthDate = birthDate;
-    }
-
     private void setEmail(final Email email) {
         this.email = email;
     }
@@ -255,10 +249,6 @@ public class Customer extends AbstractEventSourceEntity implements AggregateRoot
 
     private void setRegisteredAt(final OffsetDateTime registeredAt) {
         this.registeredAt = requireNonNull(registeredAt);
-    }
-
-    private void setArchivedAt(@Nullable final OffsetDateTime archivedAt) {
-        this.archivedAt = archivedAt;
     }
 
     private void setLoyaltyPoints(final LoyaltyPoints loyaltyPoints) {

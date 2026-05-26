@@ -8,6 +8,7 @@ import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartCantProceedToCheckoutException;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartItem;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
@@ -21,9 +22,18 @@ public class CheckoutService {
                           final ShoppingCart shoppingCart,
                           final Billing billing,
                           final Shipping shipping,
-                          final PaymentMethod paymentMethod) {
+                          final PaymentMethod paymentMethod,
+                          @Nullable
+                          final CreditCardId creditCardId) {
         validateShoppingCart(shoppingCart);
-        final var order = buildDraftOrder(customer, shoppingCart, billing, shipping, paymentMethod);
+        final var order = buildDraftOrder(
+                customer,
+                shoppingCart,
+                billing,
+                shipping,
+                paymentMethod,
+                creditCardId
+        );
         addItems(order, shoppingCart.items());
         placedOrder(order, shoppingCart);
         return order;
@@ -33,7 +43,9 @@ public class CheckoutService {
                                   final ShoppingCart shoppingCart,
                                   final Billing billing,
                                   final Shipping shipping,
-                                  final PaymentMethod paymentMethod) {
+                                  final PaymentMethod paymentMethod,
+                                  @Nullable
+                                  final CreditCardId creditCardId) {
         final var order = Order.draft(shoppingCart.customerId());
         if (haveFreeShipping(customer)){
             final var freeShipping = shipping.toBuilder().cost(Money.ZERO).build();
@@ -43,7 +55,7 @@ public class CheckoutService {
         }
         order.changeShipping(shipping);
         order.changeBilling(billing);
-        order.changePaymentMethod(paymentMethod);
+        order.changePaymentMethod(paymentMethod,creditCardId);
         return order;
     }
 

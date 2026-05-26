@@ -4,6 +4,7 @@ import com.algaworks.algashop.ordering.domain.model.product.Product;
 import com.algaworks.algashop.ordering.domain.model.commons.Quantity;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import lombok.NoArgsConstructor;
+import org.jspecify.annotations.Nullable;
 
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PRIVATE;
@@ -16,7 +17,9 @@ public class OrderFactory {
                                final Billing billing,
                                final PaymentMethod paymentMethod,
                                final Product product,
-                               final Quantity quantity) {
+                               final Quantity quantity,
+                               @Nullable
+                               final CreditCardId creditCardId) {
         requireNonNull(customerId);
         requireNonNull(shipping);
         requireNonNull(billing);
@@ -27,7 +30,7 @@ public class OrderFactory {
         final var order = Order.draft(customerId);
         order.changeBilling(billing);
         order.changeShipping(shipping);
-        order.changePaymentMethod(paymentMethod);
+        order.changePaymentMethod(paymentMethod, creditCardId);
         order.addItem(product, quantity);
         return order;
     }

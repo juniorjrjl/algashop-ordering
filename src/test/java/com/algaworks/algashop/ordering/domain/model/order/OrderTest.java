@@ -174,7 +174,7 @@ class OrderTest {
                 .withShipping(() -> customFaker.order().shipping())
                 .buildExisting();
         final var newPaymentMethod = customFaker.options().option(PaymentMethod.class);
-        order.changePaymentMethod(newPaymentMethod);
+        order.changePaymentMethod(newPaymentMethod, new CreditCardId());
         assertThat(order.paymentMethod()).isEqualTo(newPaymentMethod);
     }
 
@@ -265,7 +265,7 @@ class OrderTest {
                                     .build(),
                             customFaker.common().quantity()
                     ),
-            o -> o.changePaymentMethod(customFaker.options().option(PaymentMethod.class)),
+            o -> o.changePaymentMethod(customFaker.options().option(PaymentMethod.class), new CreditCardId()),
             o -> o.changeBilling(customFaker.order().billing()),
             o -> o.changeShipping(customFaker.order().shipping()),
             o -> o.changeItemQuantity(o.items().iterator().next().id(), customFaker.common().quantity()),

@@ -24,6 +24,7 @@ import static com.algaworks.algashop.ordering.domain.model.order.OrderStatus.DRA
 import static com.algaworks.algashop.ordering.domain.model.order.OrderStatus.PAID;
 import static com.algaworks.algashop.ordering.domain.model.order.OrderStatus.PLACED;
 import static com.algaworks.algashop.ordering.domain.model.order.OrderStatus.READY;
+import static com.algaworks.algashop.ordering.domain.model.order.PaymentMethod.CREDIT_CARD;
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PRIVATE;
@@ -36,24 +37,35 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
     private Money totalAmount;
     private Quantity totalItems;
     @Nullable
+    @Setter(PRIVATE)
     private OffsetDateTime placedAt;
     @Nullable
+    @Setter(PRIVATE)
     private OffsetDateTime paidAt;
     @Nullable
+    @Setter(PRIVATE)
     private OffsetDateTime canceledAt;
     @Nullable
+    @Setter(PRIVATE)
     private OffsetDateTime readyAt;
     @Nullable
+    @Setter(PRIVATE)
     private Billing billing;
     @Nullable
+    @Setter(PRIVATE)
     private Shipping shipping;
+    @Setter(PRIVATE)
     private OrderStatus orderStatus;
     @Nullable
+    @Setter(PRIVATE)
     private PaymentMethod paymentMethod;
     private Set<OrderItem> items;
     @Nullable
     @Setter(PRIVATE)
     private Long version;
+    @Setter(PRIVATE)
+    @Nullable
+    private CreditCardId creditCardId;
 
     @Builder(builderClassName = "ExistingOrderBuilder", builderMethodName = "existing")
     public Order(final OrderId id,
@@ -69,7 +81,8 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
                  final OrderStatus orderStatus,
                  @Nullable final PaymentMethod paymentMethod,
                  final Set<OrderItem> items,
-                 @Nullable final Long version) {
+                 @Nullable final Long version,
+                 @Nullable final CreditCardId creditCardId) {
         this.setId(id);
         this.setCustomerId(customerId);
         this.setTotalAmount(totalAmount);
@@ -84,6 +97,7 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
         this.setPaymentMethod(paymentMethod);
         this.setItems(items);
         this.setVersion(version);
+        this.setCreditCardId(creditCardId);
     }
 
     public static Order draft(final CustomerId customerId){
@@ -101,6 +115,7 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
                 DRAFT,
                 null,
                 new HashSet<>(),
+                null,
                 null
         );
     }
@@ -161,10 +176,16 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
         this.publishDomainEvent(event);
     }
 
-    public void changePaymentMethod(final PaymentMethod newPaymentMethod){
+    public void changePaymentMethod(final PaymentMethod newPaymentMethod,
+                                    @Nullable
+                                    final CreditCardId creditCardId){
+        if ((newPaymentMethod.equals(CREDIT_CARD)) && (isNull(creditCardId))){
+            throw new  IllegalArgumentException("'creditCardId' is required when paymentMethod is 'CREDIT_CARD'");
+        }
         this.verifyIfChangeable();
         requireNonNull(newPaymentMethod);
         this.setPaymentMethod(newPaymentMethod);
+        this.setCreditCardId(creditCardId);
     }
 
     public void changeBilling(final Billing billing){
@@ -274,6 +295,11 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
         return Collections.unmodifiableSet(items);
     }
 
+    @Nullable
+    public CreditCardId creditCardId() {
+        return creditCardId;
+    }
+
     private void recalculateTotals() {
         final var totalItemsAmount = this.items.stream().map(OrderItem::totalAmount)
                 .reduce(Money.ZERO, Money::add);
@@ -353,39 +379,6 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
     private void setTotalItems(final Quantity totalItems) {
         requireNonNull(totalItems);
         this.totalItems = totalItems;
-    }
-
-    private void setPlacedAt(@Nullable final OffsetDateTime placedAt) {
-        this.placedAt = placedAt;
-    }
-
-    private void setPaidAt(@Nullable final OffsetDateTime paidAt) {
-        this.paidAt = paidAt;
-    }
-
-    private void setCanceledAt(@Nullable final OffsetDateTime canceledAt) {
-        this.canceledAt = canceledAt;
-    }
-
-    private void setReadyAt(@Nullable final OffsetDateTime readyAt) {
-        this.readyAt = readyAt;
-    }
-
-    private void setBilling(@Nullable final Billing billing) {
-        this.billing = billing;
-    }
-
-    private void setShipping(@Nullable final Shipping shipping) {
-        this.shipping = shipping;
-    }
-
-    private void setOrderStatus(final OrderStatus orderStatus) {
-        requireNonNull(orderStatus);
-        this.orderStatus = orderStatus;
-    }
-
-    private void setPaymentMethod(@Nullable final PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
     }
 
     private void setItems(final Set<OrderItem> items) {

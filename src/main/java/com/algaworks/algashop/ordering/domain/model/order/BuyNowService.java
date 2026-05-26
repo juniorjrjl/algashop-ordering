@@ -6,6 +6,7 @@ import com.algaworks.algashop.ordering.domain.model.commons.Quantity;
 import com.algaworks.algashop.ordering.domain.model.customer.Customer;
 import com.algaworks.algashop.ordering.domain.model.product.Product;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 
 @DomainService
 @RequiredArgsConstructor
@@ -18,9 +19,11 @@ public class BuyNowService {
                         final Billing billing,
                         final Shipping shipping,
                         final Quantity quantity,
-                        final PaymentMethod paymentMethod){
+                        final PaymentMethod paymentMethod,
+                        @Nullable
+                        final CreditCardId creditCardId) {
         product.checkOutOfStock();
-        return buildOrder(product, customer, billing, shipping, quantity, paymentMethod);
+        return buildOrder(product, customer, billing, shipping, quantity, paymentMethod, creditCardId);
     }
 
     private Order buildOrder(final Product product,
@@ -28,10 +31,12 @@ public class BuyNowService {
                              final Billing billing,
                              final Shipping shipping,
                              final Quantity quantity,
-                             final PaymentMethod paymentMethod) {
+                             final PaymentMethod paymentMethod,
+                             @Nullable
+                             final CreditCardId creditCardId) {
         final var order = Order.draft(customer.id());
         order.changeBilling(billing);
-        order.changePaymentMethod(paymentMethod);
+        order.changePaymentMethod(paymentMethod, creditCardId);
         order.addItem(product, quantity);
 
         if (haveFreeShipping(customer)) {

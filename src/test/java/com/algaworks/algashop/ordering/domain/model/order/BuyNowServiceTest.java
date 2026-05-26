@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import static com.algaworks.algashop.ordering.domain.model.order.PaymentMethod.CREDIT_CARD;
+import static com.algaworks.algashop.ordering.domain.model.order.PaymentMethod.GATEWAY_BALANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertWith;
@@ -67,11 +69,15 @@ class BuyNowServiceTest {
         return Stream.of(
                 Arguments.of(
                         customerWithMoreThanOneHundredLoyaltyPoints,
-                        orderReturnLessThanTwoYears
+                        orderReturnLessThanTwoYears,
+                        CREDIT_CARD,
+                        new CreditCardId()
                 ),
                 Arguments.of(
                         customerWithLessThanOneHundredLoyaltyPoints,
-                        orderReturnMoreThanTwoYears
+                        orderReturnMoreThanTwoYears,
+                        GATEWAY_BALANCE,
+                        null
                 )
         );
     }
@@ -80,19 +86,21 @@ class BuyNowServiceTest {
     @ParameterizedTest
     @MethodSource
     void givenValidArgumentsWhenBuyNowThenReturnOrder(final Customer customer,
-                                                      final Consumer<Orders> orderMockConsumer){
+                                                      final Consumer<Orders> orderMockConsumer,
+                                                      final PaymentMethod paymentMethod,
+                                                      final CreditCardId creditCardId) {
         final var product = ProductDataBuilder.builder().withInStock(() -> true).build();
         final var billing = customFaker.order().billing();
         final var shipping = customFaker.order().shipping();
         final var quantity = customFaker.common().quantity();
-        final var paymentMethod = customFaker.options().option(PaymentMethod.class);
         final var actual = service.buyNow(
                 product,
                 customer,
                 billing,
                 shipping,
                 quantity,
-                paymentMethod
+                paymentMethod,
+                creditCardId
         );
         orderMockConsumer.accept(orders);
         final var expectedOrderAmount = shipping.cost().add(product.price().multiply(quantity));
@@ -144,6 +152,7 @@ class BuyNowServiceTest {
         final var shipping = customFaker.order().shipping();
         final var quantity = customFaker.common().quantity();
         final var paymentMethod = customFaker.options().option(PaymentMethod.class);
+        final var creditCardId = new CreditCardId();
         orderMockConsumer.accept(orders);
         final var actual = service.buyNow(
                 product,
@@ -151,7 +160,8 @@ class BuyNowServiceTest {
                 billing,
                 shipping,
                 quantity,
-                paymentMethod
+                paymentMethod,
+                creditCardId
         );
         final var expectedOrderAmount = product.price().multiply(quantity);
         assertWith(actual,
@@ -175,6 +185,7 @@ class BuyNowServiceTest {
                     customFaker.order().billing(),
                     customFaker.order().shipping(),
                     customFaker.common().quantity(),
+                    null,
                     null
             ),
             Arguments.of(
@@ -183,7 +194,8 @@ class BuyNowServiceTest {
                     customFaker.order().billing(),
                     customFaker.order().shipping(),
                     null,
-                    customFaker.options().option(PaymentMethod.class)
+                    customFaker.options().option(PaymentMethod.class),
+                    new CreditCardId()
             ),
             Arguments.of(
                     ProductDataBuilder.builder().withInStock(() -> true).build(),
@@ -191,7 +203,8 @@ class BuyNowServiceTest {
                     customFaker.order().billing(),
                     null,
                     customFaker.common().quantity(),
-                    customFaker.options().option(PaymentMethod.class)
+                    customFaker.options().option(PaymentMethod.class),
+                    new CreditCardId()
             ),
             Arguments.of(
                     ProductDataBuilder.builder().withInStock(() -> true).build(),
@@ -199,7 +212,8 @@ class BuyNowServiceTest {
                     null,
                     customFaker.order().shipping(),
                     customFaker.common().quantity(),
-                    customFaker.options().option(PaymentMethod.class)
+                    customFaker.options().option(PaymentMethod.class),
+                    null
             ),
             Arguments.of(
                     ProductDataBuilder.builder().withInStock(() -> true).build(),
@@ -207,7 +221,8 @@ class BuyNowServiceTest {
                     customFaker.order().billing(),
                     customFaker.order().shipping(),
                     customFaker.common().quantity(),
-                    customFaker.options().option(PaymentMethod.class)
+                    customFaker.options().option(PaymentMethod.class),
+                    null
             ),
             Arguments.of(
                     null,
@@ -215,7 +230,8 @@ class BuyNowServiceTest {
                     customFaker.order().billing(),
                     customFaker.order().shipping(),
                     customFaker.common().quantity(),
-                    customFaker.options().option(PaymentMethod.class)
+                    customFaker.options().option(PaymentMethod.class),
+                    null
             )
     );
 
@@ -226,7 +242,8 @@ class BuyNowServiceTest {
                                                       final Billing billing,
                                                       final Shipping shipping,
                                                       final Quantity quantity,
-                                                      final PaymentMethod paymentMethod){
+                                                      final PaymentMethod paymentMethod,
+                                                      final CreditCardId creditCardId){
         assertThatExceptionOfType(NullPointerException.class)
                 .isThrownBy(() -> service.buyNow(
                         product,
@@ -234,7 +251,8 @@ class BuyNowServiceTest {
                         billing,
                         shipping,
                         quantity,
-                        paymentMethod
+                        paymentMethod,
+                        creditCardId
                 ));
     }
 
@@ -253,7 +271,8 @@ class BuyNowServiceTest {
                     billing,
                     shipping,
                     quantity,
-                    paymentMethod
+                    paymentMethod,
+                    null
             ));
     }
 
@@ -272,7 +291,8 @@ class BuyNowServiceTest {
                         billing,
                         shipping,
                         quantity,
-                        paymentMethod
+                        paymentMethod,
+                        null
                 ));
     }
 

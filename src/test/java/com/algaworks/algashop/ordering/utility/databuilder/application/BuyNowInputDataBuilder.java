@@ -4,7 +4,9 @@ import com.algaworks.algashop.ordering.application.order.query.BillingData;
 import com.algaworks.algashop.ordering.application.checkout.BuyNowInput;
 import com.algaworks.algashop.ordering.application.checkout.ShippingInput;
 import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
+import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartDataBuilder;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;
@@ -32,6 +34,8 @@ public class BuyNowInputDataBuilder {
     private Supplier<Integer> quantity = () -> customFaker.number().positive();
     @With
     private Supplier<String> paymentMethod = () -> customFaker.options().option(PaymentMethod.class).name();
+    @With
+    private Supplier<UUID> creditCardId = UUID::randomUUID;
 
     public static BuyNowInputDataBuilder builder() {
         return new BuyNowInputDataBuilder();
@@ -45,6 +49,7 @@ public class BuyNowInputDataBuilder {
                 .customerId(customerId.get())
                 .quantity(quantity.get())
                 .paymentMethod(paymentMethod.get())
+                .creditCardId(creditCardId.get())
                 .build();
     }
 

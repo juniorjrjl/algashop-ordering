@@ -28,13 +28,15 @@ class OrderFactoryTest {
                 .withInStock(() -> true)
                 .build();
         final var quantity = customFaker.common().quantity();
+        final var creditCardId = new CreditCardId();
         final var order = OrderFactory.filled(
                 customerId,
                 shipping,
                 billing,
                 paymentMethod,
                 product,
-                quantity
+                quantity,
+                creditCardId
         );
         assertWith(order,
                 o -> assertThat(o.customerId()).isEqualTo(customerId),

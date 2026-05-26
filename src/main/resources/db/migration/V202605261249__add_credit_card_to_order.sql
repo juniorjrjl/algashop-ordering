@@ -1,0 +1,2 @@
+alter table public."order"
+      add credit_card_id uuid null;

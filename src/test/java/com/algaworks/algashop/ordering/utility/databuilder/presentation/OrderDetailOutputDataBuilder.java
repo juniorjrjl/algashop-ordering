@@ -16,6 +16,7 @@ import lombok.With;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -47,6 +48,8 @@ public class OrderDetailOutputDataBuilder {
     @With
     private Supplier<String> paymentMethod = () -> customFaker.options().option(PaymentMethod.class).toString();
     @With
+    private Supplier<UUID> creditCardId = UUID::randomUUID;
+    @With
     private Supplier<ShippingData> shipping = () -> ShippingDataDataBuilder.builder().build();
     @With
     private Supplier<BillingData> billing = () -> BillingDataDataBuilder.builder().build();
@@ -70,6 +73,7 @@ public class OrderDetailOutputDataBuilder {
                 readyAt.get(),
                 orderStatus.get(),
                 paymentMethod.get(),
+                creditCardId.get(),
                 shipping.get(),
                 billing.get(),
                 items.get()

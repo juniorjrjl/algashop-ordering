@@ -2,6 +2,7 @@ package com.algaworks.algashop.ordering.infrastructure.persistence.order;
 
 import com.algaworks.algashop.ordering.application.order.query.OrderDetailOutput;
 import com.algaworks.algashop.ordering.domain.model.order.Billing;
+import com.algaworks.algashop.ordering.domain.model.order.CreditCardId;
 import com.algaworks.algashop.ordering.domain.model.order.Order;
 import com.algaworks.algashop.ordering.domain.model.order.OrderId;
 import com.algaworks.algashop.ordering.domain.model.order.OrderItem;
@@ -21,6 +22,7 @@ import org.mapstruct.MappingTarget;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
@@ -69,6 +71,11 @@ public interface OrderPersistenceEntityDisassembler {
     @Nullable
     default PaymentMethod mapPaymentMethod(@Nullable final String method) {
         return isNull(method) ? null : PaymentMethod.valueOf(method);
+    }
+
+    @Nullable
+    default CreditCardId mapCreditCardId(@Nullable final UUID creditCardId) {
+        return isNull(creditCardId) ? null : new CreditCardId(creditCardId);
     }
 
     default OrderStatus mapOrderStatus(final String status) {

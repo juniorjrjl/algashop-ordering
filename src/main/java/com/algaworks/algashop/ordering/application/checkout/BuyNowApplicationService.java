@@ -1,11 +1,13 @@
 package com.algaworks.algashop.ordering.application.checkout;
 
+import com.algaworks.algashop.ordering.domain.model.DomainException;
 import com.algaworks.algashop.ordering.domain.model.commons.Quantity;
 import com.algaworks.algashop.ordering.domain.model.commons.ZipCode;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.customer.Customers;
 import com.algaworks.algashop.ordering.domain.model.order.BuyNowService;
+import com.algaworks.algashop.ordering.domain.model.order.CreditCardId;
 import com.algaworks.algashop.ordering.domain.model.order.Orders;
 import com.algaworks.algashop.ordering.domain.model.order.OriginAddressService;
 import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
@@ -16,6 +18,11 @@ import com.algaworks.algashop.ordering.domain.model.product.ProductNotFoundExcep
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
+import static com.algaworks.algashop.ordering.domain.model.order.PaymentMethod.CREDIT_CARD;
+import static java.util.Objects.isNull;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +51,23 @@ public class BuyNowApplicationService {
         final var shipping = shippingInputDisassembler.toDomainModel(input.getShipping(), calculateResult);
         final var quantity = new Quantity(input.getQuantity());
         final var paymentMethod = PaymentMethod.valueOf(input.getPaymentMethod());
-        final var order = service.buyNow(product, customer, billing, shipping, quantity, paymentMethod);
+        final var creditCardId = Optional.ofNullable(input.getCreditCardId())
+                .map(CreditCardId::new)
+                .orElse(null);
+
+        if ((paymentMethod.equals(CREDIT_CARD)) && (isNull(creditCardId))) {
+            throw new DomainException("Credit Card id is required for this payment method");
+        }
+
+        final var order = service.buyNow(
+                product,
+                customer,
+                billing,
+                shipping,
+                quantity,
+                paymentMethod,
+                creditCardId
+        );
         orders.add(order);
         return order.id().toString();
     }

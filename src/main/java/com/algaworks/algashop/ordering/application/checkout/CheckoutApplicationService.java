@@ -1,9 +1,11 @@
 package com.algaworks.algashop.ordering.application.checkout;
 
+import com.algaworks.algashop.ordering.domain.model.DomainException;
 import com.algaworks.algashop.ordering.domain.model.commons.ZipCode;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.customer.Customers;
 import com.algaworks.algashop.ordering.domain.model.order.CheckoutService;
+import com.algaworks.algashop.ordering.domain.model.order.CreditCardId;
 import com.algaworks.algashop.ordering.domain.model.order.Orders;
 import com.algaworks.algashop.ordering.domain.model.order.OriginAddressService;
 import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
@@ -14,6 +16,10 @@ import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCarts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
+import static com.algaworks.algashop.ordering.domain.model.order.PaymentMethod.CREDIT_CARD;
+import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
 @RequiredArgsConstructor
@@ -40,7 +46,22 @@ public class CheckoutApplicationService {
         final var calculateResult = shippingDeliveryInfo(input.getShipping().getAddress().getZipCode());
         final var shipping = shippingInputDisassembler.toDomainModel(input.getShipping(), calculateResult);
         final var paymentMethod = PaymentMethod.valueOf(input.getPaymentMethod());
-        final var order = service.checkout(customer, shoppingCart, billing, shipping, paymentMethod);
+        final var creditCardId = Optional.ofNullable(input.getCreditCardId())
+                .map(CreditCardId::new)
+                .orElse(null);
+
+        if ((paymentMethod.equals(CREDIT_CARD)) && (isNull(creditCardId))) {
+            throw new DomainException("Credit Card id is required for this payment method");
+        }
+
+        final var order = service.checkout(
+                customer,
+                shoppingCart,
+                billing,
+                shipping,
+                paymentMethod,
+                creditCardId
+        );
 
         orders.add(order);
         shoppingCart.empty();

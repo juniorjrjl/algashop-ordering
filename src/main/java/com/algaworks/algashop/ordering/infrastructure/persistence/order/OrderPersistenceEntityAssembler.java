@@ -2,6 +2,7 @@ package com.algaworks.algashop.ordering.infrastructure.persistence.order;
 
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.order.Billing;
+import com.algaworks.algashop.ordering.domain.model.order.CreditCardId;
 import com.algaworks.algashop.ordering.domain.model.order.Order;
 import com.algaworks.algashop.ordering.domain.model.order.OrderId;
 import com.algaworks.algashop.ordering.domain.model.order.OrderItem;
@@ -24,6 +25,7 @@ import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
+import java.util.UUID;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
@@ -63,6 +65,7 @@ public abstract class OrderPersistenceEntityAssembler {
     @Mapping(target = "totalItems", expression = "java(getEmbeddableAssembler().map(order.totalItems()))")
     @Mapping(target = "orderStatus", expression = "java(map(order.orderStatus()))")
     @Mapping(target = "paymentMethod", expression = "java(map(order.paymentMethod()))")
+    @Mapping(target = "creditCardId", expression = "java(map(order.creditCardId()))")
     @Mapping(target = "placedAt", expression = "java(order.placedAt())")
     @Mapping(target = "paidAt", expression = "java(order.paidAt())")
     @Mapping(target = "canceledAt", expression = "java(order.canceledAt())")
@@ -133,6 +136,11 @@ public abstract class OrderPersistenceEntityAssembler {
     abstract String map(final OrderStatus status);
 
     abstract String map(@Nullable final PaymentMethod method);
+
+    @Nullable
+    protected UUID map(@Nullable final CreditCardId creditCardId){
+        return isNull(creditCardId) ? null : creditCardId.value();
+    }
 
     protected Long map(final OrderItemId orderItemId) {
         return orderItemId.value().toLong();

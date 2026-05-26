@@ -71,6 +71,7 @@ public class CommonApplicationProvider extends AbstractProvider<CustomFaker> {
         return CheckoutInput.builder()
                 .shoppingCartId(UUID.randomUUID())
                 .paymentMethod(faker.options().option(PaymentMethod.class).name())
+                .creditCardId(UUID.randomUUID())
                 .shipping(shipping())
                 .billing(billing())
                 .build();

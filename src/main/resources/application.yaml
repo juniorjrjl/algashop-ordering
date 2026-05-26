@@ -20,9 +20,9 @@ algashop:
     shipping:
       provider: RAPIDEX
     rapidex:
-      url: http://localhost:8780
+      url: http://localhost:8787
     product-catalog:
-      url: http://localhost:8780
+      url: http://localhost:8787
   free-shipping:
     min-basic-loyalty-points: 200
     min-basic-sales-amount-in-year: 2

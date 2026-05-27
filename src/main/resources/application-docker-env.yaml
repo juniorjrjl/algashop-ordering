@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://algashop-postgres:5432/ordering
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    url: jdbc:postgresql://algashop-postgres:5432/ordering
+    locations: classpath:db/migration,classpath:db/testdata
+
+algashop:
+  integrations:
+    rapidex:
+      url: http://rapidexapi:8080
+    product-catalog:
+      url: http://fastpay:8787

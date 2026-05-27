@@ -138,3 +138,7 @@ tasks.contractTest {
 	useJUnitPlatform()
 
 }
+
+tasks.bootJar {
+	archiveFileName.set("ordering.jar")
+}

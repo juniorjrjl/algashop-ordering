@@ -1,6 +1,4 @@
 spring:
-  application:
-    name: ordering
   datasource:
     url: jdbc:postgresql://localhost:5432/ordering
     username: postgres
@@ -10,6 +8,7 @@ spring:
       ddl-auto: validate
     show-sql: true
   flyway:
+    enabled: true
     url: jdbc:postgresql://localhost:5432/ordering
     locations: classpath:db/migration,classpath:db/testdata
     user: postgres
@@ -17,8 +16,6 @@ spring:
 
 algashop:
   integrations:
-    shipping:
-      provider: RAPIDEX
     rapidex:
       url: http://localhost:8787
     product-catalog:

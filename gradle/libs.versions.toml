@@ -1,41 +1,43 @@
 [versions]
-springBoot = "4.0.6"
-springDependencyManagement = "1.1.7"
-springCloudContract = "5.0.2"
-springCloud = "2025.1.0"
-# flyway = "12.3.0"
-mapstruct = "1.6.3"
-rest-assured = "6.0.0"
-java-uuid = "5.2.0"
-commons-validator = "1.10.1"
-hypersistence-tsid = "2.1.4"
-postgresql = "42.7.2"
-datafaker = "2.5.4"
 assertj = "3.27.7"
-wiremock-spring = "4.0.9"
+commons-validator = "1.10.1"
+datafaker = "2.5.4"
+# flyway = "12.3.0"
+java-uuid = "5.2.0"
+hypersistence-tsid = "2.1.4"
 lombok-mapstruct = "0.2.0"
+mapstruct = "1.6.3"
+postgresql = "42.7.2"
+rest-assured = "6.0.0"
+springBoot = "4.0.6"
+springCloud = "2025.1.0"
+springCloudContract = "5.0.2"
+springDependencyManagement = "1.1.7"
+wiremock-spring = "4.0.9"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
-spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }
 spring-cloud-contract = { id = "org.springframework.cloud.contract", version.ref = "springCloudContract" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }
 # flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }
 
 [libraries]
 #IMPLEMENTATION
-java-uuid-generator = { group = "com.fasterxml.uuid", name = "java-uuid-generator", version.ref = "java-uuid" }
 commons-validator = { group = "commons-validator", name = "commons-validator", version.ref = "commons-validator" }
-hypersistence-tsid = { group = "io.hypersistence", name = "hypersistence-tsid", version.ref = "hypersistence-tsid" }
-mapstruct = { group = "org.mapstruct", name = "mapstruct", version.ref = "mapstruct" }
-spring-boot-starter-webmvc = { group = "org.springframework.boot", name = "spring-boot-starter-webmvc" }
-spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
-spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
-spring-boot-restclient = { group = "org.springframework.boot", name = "spring-boot-restclient" }
-spring-boot-starter-flyway = { group = "org.springframework.boot", name = "spring-boot-starter-flyway" }
 flyway-database-postgresql = { group = "org.flywaydb", name = "flyway-database-postgresql" }
+hypersistence-tsid = { group = "io.hypersistence", name = "hypersistence-tsid", version.ref = "hypersistence-tsid" }
+java-uuid-generator = { group = "com.fasterxml.uuid", name = "java-uuid-generator", version.ref = "java-uuid" }
+mapstruct = { group = "org.mapstruct", name = "mapstruct", version.ref = "mapstruct" }
+spring-boot-restclient = { group = "org.springframework.boot", name = "spring-boot-restclient" }
+spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
+spring-boot-starter-flyway = { group = "org.springframework.boot", name = "spring-boot-starter-flyway" }
+spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
+spring-boot-starter-webmvc = { group = "org.springframework.boot", name = "spring-boot-starter-webmvc" }
 
-#COMPILE ONLY & RUNTIME ONLY
+#COMPILE ONLY
 lombok = { group = "org.projectlombok", name = "lombok" }
+
+#RUNTIME ONLY
 postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgresql" }
 
 #ANNOTATION PROCESSORS
@@ -44,18 +46,20 @@ lombok-mapstruct-binding = { group = "org.projectlombok", name = "lombok-mapstru
 mapstruct-processor = { group = "org.mapstruct", name = "mapstruct-processor", version.ref = "mapstruct" }
 
 #TEST IMPLEMENTATION
-spring-boot-starter-flyway-test = { group = "org.springframework.boot", name = "spring-boot-starter-flyway-test" }
-spring-cloud-starter-contract-verifier = { group = "org.springframework.cloud", name = "spring-cloud-starter-contract-verifier" }
+assertj-core = { group = "org.assertj", name = "assertj-core", version.ref = "assertj" }
+datafaker = { group = "net.datafaker", name = "datafaker", version.ref = "datafaker" }
 rest-assured = { group = "io.rest-assured", name = "rest-assured", version.ref = "rest-assured" }
 rest-assured-spring-mock-mvc = { group = "io.rest-assured", name = "spring-mock-mvc", version.ref = "rest-assured" }
-datafaker = { group = "net.datafaker", name = "datafaker", version.ref = "datafaker" }
-assertj-core = { group = "org.assertj", name = "assertj-core", version.ref = "assertj" }
 spring-boot-starter-data-jpa-test = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa-test" }
+spring-boot-starter-flyway-test = { group = "org.springframework.boot", name = "spring-boot-starter-flyway-test" }
 spring-boot-starter-webmvc-test = { group = "org.springframework.boot", name = "spring-boot-starter-webmvc-test" }
+spring-cloud-starter-contract-verifier = { group = "org.springframework.cloud", name = "spring-cloud-starter-contract-verifier" }
 wiremock-spring-boot = { group = "org.wiremock.integrations", name = "wiremock-spring-boot", version.ref = "wiremock-spring" }
 
-#TEST RUNTIME & AGENTS
+#AGENTS
 mockito-core = { group = "org.mockito", name = "mockito-core" }
+
+#TEST RUNTIME
 junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }
 
 #EXTRA

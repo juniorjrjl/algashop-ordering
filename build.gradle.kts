@@ -5,13 +5,13 @@
 	}//plugin flyway
 }*/
 plugins {
-	idea
-	java
-	jacoco
-	alias(libs.plugins.spring.boot)
-	alias(libs.plugins.spring.dependency.management)
-	alias(libs.plugins.spring.cloud.contract)
 	// alias(libs.plugins.flyway)
+	alias(libs.plugins.spring.boot)
+	alias(libs.plugins.spring.cloud.contract)
+	alias(libs.plugins.spring.dependency.management)
+	idea
+	jacoco
+	java
 }
 
 group = "com.algaworks.algashop"
@@ -37,39 +37,43 @@ repositories {
 
 
 dependencies {
-	implementation(libs.java.uuid.generator)
-	implementation(libs.commons.validator)
-	implementation(libs.hypersistence.tsid)
-	implementation(libs.mapstruct)
-	implementation(libs.spring.boot.starter.webmvc)
-	implementation(libs.spring.boot.starter.data.jpa)
-	implementation(libs.spring.boot.starter.validation)
-	implementation(libs.spring.boot.restclient)
-	implementation(libs.spring.boot.starter.flyway)
-	implementation(libs.flyway.database.postgresql)
-
-	compileOnly(libs.lombok)
-	runtimeOnly(libs.postgresql)
 
 	annotationProcessor(libs.hibernate.processor)
 	annotationProcessor(libs.lombok)
 	annotationProcessor(libs.lombok.mapstruct.binding)
 	annotationProcessor(libs.mapstruct.processor)
 
-	testCompileOnly(libs.lombok)
-	testAnnotationProcessor(libs.lombok)
+	compileOnly(libs.lombok)
 
-	testImplementation(libs.spring.boot.starter.flyway.test)
-	testImplementation(libs.spring.cloud.starter.contract.verifier)
-	testImplementation(libs.rest.assured)
-	testImplementation(libs.rest.assured.spring.mock.mvc)
-	testImplementation(libs.datafaker)
-	testImplementation(libs.assertj.core)
-	testImplementation(libs.spring.boot.starter.data.jpa.test)
-	testImplementation(libs.spring.boot.starter.webmvc.test)
-	testImplementation(libs.wiremock.spring.boot)
+	implementation(libs.commons.validator)
+	implementation(libs.flyway.database.postgresql)
+	implementation(libs.java.uuid.generator)
+	implementation(libs.hypersistence.tsid)
+	implementation(libs.mapstruct)
+	implementation(libs.spring.boot.restclient)
+	implementation(libs.spring.boot.starter.data.jpa)
+	implementation(libs.spring.boot.starter.flyway)
+	implementation(libs.spring.boot.starter.validation)
+	implementation(libs.spring.boot.starter.webmvc)
 
 	mockitoAgent(libs.mockito.core) { isTransitive = false }
+
+	runtimeOnly(libs.postgresql)
+
+	testAnnotationProcessor(libs.lombok)
+
+	testCompileOnly(libs.lombok)
+
+	testImplementation(libs.assertj.core)
+	testImplementation(libs.datafaker)
+	testImplementation(libs.rest.assured)
+	testImplementation(libs.rest.assured.spring.mock.mvc)
+	testImplementation(libs.spring.boot.starter.data.jpa.test)
+	testImplementation(libs.spring.boot.starter.flyway.test)
+	testImplementation(libs.spring.boot.starter.webmvc.test)
+	testImplementation(libs.spring.cloud.starter.contract.verifier)
+	testImplementation(libs.wiremock.spring.boot)
+
 	testRuntimeOnly(libs.junit.platform.launcher)
 }
 

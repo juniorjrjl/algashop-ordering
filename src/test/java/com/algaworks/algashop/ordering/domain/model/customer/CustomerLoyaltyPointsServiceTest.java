@@ -9,10 +9,12 @@ import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBui
 import com.algaworks.algashop.ordering.utility.tag.UnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
 
 import static com.algaworks.algashop.ordering.domain.model.order.OrderStatus.READY;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ActiveProfiles("test")
 @UnitTest
 class CustomerLoyaltyPointsServiceTest {
 

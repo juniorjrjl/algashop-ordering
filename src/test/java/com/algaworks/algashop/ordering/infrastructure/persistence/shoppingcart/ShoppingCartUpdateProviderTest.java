@@ -7,9 +7,9 @@ import com.algaworks.algashop.ordering.infrastructure.persistence.common.Embedda
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.DBTestContainer;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.CustomerPersistenceEntityDataBuilder;
-import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,15 +24,15 @@ import static org.springframework.transaction.annotation.Propagation.NEVER;
 
 @ActiveProfiles("test")
 @IntegrationTest
-@SpringBootTest
-@PostgreSQLExtensionWithContextConfig
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Import({
         ShoppingCartUpdateProvider.class,
         ShoppingCartsPersistenceProvider.class,
         ShoppingCartPersistenceEntityAssemblerImpl.class,
         ShoppingCartPersistenceEntityDisassemblerImpl.class,
         EmbeddableDisassemblerImpl.class,
-        EmbeddableAssemblerImpl.class
+        EmbeddableAssemblerImpl.class,
+        DBTestContainer.class,
 })
 class ShoppingCartUpdateProviderTest {
 

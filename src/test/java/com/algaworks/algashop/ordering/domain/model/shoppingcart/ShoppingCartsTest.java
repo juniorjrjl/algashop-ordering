@@ -8,17 +8,19 @@ import com.algaworks.algashop.ordering.infrastructure.persistence.customer.Custo
 import com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntityAssemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntityDisassemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartsPersistenceProvider;
+import com.algaworks.algashop.ordering.utility.AbstractDBTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.DBTestContainer;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartItemDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.CustomerPersistenceEntityDataBuilder;
-import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -30,16 +32,16 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @ActiveProfiles("test")
 @IntegrationTest
-@SpringBootTest
-@PostgreSQLExtensionWithContextConfig
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Import({
         ShoppingCartsPersistenceProvider.class,
         ShoppingCartPersistenceEntityAssemblerImpl.class,
         ShoppingCartPersistenceEntityDisassemblerImpl.class,
         EmbeddableDisassemblerImpl.class,
-        EmbeddableAssemblerImpl.class
+        EmbeddableAssemblerImpl.class,
+        DBTestContainer.class,
 })
-class ShoppingCartsTest {
+class ShoppingCartsTest extends AbstractDBTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
 
@@ -49,8 +51,10 @@ class ShoppingCartsTest {
     private CustomerId customerId;
 
     @Autowired
-    ShoppingCartsTest(final ShoppingCarts shoppingCarts,
+    ShoppingCartsTest(final JdbcTemplate jdbcTemplate,
+                      final ShoppingCarts shoppingCarts,
                       final CustomerPersistenceEntityRepository customerRepository) {
+        super(jdbcTemplate);
         this.shoppingCarts = shoppingCarts;
         this.customerRepository = customerRepository;
     }

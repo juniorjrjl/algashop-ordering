@@ -11,11 +11,12 @@ import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartCantProceedToCheckoutException;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCarts;
+import com.algaworks.algashop.ordering.utility.AbstractDBTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.DBTestContainer;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartItemDataBuilder;
-import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalDate;
@@ -34,10 +38,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.Mockito.when;
 
+@ActiveProfiles("test")
 @IntegrationTest
-@SpringBootTest
-@PostgreSQLExtensionWithContextConfig
-class CheckoutApplicationServiceTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@Import(DBTestContainer.class)
+class CheckoutApplicationServiceTest extends AbstractDBTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
 
@@ -54,10 +59,12 @@ class CheckoutApplicationServiceTest {
     private static Customer customer;
 
     @Autowired
-    public CheckoutApplicationServiceTest(final CheckoutApplicationService service,
+    public CheckoutApplicationServiceTest(final JdbcTemplate jdbcTemplate,
+                                          final CheckoutApplicationService service,
                                           final ShoppingCarts shoppingCarts,
                                           final Orders orders,
                                           final Customers customers) {
+        super(jdbcTemplate);
         this.service = service;
         this.shoppingCarts = shoppingCarts;
         this.orders = orders;

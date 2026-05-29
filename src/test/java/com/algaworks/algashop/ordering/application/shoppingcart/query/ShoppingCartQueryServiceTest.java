@@ -4,15 +4,19 @@ import com.algaworks.algashop.ordering.domain.model.customer.Customer;
 import com.algaworks.algashop.ordering.domain.model.customer.Customers;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCarts;
+import com.algaworks.algashop.ordering.utility.AbstractDBTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.DBTestContainer;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartDataBuilder;
-import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
@@ -20,11 +24,12 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@ActiveProfiles("test")
 @IntegrationTest
-@SpringBootTest
 @Transactional
-@PostgreSQLExtensionWithContextConfig
-class ShoppingCartQueryServiceTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@Import(DBTestContainer.class)
+class ShoppingCartQueryServiceTest extends AbstractDBTest {
 
     private final ShoppingCartQueryService queryService;
     private final Customers customers;
@@ -33,9 +38,11 @@ class ShoppingCartQueryServiceTest {
     private Customer customer;
 
     @Autowired
-    ShoppingCartQueryServiceTest(final ShoppingCartQueryService queryService,
+    ShoppingCartQueryServiceTest(final JdbcTemplate jdbcTemplate,
+                                 final ShoppingCartQueryService queryService,
                                  final Customers customers,
                                  final ShoppingCarts shoppingCarts) {
+        super(jdbcTemplate);
         this.queryService = queryService;
         this.customers = customers;
         this.shoppingCarts = shoppingCarts;

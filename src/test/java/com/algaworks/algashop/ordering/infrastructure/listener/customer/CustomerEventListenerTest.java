@@ -7,13 +7,16 @@ import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerRegisteredEvent;
 import com.algaworks.algashop.ordering.domain.model.order.OrderId;
 import com.algaworks.algashop.ordering.domain.model.order.OrderReadyEvent;
+import com.algaworks.algashop.ordering.utility.AbstractDBTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
-import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
+import com.algaworks.algashop.ordering.utility.DBTestContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
@@ -25,9 +28,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
 @ActiveProfiles("test")
-@IntegrationTest
-@SpringBootTest
-class CustomerEventListenerTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@Import(DBTestContainer.class)
+class CustomerEventListenerTest extends AbstractDBTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
 
@@ -43,7 +46,9 @@ class CustomerEventListenerTest {
     private CustomerNotificationApplicationService notificationApplicationService;
 
     @Autowired
-    CustomerEventListenerTest(final ApplicationEventPublisher applicationEventPublisher) {
+    CustomerEventListenerTest(final JdbcTemplate jdbcTemplate,
+                              final ApplicationEventPublisher applicationEventPublisher) {
+        super(jdbcTemplate);
         this.applicationEventPublisher = applicationEventPublisher;
     }
 

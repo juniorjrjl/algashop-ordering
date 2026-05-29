@@ -5,10 +5,11 @@ import com.algaworks.algashop.ordering.domain.model.customer.Customers;
 import com.algaworks.algashop.ordering.domain.model.order.Order;
 import com.algaworks.algashop.ordering.domain.model.order.OrderStatus;
 import com.algaworks.algashop.ordering.domain.model.order.Orders;
+import com.algaworks.algashop.ordering.utility.AbstractDBTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.DBTestContainer;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.OrderDataBuilder;
-import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,10 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Sort;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
@@ -33,11 +37,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
+@ActiveProfiles("test")
 @IntegrationTest
-@SpringBootTest
 @Transactional
-@PostgreSQLExtensionWithContextConfig
-class OrderQueryServiceTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@Import(DBTestContainer.class)
+class OrderQueryServiceTest extends AbstractDBTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
 
@@ -48,9 +53,11 @@ class OrderQueryServiceTest {
     private Customer customer;
 
     @Autowired
-    OrderQueryServiceTest(final OrderQueryService queryService,
+    OrderQueryServiceTest(final JdbcTemplate jdbcTemplate,
+                          final OrderQueryService queryService,
                           final Orders orders,
                           final Customers customers) {
+        super(jdbcTemplate);
         this.queryService = queryService;
         this.orders = orders;
         this.customers = customers;

@@ -21,15 +21,19 @@ import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartIte
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCarts;
 import com.algaworks.algashop.ordering.infrastructure.listener.shoppingcart.ShoppingCartEventListener;
+import com.algaworks.algashop.ordering.utility.AbstractDBTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.DBTestContainer;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBuilder;
-import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
@@ -46,10 +50,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+@ActiveProfiles("test")
 @IntegrationTest
-@SpringBootTest
-@PostgreSQLExtensionWithContextConfig
-class ShoppingCartManagementApplicationServiceTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@Import(DBTestContainer.class)
+class ShoppingCartManagementApplicationServiceTest extends AbstractDBTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
 
@@ -67,9 +72,11 @@ class ShoppingCartManagementApplicationServiceTest {
     private ShoppingCartNotificationApplicationService notificationApplicationService;
 
     @Autowired
-    public ShoppingCartManagementApplicationServiceTest(final ShoppingCarts shoppingCarts,
+    public ShoppingCartManagementApplicationServiceTest(final JdbcTemplate jdbcTemplate,
+                                                        final ShoppingCarts shoppingCarts,
                                                         final Customers customers,
                                                         final ShoppingCartManagementApplicationService service) {
+        super(jdbcTemplate);
         this.shoppingCarts = shoppingCarts;
         this.customers = customers;
         this.service = service;

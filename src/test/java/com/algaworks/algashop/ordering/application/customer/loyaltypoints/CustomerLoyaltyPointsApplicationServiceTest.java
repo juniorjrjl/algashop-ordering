@@ -14,17 +14,21 @@ import com.algaworks.algashop.ordering.domain.model.order.OrderNotFoundException
 import com.algaworks.algashop.ordering.domain.model.order.OrderStatus;
 import com.algaworks.algashop.ordering.domain.model.order.Orders;
 import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
+import com.algaworks.algashop.ordering.utility.AbstractDBTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.DBTestContainer;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.OrderDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.OrderItemDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBuilder;
-import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.UUID;
 
@@ -33,10 +37,11 @@ import static com.algaworks.algashop.ordering.domain.model.order.OrderStatus.REA
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
+@ActiveProfiles("test")
 @IntegrationTest
-@SpringBootTest
-@PostgreSQLExtensionWithContextConfig
-class CustomerLoyaltyPointsApplicationServiceTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@Import(DBTestContainer.class)
+class CustomerLoyaltyPointsApplicationServiceTest extends AbstractDBTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
 
@@ -45,9 +50,11 @@ class CustomerLoyaltyPointsApplicationServiceTest {
     private final Orders orders;
 
     @Autowired
-    public CustomerLoyaltyPointsApplicationServiceTest(final CustomerLoyaltyPointsApplicationService service,
+    public CustomerLoyaltyPointsApplicationServiceTest(final JdbcTemplate  jdbcTemplate,
+                                                       final CustomerLoyaltyPointsApplicationService service,
                                                        final Customers customers,
                                                        final Orders orders) {
+        super(jdbcTemplate);
         this.service = service;
         this.customers = customers;
         this.orders = orders;

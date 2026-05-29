@@ -7,7 +7,6 @@ import com.algaworks.algashop.ordering.domain.model.product.Product;
 import com.algaworks.algashop.ordering.domain.model.product.ProductOutOfStockException;
 import com.algaworks.algashop.ordering.infrastructure.config.FreeShippingConfig;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
-import com.algaworks.algashop.ordering.utility.MockitoWithResetExtension;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBuilder;
 import com.algaworks.algashop.ordering.utility.tag.UnitTest;
@@ -19,6 +18,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.FieldSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Year;
 import java.util.List;
@@ -33,8 +34,9 @@ import static org.assertj.core.api.Assertions.assertWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+@ActiveProfiles("test")
 @UnitTest
-@ExtendWith(MockitoWithResetExtension.class)
+@ExtendWith(MockitoExtension.class)
 class BuyNowServiceTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
@@ -56,28 +58,18 @@ class BuyNowServiceTest {
     }
 
     private static Stream<Arguments> givenValidArgumentsWhenBuyNowThenReturnOrder() {
-        final var customerWithMoreThanOneHundredLoyaltyPoints =CustomerDataBuilder.builder()
-                .withLoyaltyPoints(() -> customFaker.customer().loyaltyPoints(100, 2000))
-                .buildExisting();
-        final var customerWithLessThanOneHundredLoyaltyPoints =CustomerDataBuilder.builder()
-                .withLoyaltyPoints(() -> customFaker.customer().loyaltyPoints(0, 100))
-                .buildExisting();
-        final Consumer<Orders> orderReturnMoreThanTwoYears = orders ->
-                when(orders.salesQuantityByCustomerInYear(any(CustomerId.class), any(Year.class)))
-                        .thenReturn(customFaker.number().numberBetween(2, Long.MAX_VALUE));
-        final Consumer<Orders> orderReturnLessThanTwoYears = orders ->
-                when(orders.salesQuantityByCustomerInYear(any(CustomerId.class), any(Year.class)))
-                        .thenReturn(customFaker.number().numberBetween(0L, 2L));
         return Stream.of(
                 Arguments.of(
-                        customerWithMoreThanOneHundredLoyaltyPoints,
-                        orderReturnLessThanTwoYears,
+                        CustomerDataBuilder.builder()
+                                .withLoyaltyPoints(() -> customFaker.customer().loyaltyPoints(100, 2000))
+                                .buildExisting(),
                         CREDIT_CARD,
                         new CreditCardId()
                 ),
                 Arguments.of(
-                        customerWithLessThanOneHundredLoyaltyPoints,
-                        orderReturnMoreThanTwoYears,
+                        CustomerDataBuilder.builder()
+                                .withLoyaltyPoints(() -> customFaker.customer().loyaltyPoints(0, 100))
+                                .buildExisting(),
                         GATEWAY_BALANCE,
                         null
                 )
@@ -88,7 +80,6 @@ class BuyNowServiceTest {
     @ParameterizedTest
     @MethodSource
     void givenValidArgumentsWhenBuyNowThenReturnOrder(final Customer customer,
-                                                      final Consumer<Orders> orderMockConsumer,
                                                       final PaymentMethod paymentMethod,
                                                       final CreditCardId creditCardId) {
         final var product = ProductDataBuilder.builder().withInStock(() -> true).build();
@@ -104,7 +95,6 @@ class BuyNowServiceTest {
                 paymentMethod,
                 creditCardId
         );
-        orderMockConsumer.accept(orders);
         final var expectedOrderAmount = shipping.cost().add(product.price().multiply(quantity));
         assertWith(actual,
                 o -> assertThat(o.customerId()).isEqualTo(customer.id()),

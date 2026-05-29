@@ -2,33 +2,36 @@ package com.algaworks.algashop.ordering.infrastructure.persistence.order;
 
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
+import com.algaworks.algashop.ordering.utility.AbstractDBTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.DBTestContainer;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.CustomerPersistenceEntityDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.OrderPersistenceEntityDataBuilder;
-import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
-import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertWith;
 
 @ActiveProfiles("test")
-@IntegrationTest
-@SpringBootTest
-@PostgreSQLExtensionWithContextConfig
-class OrderPersistenceEntityRepositoryTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@Import(DBTestContainer.class)
+class OrderPersistenceEntityRepositoryTest extends AbstractDBTest {
 
     private final OrderPersistenceEntityRepository repository;
     private final CustomerPersistenceEntityRepository customerRepository;
     private CustomerPersistenceEntity customerEntity;
 
     @Autowired
-    OrderPersistenceEntityRepositoryTest(final OrderPersistenceEntityRepository repository,
+    OrderPersistenceEntityRepositoryTest(final JdbcTemplate jdbcTemplate,
+                                         final OrderPersistenceEntityRepository repository,
                                          final CustomerPersistenceEntityRepository customerRepository) {
+        super(jdbcTemplate);
         this.repository = repository;
         this.customerRepository = customerRepository;
     }

@@ -5,16 +5,18 @@ import com.algaworks.algashop.ordering.infrastructure.persistence.common.Embedda
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableDisassemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
+import com.algaworks.algashop.ordering.utility.AbstractDBTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.DBTestContainer;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.OrderDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.CustomerPersistenceEntityDataBuilder;
-import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,16 +28,16 @@ import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORT
 
 @ActiveProfiles("test")
 @IntegrationTest
-@SpringBootTest
-@PostgreSQLExtensionWithContextConfig
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Import({
         OrdersPersistenceProvider.class,
         OrderPersistenceEntityAssemblerImpl.class,
         OrderPersistenceEntityDisassemblerImpl.class,
         EmbeddableDisassemblerImpl.class,
-        EmbeddableAssemblerImpl.class
+        EmbeddableAssemblerImpl.class,
+        DBTestContainer.class
 })
-class OrdersPersistenceProviderTest {
+class OrdersPersistenceProviderTest extends AbstractDBTest {
 
     private final OrdersPersistenceProvider persistenceProvider;
     private final OrderPersistenceEntityRepository repository;
@@ -43,9 +45,11 @@ class OrdersPersistenceProviderTest {
     private CustomerPersistenceEntity customerEntity;
 
     @Autowired
-    OrdersPersistenceProviderTest(final OrdersPersistenceProvider persistenceProvider,
+    OrdersPersistenceProviderTest(final JdbcTemplate jdbcTemplate,
+                                  final OrdersPersistenceProvider persistenceProvider,
                                   final OrderPersistenceEntityRepository repository,
                                   final CustomerPersistenceEntityRepository customerRepository) {
+        super(jdbcTemplate);
         this.persistenceProvider = persistenceProvider;
         this.repository = repository;
         this.customerRepository = customerRepository;

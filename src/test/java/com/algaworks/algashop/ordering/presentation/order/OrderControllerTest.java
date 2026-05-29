@@ -4,8 +4,8 @@ import com.algaworks.algashop.ordering.domain.model.order.OrderId;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
 import com.algaworks.algashop.ordering.infrastructure.persistence.order.OrderPersistenceEntityRepository;
 import com.algaworks.algashop.ordering.utility.AlgaShopResourceUtils;
+import com.algaworks.algashop.ordering.utility.DBTestContainer;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.CustomerPersistenceEntityDataBuilder;
-import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.http.Fault;
@@ -19,6 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.wiremock.spring.ConfigureWireMock;
 import org.wiremock.spring.EnableWireMock;
@@ -38,7 +40,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
 
 @ActiveProfiles("test")
-@PostgreSQLExtensionWithContextConfig
+@Import(DBTestContainer.class)
 @IntegrationTest
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @EnableWireMock(
@@ -67,15 +69,24 @@ class OrderControllerTest {
 
     @Autowired
     private CustomerPersistenceEntityRepository customerPersistenceEntityRepository;
-
     @Autowired
     private OrderPersistenceEntityRepository orderPersistenceEntityRepository;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @InjectWireMock("productCatalogApi")
     private WireMockServer wireMockProductCatalog;
 
     @BeforeEach
     void setUp() {
+        jdbcTemplate.execute("""
+            TRUNCATE TABLE SHOPPING_CART_ITEMS,
+                SHOPPING_CARTS,
+                ORDER_ITEMS,
+                ORDERS,
+                CUSTOMERS
+            RESTART IDENTITY CASCADE
+        """);
         RestAssuredMockMvc.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.port = port;
 

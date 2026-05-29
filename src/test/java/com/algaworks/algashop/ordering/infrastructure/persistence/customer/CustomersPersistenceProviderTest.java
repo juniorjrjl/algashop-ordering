@@ -2,15 +2,17 @@ package com.algaworks.algashop.ordering.infrastructure.persistence.customer;
 
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableAssemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableDisassemblerImpl;
+import com.algaworks.algashop.ordering.utility.AbstractDBTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.DBTestContainer;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
-import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,16 +22,16 @@ import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORT
 
 @ActiveProfiles("test")
 @IntegrationTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Import({
         CustomersPersistenceProvider.class,
         CustomerPersistenceEntityAssemblerImpl.class,
         CustomerPersistenceEntityDisassemblerImpl.class,
         EmbeddableDisassemblerImpl.class,
-        EmbeddableAssemblerImpl.class
+        EmbeddableAssemblerImpl.class,
+        DBTestContainer.class
 })
-@SpringBootTest
-@PostgreSQLExtensionWithContextConfig
-class CustomersPersistenceProviderTest {
+class CustomersPersistenceProviderTest extends AbstractDBTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
 
@@ -37,8 +39,10 @@ class CustomersPersistenceProviderTest {
     private final CustomerPersistenceEntityRepository repository;
 
     @Autowired
-    CustomersPersistenceProviderTest(final CustomersPersistenceProvider persistenceProvider,
+    CustomersPersistenceProviderTest(final JdbcTemplate jdbcTemplate,
+                                     final CustomersPersistenceProvider persistenceProvider,
                                      final CustomerPersistenceEntityRepository repository) {
+        super(jdbcTemplate);
         this.persistenceProvider = persistenceProvider;
         this.repository = repository;
     }

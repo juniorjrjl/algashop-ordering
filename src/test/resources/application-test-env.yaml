@@ -6,7 +6,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     hikari:
       minimum-idle: 1
-      maximum-pool-size: 10
+      maximum-pool-size: 2
       connection-timeout: 3000
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -14,16 +14,14 @@ spring:
       ddl-auto: create-drop
     show-sql: true
   flyway:
-    enabled: false
-    #url: jdbc:postgresql://localhost:5432/ordering_test
-    #locations: classpath:db/migration
-    #user: postgres
-    #password: postgres
+    enabled: true
+    url: jdbc:postgresql://localhost:5432/ordering_test
+    locations: classpath:db/migration
+    user: postgres
+    password: postgres
 
 algashop:
   integrations:
-    shipping:
-      provider: RAPIDEX
     rapidex:
       url: http://localhost:8780
     product-catalog:

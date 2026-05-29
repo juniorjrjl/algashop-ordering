@@ -14,17 +14,17 @@ import com.algaworks.algashop.ordering.domain.model.order.OrderNotFoundException
 import com.algaworks.algashop.ordering.domain.model.order.OrderStatus;
 import com.algaworks.algashop.ordering.domain.model.order.Orders;
 import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
-import com.algaworks.algashop.ordering.utility.AbstractApplicationTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.OrderDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.OrderItemDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBuilder;
+import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
+import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.UUID;
 
@@ -33,8 +33,10 @@ import static com.algaworks.algashop.ordering.domain.model.order.OrderStatus.REA
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
+@IntegrationTest
 @SpringBootTest
-class CustomerLoyaltyPointsApplicationServiceTest extends AbstractApplicationTest {
+@PostgreSQLExtensionWithContextConfig
+class CustomerLoyaltyPointsApplicationServiceTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
 
@@ -43,11 +45,9 @@ class CustomerLoyaltyPointsApplicationServiceTest extends AbstractApplicationTes
     private final Orders orders;
 
     @Autowired
-    public CustomerLoyaltyPointsApplicationServiceTest(final JdbcTemplate jdbcTemplate,
-                                                       final CustomerLoyaltyPointsApplicationService service,
+    public CustomerLoyaltyPointsApplicationServiceTest(final CustomerLoyaltyPointsApplicationService service,
                                                        final Customers customers,
                                                        final Orders orders) {
-        super(jdbcTemplate);
         this.service = service;
         this.customers = customers;
         this.orders = orders;

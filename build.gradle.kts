@@ -71,10 +71,14 @@ dependencies {
 	testImplementation(libs.spring.boot.starter.data.jpa.test)
 	testImplementation(libs.spring.boot.starter.flyway.test)
 	testImplementation(libs.spring.boot.starter.webmvc.test)
+	testImplementation(libs.spring.boot.testcontainers)
 	testImplementation(libs.spring.cloud.starter.contract.verifier)
+	testImplementation(libs.testcontainers.junit.jupiter)
+	testImplementation(libs.testcontainers.junit.postgresql)
 	testImplementation(libs.wiremock.spring.boot)
 
 	testRuntimeOnly(libs.junit.platform.launcher)
+
 }
 
 dependencyManagement {

@@ -5,10 +5,11 @@ import com.algaworks.algashop.ordering.domain.model.customer.Customers;
 import com.algaworks.algashop.ordering.domain.model.order.Order;
 import com.algaworks.algashop.ordering.domain.model.order.OrderStatus;
 import com.algaworks.algashop.ordering.domain.model.order.Orders;
-import com.algaworks.algashop.ordering.utility.AbstractApplicationTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.OrderDataBuilder;
+import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
+import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,7 +18,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
@@ -33,9 +33,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
+@IntegrationTest
 @SpringBootTest
 @Transactional
-class OrderQueryServiceTest extends AbstractApplicationTest {
+@PostgreSQLExtensionWithContextConfig
+class OrderQueryServiceTest {
+
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     private final OrderQueryService queryService;
     private final Orders orders;
@@ -44,11 +48,9 @@ class OrderQueryServiceTest extends AbstractApplicationTest {
     private Customer customer;
 
     @Autowired
-    OrderQueryServiceTest(final JdbcTemplate jdbcTemplate,
-                          final OrderQueryService queryService,
+    OrderQueryServiceTest(final OrderQueryService queryService,
                           final Orders orders,
                           final Customers customers) {
-        super(jdbcTemplate);
         this.queryService = queryService;
         this.orders = orders;
         this.customers = customers;

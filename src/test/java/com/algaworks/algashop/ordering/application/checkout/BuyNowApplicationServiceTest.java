@@ -9,16 +9,16 @@ import com.algaworks.algashop.ordering.domain.model.order.OriginAddressService;
 import com.algaworks.algashop.ordering.domain.model.order.ShippingCostService;
 import com.algaworks.algashop.ordering.domain.model.product.ProductCatalogService;
 import com.algaworks.algashop.ordering.domain.model.product.ProductId;
-import com.algaworks.algashop.ordering.utility.AbstractApplicationTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.application.BuyNowInputDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBuilder;
+import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
+import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalDate;
@@ -28,8 +28,10 @@ import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+@IntegrationTest
 @SpringBootTest
-class BuyNowApplicationServiceTest extends AbstractApplicationTest {
+@PostgreSQLExtensionWithContextConfig
+class BuyNowApplicationServiceTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
 
@@ -47,11 +49,9 @@ class BuyNowApplicationServiceTest extends AbstractApplicationTest {
     private final Customers customers;
 
     @Autowired
-    public BuyNowApplicationServiceTest(final JdbcTemplate jdbcTemplate,
-                                        final BuyNowApplicationService service,
+    public BuyNowApplicationServiceTest(final BuyNowApplicationService service,
                                         final Orders orders,
                                         final Customers customers) {
-        super(jdbcTemplate);
         this.service = service;
         this.orders = orders;
         this.customers = customers;

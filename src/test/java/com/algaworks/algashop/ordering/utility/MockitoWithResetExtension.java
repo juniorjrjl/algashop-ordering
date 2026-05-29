@@ -8,8 +8,6 @@ import static org.mockito.Mockito.mockingDetails;
 import static org.mockito.Mockito.reset;
 
 public class MockitoWithResetExtension extends MockitoExtension {
-
-
     @Override
     public void afterEach(final ExtensionContext context) {
         resetMocks(context.getRequiredTestInstance());

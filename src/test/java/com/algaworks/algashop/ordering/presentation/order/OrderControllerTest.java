@@ -5,24 +5,31 @@ import com.algaworks.algashop.ordering.infrastructure.persistence.customer.Custo
 import com.algaworks.algashop.ordering.infrastructure.persistence.order.OrderPersistenceEntityRepository;
 import com.algaworks.algashop.ordering.utility.AlgaShopResourceUtils;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.CustomerPersistenceEntityDataBuilder;
+import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.http.Fault;
 import io.restassured.RestAssured;
 import io.restassured.config.JsonConfig;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.path.json.config.JsonPathConfig;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.ActiveProfiles;
+import org.wiremock.spring.ConfigureWireMock;
+import org.wiremock.spring.EnableWireMock;
+import org.wiremock.spring.InjectWireMock;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.cloud.contract.spec.internal.HttpStatus.CREATED;
 import static org.springframework.cloud.contract.spec.internal.HttpStatus.GATEWAY_TIMEOUT;
@@ -30,11 +37,28 @@ import static org.springframework.cloud.contract.spec.internal.HttpStatus.UNPROC
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
 
+@ActiveProfiles("test")
+@PostgreSQLExtensionWithContextConfig
 @IntegrationTest
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class OrderControllerTest {
+@EnableWireMock(
+        {
+                @ConfigureWireMock(
+                        name = "rapiDexApi",
+                        port = 8780,
+                        filesUnderDirectory = "src/test/resources/wiremock/rapidex",
+                        globalTemplating = true
+                ),
+                @ConfigureWireMock(
+                        name = "productCatalogApi",
+                        port = 8781,
+                        filesUnderDirectory = "src/test/resources/wiremock/product-catalog",
+                        globalTemplating = true
+                )
 
-    private static boolean databaseInitialized;
+        }
+)
+class OrderControllerTest {
 
     private final UUID customerId = UUID.fromString("6e148bd5-47f6-4022-b9da-07cfaa294f7a");
 
@@ -47,8 +71,8 @@ class OrderControllerTest {
     @Autowired
     private OrderPersistenceEntityRepository orderPersistenceEntityRepository;
 
+    @InjectWireMock("productCatalogApi")
     private WireMockServer wireMockProductCatalog;
-    private WireMockServer wireMockRapidex;
 
     @BeforeEach
     void setUp() {
@@ -59,36 +83,14 @@ class OrderControllerTest {
                 .numberReturnType(JsonPathConfig.NumberReturnType.BIG_DECIMAL));
         initDatabase();
 
-        wireMockProductCatalog = new WireMockServer(
-                options().port(8781)
-                        .usingFilesUnderDirectory("src/test/resources/wiremock/product-catalog")
-                        .globalTemplating(true)
-        );
-        wireMockRapidex = new WireMockServer(
-                options().port(8780)
-                        .usingFilesUnderDirectory("src/test/resources/wiremock/rapidex")
-                        .globalTemplating(true)
-        );
-        wireMockProductCatalog.start();
-        wireMockRapidex.start();
-    }
-
-    @AfterEach
-    void tearDown() {
-        wireMockProductCatalog.stop();
-        wireMockRapidex.stop();
     }
 
     private void initDatabase(){
-        if(databaseInitialized){
-            return;
-        }
         final var customer = CustomerPersistenceEntityDataBuilder.builder()
                 .withId(() -> customerId)
                 .withBirthDate(() -> LocalDate.now().minusYears(20))
                 .build();
         customerPersistenceEntityRepository.saveAndFlush(customer);
-        databaseInitialized = true;
     }
 
     @Test
@@ -136,7 +138,11 @@ class OrderControllerTest {
     @Test
     void shouldNotCreateOrderUsingProductWhenProductAPIIsUnavailable() {
         final var json = AlgaShopResourceUtils.readContent("json/create-order-with-product.json");
-        wireMockProductCatalog.stop();
+        wireMockProductCatalog.stubFor(get(urlPathMatching(
+                "/api/v1/products/[0-9a-fA-F-]{36}"
+        ))
+                .willReturn(aResponse()
+                        .withFault(Fault.CONNECTION_RESET_BY_PEER)));
         RestAssured
             .given()
                 .accept(APPLICATION_JSON_VALUE)

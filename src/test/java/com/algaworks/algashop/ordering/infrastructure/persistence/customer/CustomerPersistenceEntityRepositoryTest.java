@@ -1,24 +1,28 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.customer;
 
-import com.algaworks.algashop.ordering.utility.AbstractDBTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.CustomerPersistenceEntityDataBuilder;
+import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
+import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertWith;
 
-class CustomerPersistenceEntityRepositoryTest extends AbstractDBTest {
+@ActiveProfiles("test")
+@IntegrationTest
+@SpringBootTest
+@PostgreSQLExtensionWithContextConfig
+class CustomerPersistenceEntityRepositoryTest {
 
     private final CustomerPersistenceEntityRepository repository;
 
     @Autowired
-    CustomerPersistenceEntityRepositoryTest(final CustomerPersistenceEntityRepository repository,
-                                            final JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate);
+    CustomerPersistenceEntityRepositoryTest(final CustomerPersistenceEntityRepository repository) {
         this.repository = repository;
     }
 

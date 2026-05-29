@@ -3,12 +3,14 @@ package com.algaworks.algashop.ordering.domain.model.order;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBuilder;
+import com.algaworks.algashop.ordering.utility.tag.UnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertWith;
 
+@UnitTest
 class OrderFactoryTest {
 
     private final CustomFaker customFaker = CustomFaker.getInstance();

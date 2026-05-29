@@ -5,22 +5,28 @@ import com.algaworks.algashop.ordering.infrastructure.persistence.common.Embedda
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityAssemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityDisassemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomersPersistenceProvider;
-import com.algaworks.algashop.ordering.utility.AbstractDBTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
+import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
+import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
+import java.time.OffsetDateTime;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@IntegrationTest
+@SpringBootTest
+@PostgreSQLExtensionWithContextConfig
 @Import({
         CustomersPersistenceProvider.class,
         CustomerPersistenceEntityAssemblerImpl.class,
@@ -28,13 +34,14 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
         EmbeddableDisassemblerImpl.class,
         EmbeddableAssemblerImpl.class
 })
-class CustomersTest extends AbstractDBTest {
+class CustomersTest {
+
+    private final static CustomFaker customFaker = CustomFaker.getInstance();
 
     private final Customers customers;
 
     @Autowired
-    CustomersTest(final Customers customers, final JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate);
+    CustomersTest(final Customers customers) {
         this.customers = customers;
     }
 
@@ -53,6 +60,7 @@ class CustomersTest extends AbstractDBTest {
         final var actual = optional.get();
         assertThat(actual)
                 .usingRecursiveComparison()
+                .withComparatorForType(Comparator.comparing(OffsetDateTime::toInstant), OffsetDateTime.class)
                 .isEqualTo(customer);
     }
 

@@ -2,21 +2,23 @@ package com.algaworks.algashop.ordering.infrastructure.persistence.customer;
 
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableAssemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.common.EmbeddableDisassemblerImpl;
-import com.algaworks.algashop.ordering.utility.AbstractDBTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
+import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED;
 
+@ActiveProfiles("test")
 @IntegrationTest
 @Import({
         CustomersPersistenceProvider.class,
@@ -25,16 +27,18 @@ import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORT
         EmbeddableDisassemblerImpl.class,
         EmbeddableAssemblerImpl.class
 })
-class CustomersPersistenceProviderTest extends AbstractDBTest {
+@SpringBootTest
+@PostgreSQLExtensionWithContextConfig
+class CustomersPersistenceProviderTest {
+
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     private final CustomersPersistenceProvider persistenceProvider;
     private final CustomerPersistenceEntityRepository repository;
 
     @Autowired
     CustomersPersistenceProviderTest(final CustomersPersistenceProvider persistenceProvider,
-                                     final CustomerPersistenceEntityRepository repository,
-                                     final JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate);
+                                     final CustomerPersistenceEntityRepository repository) {
         this.persistenceProvider = persistenceProvider;
         this.repository = repository;
     }

@@ -53,8 +53,12 @@ rest-assured-spring-mock-mvc = { group = "io.rest-assured", name = "spring-mock-
 spring-boot-starter-data-jpa-test = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa-test" }
 spring-boot-starter-flyway-test = { group = "org.springframework.boot", name = "spring-boot-starter-flyway-test" }
 spring-boot-starter-webmvc-test = { group = "org.springframework.boot", name = "spring-boot-starter-webmvc-test" }
+spring-boot-testcontainers = { group = "org.springframework.boot", name = "spring-boot-testcontainers"}
 spring-cloud-starter-contract-verifier = { group = "org.springframework.cloud", name = "spring-cloud-starter-contract-verifier" }
+testcontainers-junit-jupiter = { group = "org.testcontainers", name = "testcontainers-junit-jupiter" }
+testcontainers-junit-postgresql = { group = "org.testcontainers", name = "testcontainers-postgresql" }
 wiremock-spring-boot = { group = "org.wiremock.integrations", name = "wiremock-spring-boot", version.ref = "wiremock-spring" }
+
 
 #AGENTS
 mockito-core = { group = "org.mockito", name = "mockito-core" }

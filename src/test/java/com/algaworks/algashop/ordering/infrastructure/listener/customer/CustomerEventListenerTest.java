@@ -8,11 +8,13 @@ import com.algaworks.algashop.ordering.domain.model.customer.CustomerRegisteredE
 import com.algaworks.algashop.ordering.domain.model.order.OrderId;
 import com.algaworks.algashop.ordering.domain.model.order.OrderReadyEvent;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
@@ -22,6 +24,8 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
+@ActiveProfiles("test")
+@IntegrationTest
 @SpringBootTest
 class CustomerEventListenerTest {
 

@@ -1,20 +1,26 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.order;
 
+import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
-import com.algaworks.algashop.ordering.utility.AbstractDBTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.CustomerPersistenceEntityDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.OrderPersistenceEntityDataBuilder;
-import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
+import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
+import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertWith;
 
-class OrderPersistenceEntityRepositoryTest extends AbstractDBTest {
+@ActiveProfiles("test")
+@IntegrationTest
+@SpringBootTest
+@PostgreSQLExtensionWithContextConfig
+class OrderPersistenceEntityRepositoryTest {
 
     private final OrderPersistenceEntityRepository repository;
     private final CustomerPersistenceEntityRepository customerRepository;
@@ -22,9 +28,7 @@ class OrderPersistenceEntityRepositoryTest extends AbstractDBTest {
 
     @Autowired
     OrderPersistenceEntityRepositoryTest(final OrderPersistenceEntityRepository repository,
-                                         final CustomerPersistenceEntityRepository customerRepository,
-                                         final JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate);
+                                         final CustomerPersistenceEntityRepository customerRepository) {
         this.repository = repository;
         this.customerRepository = customerRepository;
     }

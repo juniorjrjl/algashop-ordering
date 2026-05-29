@@ -2,19 +2,23 @@ package com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart;
 
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
-import com.algaworks.algashop.ordering.utility.AbstractDBTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.CustomerPersistenceEntityDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.ShoppingCartPersistenceEntityDataBuilder;
+import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
+import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertWith;
 
-class ShoppingCartPersistenceEntityRepositoryTest extends AbstractDBTest {
+@IntegrationTest
+@SpringBootTest
+@PostgreSQLExtensionWithContextConfig
+class ShoppingCartPersistenceEntityRepositoryTest {
 
     private final ShoppingCartPersistenceEntityRepository repository;
     private final CustomerPersistenceEntityRepository customerRepository;
@@ -22,9 +26,7 @@ class ShoppingCartPersistenceEntityRepositoryTest extends AbstractDBTest {
 
     @Autowired
     ShoppingCartPersistenceEntityRepositoryTest(final ShoppingCartPersistenceEntityRepository repository,
-                                                final CustomerPersistenceEntityRepository customerRepository,
-                                                final JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate);
+                                                final CustomerPersistenceEntityRepository customerRepository) {
         this.repository = repository;
         this.customerRepository = customerRepository;
     }

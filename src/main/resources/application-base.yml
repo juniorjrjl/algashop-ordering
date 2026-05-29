@@ -9,8 +9,3 @@ spring:
     enabled: false
     url: jdbc:postgresql://localhost:5432/ordering
     locations: classpath:db/migration
-
-algashop:
-  integrations:
-    shipping:
-      provider: RAPIDEX

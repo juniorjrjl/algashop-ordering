@@ -1,4 +1,4 @@
-create table public.orders (
+create table orders (
     id bigint not null,
     shipping_cost numeric(38,2),
     shipping_expected_date date,

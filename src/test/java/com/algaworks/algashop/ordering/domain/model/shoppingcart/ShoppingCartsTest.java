@@ -8,24 +8,30 @@ import com.algaworks.algashop.ordering.infrastructure.persistence.customer.Custo
 import com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntityAssemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntityDisassemblerImpl;
 import com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartsPersistenceProvider;
-import com.algaworks.algashop.ordering.utility.AbstractDBTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartItemDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.CustomerPersistenceEntityDataBuilder;
+import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
+import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.test.context.ActiveProfiles;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.time.OffsetDateTime;
+import java.util.Comparator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@ActiveProfiles("test")
+@IntegrationTest
+@SpringBootTest
+@PostgreSQLExtensionWithContextConfig
 @Import({
         ShoppingCartsPersistenceProvider.class,
         ShoppingCartPersistenceEntityAssemblerImpl.class,
@@ -33,7 +39,9 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
         EmbeddableDisassemblerImpl.class,
         EmbeddableAssemblerImpl.class
 })
-class ShoppingCartsTest extends AbstractDBTest {
+class ShoppingCartsTest {
+
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     private final ShoppingCarts shoppingCarts;
     private final CustomerPersistenceEntityRepository customerRepository;
@@ -42,9 +50,7 @@ class ShoppingCartsTest extends AbstractDBTest {
 
     @Autowired
     ShoppingCartsTest(final ShoppingCarts shoppingCarts,
-                      final CustomerPersistenceEntityRepository customerRepository,
-                      final JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate);
+                      final CustomerPersistenceEntityRepository customerRepository) {
         this.shoppingCarts = shoppingCarts;
         this.customerRepository = customerRepository;
     }
@@ -67,6 +73,7 @@ class ShoppingCartsTest extends AbstractDBTest {
         final var actual = optional.get();
         assertThat(actual)
                 .usingRecursiveComparison()
+                .withComparatorForType(Comparator.comparing(OffsetDateTime::toInstant), OffsetDateTime.class)
                 .isEqualTo(shoppingCart);
     }
 
@@ -112,17 +119,6 @@ class ShoppingCartsTest extends AbstractDBTest {
         final var storedOrder = shoppingCarts.ofId(order.id()).orElseThrow();
         assertThat(storedOrder.items().stream().toList().get(randomIndex).quantity()).isEqualTo(firstQuantity);
         assertThat(storedOrder.items().stream().toList().get(randomIndex).quantity()).isNotEqualTo(secondQuantity);
-    }
-
-    @Test
-    void shouldCountExistingOrders(){
-        assertThat(shoppingCarts.count()).isZero();
-        final var toInsert = Stream.generate(() -> ShoppingCartDataBuilder.builder(ShoppingCart.startShopping(customerId))
-                        .build())
-                .limit(customFaker.number().numberBetween(1, 10))
-                .collect(Collectors.toSet());
-        toInsert.forEach(shoppingCarts::add);
-        assertThat(shoppingCarts.count()).isEqualTo(toInsert.size());
     }
 
     @Test

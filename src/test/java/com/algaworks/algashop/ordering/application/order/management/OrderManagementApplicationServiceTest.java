@@ -14,17 +14,17 @@ import com.algaworks.algashop.ordering.domain.model.order.OrderStatus;
 import com.algaworks.algashop.ordering.domain.model.order.OrderStatusCannotBeChangedException;
 import com.algaworks.algashop.ordering.domain.model.order.Orders;
 import com.algaworks.algashop.ordering.infrastructure.listener.order.OrderEventListener;
-import com.algaworks.algashop.ordering.utility.AbstractApplicationTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.OrderDataBuilder;
+import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
+import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.util.UUID;
@@ -39,8 +39,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
+@IntegrationTest
 @SpringBootTest
-class OrderManagementApplicationServiceTest extends AbstractApplicationTest {
+@PostgreSQLExtensionWithContextConfig
+class OrderManagementApplicationServiceTest {
 
     private final Customers customers;
     private final Orders orders;
@@ -58,11 +60,9 @@ class OrderManagementApplicationServiceTest extends AbstractApplicationTest {
     private Customer customer;
 
     @Autowired
-    public OrderManagementApplicationServiceTest(final JdbcTemplate jdbcTemplate,
-                                                 final Customers customers,
+    public OrderManagementApplicationServiceTest(final Customers customers,
                                                  final Orders orders,
                                                  final OrderManagementApplicationService service) {
-        super(jdbcTemplate);
         this.customers = customers;
         this.orders = orders;
         this.service = service;

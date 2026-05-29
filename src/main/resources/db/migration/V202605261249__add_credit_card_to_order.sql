@@ -1,2 +1,2 @@
-alter table public."order"
+alter table orders
       add credit_card_id uuid null;

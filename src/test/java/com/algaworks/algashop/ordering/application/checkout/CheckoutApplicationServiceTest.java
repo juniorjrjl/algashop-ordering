@@ -11,19 +11,18 @@ import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartCantProceedToCheckoutException;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCarts;
-import com.algaworks.algashop.ordering.utility.AbstractApplicationTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartItemDataBuilder;
+import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
+import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalDate;
@@ -33,12 +32,14 @@ import java.util.stream.Stream;
 import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
-import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.mockito.Mockito.when;
 
+@IntegrationTest
 @SpringBootTest
-@TestInstance(PER_CLASS)
-class CheckoutApplicationServiceTest extends AbstractApplicationTest {
+@PostgreSQLExtensionWithContextConfig
+class CheckoutApplicationServiceTest {
+
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     private final CheckoutApplicationService service;
     private final ShoppingCarts shoppingCarts;
@@ -50,15 +51,13 @@ class CheckoutApplicationServiceTest extends AbstractApplicationTest {
     @MockitoBean
     private ShippingCostService shippingCostService;
 
-    private Customer customer;
+    private static Customer customer;
 
     @Autowired
-    public CheckoutApplicationServiceTest(final JdbcTemplate jdbcTemplate,
-                                          final CheckoutApplicationService service,
+    public CheckoutApplicationServiceTest(final CheckoutApplicationService service,
                                           final ShoppingCarts shoppingCarts,
                                           final Orders orders,
                                           final Customers customers) {
-        super(jdbcTemplate);
         this.service = service;
         this.shoppingCarts = shoppingCarts;
         this.orders = orders;
@@ -72,6 +71,7 @@ class CheckoutApplicationServiceTest extends AbstractApplicationTest {
         customers.add(customer);
     }
 
+    @Test
     void shouldCheckout() {
         final var items = ShoppingCartItemDataBuilder.builder()
                 .withAvailable(() -> true)
@@ -112,7 +112,7 @@ class CheckoutApplicationServiceTest extends AbstractApplicationTest {
                 .isThrownBy(() -> service.checkout(input));
     }
 
-    private Stream<Supplier<ShoppingCart>> givenInvalidShoppingCartWhenCheckoutThenThrowException(){
+    private static Stream<Supplier<ShoppingCart>> givenInvalidShoppingCartWhenCheckoutThenThrowException(){
         final Supplier<ShoppingCart> emptyShoppingCartSupplier = () -> {
             final var emptyShoppingCart = ShoppingCartDataBuilder.builder()
                     .withCustomerId(() -> customer.id())

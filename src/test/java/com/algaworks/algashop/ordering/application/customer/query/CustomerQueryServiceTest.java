@@ -3,10 +3,11 @@ package com.algaworks.algashop.ordering.application.customer.query;
 import com.algaworks.algashop.ordering.application.customer.management.CustomerManagementApplicationService;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.customer.Customers;
-import com.algaworks.algashop.ordering.utility.AbstractApplicationTest;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.application.CustomerInputDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
+import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
+import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,7 +16,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,19 +30,21 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOf
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
+@IntegrationTest
 @SpringBootTest
-class CustomerQueryServiceTest extends AbstractApplicationTest {
+@PostgreSQLExtensionWithContextConfig
+class CustomerQueryServiceTest {
+
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     private final CustomerManagementApplicationService service;
     private final CustomerQueryService queryService;
     private final Customers customers;
 
     @Autowired
-    CustomerQueryServiceTest(final JdbcTemplate jdbcTemplate,
-                             final CustomerManagementApplicationService service,
+    CustomerQueryServiceTest(final CustomerManagementApplicationService service,
                              final CustomerQueryService queryService,
                              final Customers customers) {
-        super(jdbcTemplate);
         this.service = service;
         this.queryService = queryService;
         this.customers = customers;

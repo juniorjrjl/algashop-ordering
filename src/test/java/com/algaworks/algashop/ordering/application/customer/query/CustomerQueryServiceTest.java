@@ -6,16 +6,21 @@ import com.algaworks.algashop.ordering.domain.model.customer.Customers;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.application.CustomerInputDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
-import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
+import com.algaworks.algashop.ordering.utility.extension.PGContainer;
+import com.algaworks.algashop.ordering.utility.extension.PostgreSQLTestContainerExtension;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,7 +37,7 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @IntegrationTest
 @SpringBootTest
-@PostgreSQLExtensionWithContextConfig
+@ExtendWith(PostgreSQLTestContainerExtension.class)
 class CustomerQueryServiceTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
@@ -40,6 +45,9 @@ class CustomerQueryServiceTest {
     private final CustomerManagementApplicationService service;
     private final CustomerQueryService queryService;
     private final Customers customers;
+
+    @PGContainer
+    private static PostgreSQLContainer postgreSQLContainer;
 
     @Autowired
     CustomerQueryServiceTest(final CustomerManagementApplicationService service,
@@ -53,6 +61,16 @@ class CustomerQueryServiceTest {
     @BeforeEach
     void setUp() {
         CustomFaker.getInstance().reseed();
+    }
+
+    @DynamicPropertySource
+    public static void configurePropertySource(final DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
+        registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
+        registry.add("spring.flyway.url", postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.flyway.user", postgreSQLContainer::getUsername);
+        registry.add("spring.flyway.password", postgreSQLContainer::getPassword);
     }
 
 

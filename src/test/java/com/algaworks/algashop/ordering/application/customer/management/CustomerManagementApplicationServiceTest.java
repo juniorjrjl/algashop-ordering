@@ -19,13 +19,18 @@ import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.application.CustomerInputDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.application.CustomerUpdateInputDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
-import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
+import com.algaworks.algashop.ordering.utility.extension.PGContainer;
+import com.algaworks.algashop.ordering.utility.extension.PostgreSQLTestContainerExtension;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 
 import java.util.UUID;
 
@@ -37,7 +42,7 @@ import static org.mockito.Mockito.verify;
 
 @IntegrationTest
 @SpringBootTest
-@PostgreSQLExtensionWithContextConfig
+@ExtendWith(PostgreSQLTestContainerExtension.class)
 class CustomerManagementApplicationServiceTest {
 
     private static final CustomFaker customFaker = CustomFaker.getInstance();
@@ -51,6 +56,9 @@ class CustomerManagementApplicationServiceTest {
     private final CustomerManagementApplicationService service;
     private final Customers customers;
 
+    @PGContainer
+    private static PostgreSQLContainer postgreSQLContainer;
+
     @Autowired
     CustomerManagementApplicationServiceTest(final CustomerManagementApplicationService service,
                                              final Customers customers) {
@@ -61,6 +69,16 @@ class CustomerManagementApplicationServiceTest {
     @BeforeEach
     void setUp() {
         CustomFaker.getInstance().reseed();
+    }
+
+    @DynamicPropertySource
+    public static void configurePropertySource(final DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
+        registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
+        registry.add("spring.flyway.url", postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.flyway.user", postgreSQLContainer::getUsername);
+        registry.add("spring.flyway.password", postgreSQLContainer::getPassword);
     }
 
     @Test

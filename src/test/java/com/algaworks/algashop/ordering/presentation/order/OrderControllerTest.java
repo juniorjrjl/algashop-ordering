@@ -5,7 +5,8 @@ import com.algaworks.algashop.ordering.infrastructure.persistence.customer.Custo
 import com.algaworks.algashop.ordering.infrastructure.persistence.order.OrderPersistenceEntityRepository;
 import com.algaworks.algashop.ordering.utility.AlgaShopResourceUtils;
 import com.algaworks.algashop.ordering.utility.databuilder.entity.CustomerPersistenceEntityDataBuilder;
-import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
+import com.algaworks.algashop.ordering.utility.extension.PGContainer;
+import com.algaworks.algashop.ordering.utility.extension.PostgreSQLTestContainerExtension;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.http.Fault;
@@ -16,13 +17,17 @@ import io.restassured.path.json.config.JsonPathConfig;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.wiremock.spring.ConfigureWireMock;
 import org.wiremock.spring.EnableWireMock;
 import org.wiremock.spring.InjectWireMock;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -38,7 +43,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
 
 @ActiveProfiles("test")
-@PostgreSQLExtensionWithContextConfig
+@ExtendWith(PostgreSQLTestContainerExtension.class)
 @IntegrationTest
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @EnableWireMock(
@@ -71,6 +76,9 @@ class OrderControllerTest {
     @Autowired
     private OrderPersistenceEntityRepository orderPersistenceEntityRepository;
 
+    @PGContainer
+    private static PostgreSQLContainer postgreSQLContainer;
+
     @InjectWireMock("productCatalogApi")
     private WireMockServer wireMockProductCatalog;
 
@@ -83,6 +91,16 @@ class OrderControllerTest {
                 .numberReturnType(JsonPathConfig.NumberReturnType.BIG_DECIMAL));
         initDatabase();
 
+    }
+
+    @DynamicPropertySource
+    public static void configurePropertySource(final DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
+        registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
+        registry.add("spring.flyway.url", postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.flyway.user", postgreSQLContainer::getUsername);
+        registry.add("spring.flyway.password", postgreSQLContainer::getPassword);
     }
 
     private void initDatabase(){

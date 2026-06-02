@@ -17,15 +17,20 @@ import com.algaworks.algashop.ordering.infrastructure.listener.order.OrderEventL
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.OrderDataBuilder;
-import com.algaworks.algashop.ordering.utility.extension.PostgreSQLExtensionWithContextConfig;
+import com.algaworks.algashop.ordering.utility.extension.PGContainer;
+import com.algaworks.algashop.ordering.utility.extension.PostgreSQLTestContainerExtension;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 
 import java.util.UUID;
 
@@ -41,7 +46,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 
 @IntegrationTest
 @SpringBootTest
-@PostgreSQLExtensionWithContextConfig
+@ExtendWith(PostgreSQLTestContainerExtension.class)
 class OrderManagementApplicationServiceTest {
 
     private final Customers customers;
@@ -57,6 +62,9 @@ class OrderManagementApplicationServiceTest {
     @MockitoSpyBean
     private CustomerLoyaltyPointsApplicationService customerLoyaltyPointsApplicationService;
 
+    @PGContainer
+    private static PostgreSQLContainer postgreSQLContainer;
+
     private Customer customer;
 
     @Autowired
@@ -66,6 +74,16 @@ class OrderManagementApplicationServiceTest {
         this.customers = customers;
         this.orders = orders;
         this.service = service;
+    }
+
+    @DynamicPropertySource
+    public static void configurePropertySource(final DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
+        registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
+        registry.add("spring.flyway.url", postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.flyway.user", postgreSQLContainer::getUsername);
+        registry.add("spring.flyway.password", postgreSQLContainer::getPassword);
     }
 
     @BeforeEach

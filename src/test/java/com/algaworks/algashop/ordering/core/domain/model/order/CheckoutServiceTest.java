@@ -1,0 +1,242 @@
+package com.algaworks.algashop.ordering.core.domain.model.order;
+
+import com.algaworks.algashop.ordering.core.domain.model.commons.Money;
+import com.algaworks.algashop.ordering.core.domain.model.commons.Quantity;
+import com.algaworks.algashop.ordering.core.domain.model.customer.Customer;
+import com.algaworks.algashop.ordering.core.domain.model.order.Billing;
+import com.algaworks.algashop.ordering.core.domain.model.order.CheckoutService;
+import com.algaworks.algashop.ordering.core.domain.model.order.CreditCardId;
+import com.algaworks.algashop.ordering.core.domain.model.order.CustomerHaveFreeShippingSpecification;
+import com.algaworks.algashop.ordering.core.domain.model.order.Orders;
+import com.algaworks.algashop.ordering.core.domain.model.order.PaymentMethod;
+import com.algaworks.algashop.ordering.core.domain.model.order.Shipping;
+import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.ShoppingCart;
+import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartCantProceedToCheckoutException;
+import com.algaworks.algashop.ordering.infrastructure.config.FreeShippingConfig;
+import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartDataBuilder;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartItemDataBuilder;
+import com.algaworks.algashop.ordering.utility.tag.UnitTest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.FieldSource;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Stream;
+
+import static com.algaworks.algashop.ordering.core.domain.model.order.PaymentMethod.CREDIT_CARD;
+import static com.algaworks.algashop.ordering.core.domain.model.order.PaymentMethod.GATEWAY_BALANCE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertWith;
+
+@UnitTest
+class CheckoutServiceTest {
+
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
+
+    private CheckoutService service;
+
+    @Mock
+    private Orders orders;
+
+    @BeforeEach
+    void setUp() {
+        CustomFaker.getInstance().reseed();
+        final var freeShippingConfig = new FreeShippingConfig(100, 2, 2000);
+        final var freeShippingSpecification = new CustomerHaveFreeShippingSpecification(
+                orders,
+                freeShippingConfig
+        );
+        service = new CheckoutService(freeShippingSpecification);
+    }
+
+    public static Stream<Arguments> givenValidArgsWhenCheckoutThenReturnOrder() {
+        return Stream.of(
+                Arguments.of(CREDIT_CARD, new CreditCardId()),
+                Arguments.of(GATEWAY_BALANCE, null)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void givenValidArgsWhenCheckoutThenReturnOrder(final PaymentMethod paymentMethod,
+                                                   final CreditCardId creditCardId) {
+        final var customer = CustomerDataBuilder.builder().buildNew();
+        final var shoppingCart = ShoppingCartDataBuilder.builder()
+                .withItems(() -> ShoppingCartItemDataBuilder.builder()
+                        .withAvailable(() -> true)
+                        .buildSet(customFaker.number().numberBetween(1, 1)))
+                .build();
+        final var expectedCartAmount = shoppingCart.totalAmount();
+        final var expectedQuantity = shoppingCart.totalItems();
+        final var billing = customFaker.order().billing();
+        final var shipping = customFaker.order().shipping();
+        final var actual = service.checkout(customer, shoppingCart, billing, shipping, paymentMethod, creditCardId);
+        final var expectedOrderAmount = expectedCartAmount.add(actual.shipping().cost());
+
+        assertWith(actual,
+                o -> assertThat(o.customerId()).isEqualTo(shoppingCart.customerId()),
+                o -> assertThat(o.billing()).isEqualTo(billing),
+                o -> assertThat(o.totalAmount()).isEqualTo(expectedOrderAmount),
+                o -> assertThat(o.totalItems()).isEqualTo(expectedQuantity),
+                o -> assertThat(o.isPlaced()).isTrue(),
+                o -> assertThat(o.placedAt()).isNotNull(),
+                o -> assertThat(o.paidAt()).isNull(),
+                o -> assertThat(o.canceledAt()).isNull(),
+                o -> assertThat(o.readyAt()).isNull()
+                );
+        final var actualItems = shoppingCart.items();
+        while (actualItems.iterator().hasNext()){
+            final var actualItem = actualItems.iterator().next();
+            final var shoppingCartItem = shoppingCart.findItem(actualItem.productId());
+            assertWith(actualItem,
+                    i -> assertThat(i.name()).isEqualTo(shoppingCartItem.name()),
+                    i -> assertThat(i.price()).isEqualTo(shoppingCartItem.price()),
+                    i -> assertThat(i.isAvailable()).isEqualTo(shoppingCartItem.isAvailable())
+                    );
+        }
+        assertWith(shoppingCart,
+                c -> assertThat(c.totalAmount()).isEqualTo(Money.ZERO),
+                c -> assertThat(c.totalItems()).isEqualTo(Quantity.ZERO),
+                c -> assertThat(c.isEmpty()).isTrue()
+                );
+    }
+
+    @Test
+    void givenCreditCardPaymentMethodAndNullCreditCardIdThenThrowException() {
+        final var customer = CustomerDataBuilder.builder().buildNew();
+        final var shoppingCart = ShoppingCartDataBuilder.builder()
+                .withItems(() -> ShoppingCartItemDataBuilder.builder()
+                        .withAvailable(() -> true)
+                        .buildSet(customFaker.number().numberBetween(1, 1)))
+                .build();
+        final var billing = customFaker.order().billing();
+        final var shipping = customFaker.order().shipping();
+
+        assertThatThrownBy(() -> service.checkout(customer, shoppingCart, billing, shipping, CREDIT_CARD, null))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    private static final List<Arguments> givenNullArgWhenCheckoutThenThrowException = List.of(
+            Arguments.of(
+                    null,
+                    ShoppingCartDataBuilder.builder()
+                            .withItems(() -> ShoppingCartItemDataBuilder.builder()
+                                    .withAvailable(() -> true)
+                                    .buildSet(1))
+                            .build(),
+                    customFaker.order().billing(),
+                    customFaker.order().shipping(),
+                    customFaker.options().option(PaymentMethod.class),
+                    new CreditCardId()
+            ),
+            Arguments.of(
+                    CustomerDataBuilder.builder().buildNew(),
+                    null,
+                    customFaker.order().billing(),
+                    customFaker.order().shipping(),
+                    customFaker.options().option(PaymentMethod.class),
+                    new CreditCardId()
+            ),
+            Arguments.of(
+                    CustomerDataBuilder.builder().buildNew(),
+                    ShoppingCartDataBuilder.builder()
+                            .withItems(() -> ShoppingCartItemDataBuilder.builder()
+                                    .withAvailable(() -> true)
+                                    .buildSet(1))
+                            .build(),
+                    null,
+                    customFaker.order().shipping(),
+                    customFaker.options().option(PaymentMethod.class),
+                    new CreditCardId()
+            ),
+            Arguments.of(
+                    CustomerDataBuilder.builder().buildNew(),
+                    ShoppingCartDataBuilder.builder()
+                            .withItems(() -> ShoppingCartItemDataBuilder.builder()
+                                    .withAvailable(() -> true)
+                                    .buildSet(1))
+                            .build(),
+                    customFaker.order().billing(),
+                    null,
+                    customFaker.options().option(PaymentMethod.class),
+                    new CreditCardId()
+            ),
+            Arguments.of(
+                    CustomerDataBuilder.builder().buildNew(),
+                    ShoppingCartDataBuilder.builder()
+                            .withItems(() -> ShoppingCartItemDataBuilder.builder()
+                                    .withAvailable(() -> true)
+                                    .buildSet(1))
+                            .build(),
+                    customFaker.order().billing(),
+                    customFaker.order().shipping(),
+                    null,
+                    new CreditCardId()
+            )
+    );
+
+    @FieldSource
+    @ParameterizedTest
+    void givenNullArgWhenCheckoutThenThrowException(final Customer customer,
+                                                    final ShoppingCart shoppingCart,
+                                                    final Billing billing,
+                                                    final Shipping shipping,
+                                                    final PaymentMethod paymentMethod,
+                                                    final CreditCardId creditCardId) {
+        assertThatExceptionOfType(NullPointerException.class)
+                .isThrownBy(() -> service.checkout(
+                        customer,
+                        shoppingCart,
+                        billing,
+                        shipping,
+                        paymentMethod,
+                        creditCardId
+                ));
+    }
+
+    private static Stream<ShoppingCart> givenUnprocessableShoppingCartWhenCheckoutThenThrowException(){
+        final var emptyShoppingCart = ShoppingCartDataBuilder.builder()
+                .withItems(HashSet::new)
+                .build();
+        final var availableItems = ShoppingCartItemDataBuilder.builder()
+                .withAvailable(() -> true)
+                .buildSet(3);
+        final var unavailableItem = ShoppingCartItemDataBuilder.builder()
+                .withAvailable(() -> false)
+                .build();
+        availableItems.add(unavailableItem);
+        final var unavaliableItemShoppingCart = ShoppingCartDataBuilder.builder()
+                .withItems(() -> availableItems)
+                .build();
+        return Stream.of(emptyShoppingCart, unavaliableItemShoppingCart);
+    }
+
+    @MethodSource
+    @ParameterizedTest
+    void givenUnprocessableShoppingCartWhenCheckoutThenThrowException(final ShoppingCart shoppingCart){
+        final var customer = CustomerDataBuilder.builder().buildNew();
+        final var billing = customFaker.order().billing();
+        final var shipping = customFaker.order().shipping();
+        final var paymentMethod = customFaker.options().option(PaymentMethod.class);
+        final var creditCardId = new CreditCardId();
+        assertThatExceptionOfType(ShoppingCartCantProceedToCheckoutException.class)
+                .isThrownBy(() -> service.checkout(
+                        customer,
+                        shoppingCart,
+                        billing,
+                        shipping,
+                        paymentMethod,
+                        creditCardId
+                ));
+    }
+
+}

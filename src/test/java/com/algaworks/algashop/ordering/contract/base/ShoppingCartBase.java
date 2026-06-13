@@ -1,9 +1,9 @@
 package com.algaworks.algashop.ordering.contract.base;
 
-import com.algaworks.algashop.ordering.application.shoppingcart.management.ShoppingCartManagementApplicationService;
-import com.algaworks.algashop.ordering.application.shoppingcart.query.ShoppingCartQueryService;
-import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFoundException;
-import com.algaworks.algashop.ordering.presentation.shoppingcart.ShoppingCartController;
+import com.algaworks.algashop.ordering.core.application.shoppingcart.ShoppingCartManagementApplicationService;
+import com.algaworks.algashop.ordering.core.port.in.shoppingcart.ForQueryingShoppingCart;
+import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartNotFoundException;
+import com.algaworks.algashop.ordering.infrastructure.adapter.in.web.shppingcart.ShoppingCartController;
 import com.algaworks.algashop.ordering.utility.databuilder.application.ShoppingCartOutputDataBuilder;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +27,7 @@ public class ShoppingCartBase {
     @MockitoBean
     private ShoppingCartManagementApplicationService managementService;
     @MockitoBean
-    private ShoppingCartQueryService queryService;
+    private ForQueryingShoppingCart queryService;
 
     @BeforeEach
     void setUp() {

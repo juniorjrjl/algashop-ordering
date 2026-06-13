@@ -1,16 +1,16 @@
 package com.algaworks.algashop.ordering.utility.databuilder.domain;
 
-import com.algaworks.algashop.ordering.domain.model.order.Order;
-import com.algaworks.algashop.ordering.domain.model.order.OrderItem;
-import com.algaworks.algashop.ordering.domain.model.order.OrderStatus;
-import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
+import com.algaworks.algashop.ordering.core.domain.model.order.Order;
+import com.algaworks.algashop.ordering.core.domain.model.order.OrderItem;
+import com.algaworks.algashop.ordering.core.domain.model.order.OrderStatus;
+import com.algaworks.algashop.ordering.core.domain.model.order.PaymentMethod;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.model.order.Billing;
-import com.algaworks.algashop.ordering.domain.model.commons.Money;
-import com.algaworks.algashop.ordering.domain.model.commons.Quantity;
-import com.algaworks.algashop.ordering.domain.model.order.Shipping;
-import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
-import com.algaworks.algashop.ordering.domain.model.order.OrderId;
+import com.algaworks.algashop.ordering.core.domain.model.order.Billing;
+import com.algaworks.algashop.ordering.core.domain.model.commons.Money;
+import com.algaworks.algashop.ordering.core.domain.model.commons.Quantity;
+import com.algaworks.algashop.ordering.core.domain.model.order.Shipping;
+import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerId;
+import com.algaworks.algashop.ordering.core.domain.model.order.OrderId;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;

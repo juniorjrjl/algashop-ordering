@@ -1,6 +1,6 @@
 package com.algaworks.algashop.ordering.infrastructure.config;
 
-import com.algaworks.algashop.ordering.domain.model.customer.LoyaltyPoints;
+import com.algaworks.algashop.ordering.core.domain.model.customer.LoyaltyPoints;
 import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;

@@ -1,0 +1,16 @@
+package com.algaworks.algashop.ordering.infrastructure.config.beans;
+
+import com.algaworks.algashop.ordering.core.domain.model.DomainService;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+import static org.springframework.context.annotation.FilterType.ANNOTATION;
+
+@Configuration
+@ComponentScan(
+        basePackages = "com.algaworks.algashop.ordering.core.domain.model",
+        includeFilters = @ComponentScan.Filter(type = ANNOTATION, classes = DomainService.class)
+)
+public class DomainServiceScanConfig {
+
+}

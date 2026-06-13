@@ -1,8 +1,7 @@
 package com.algaworks.algashop.ordering.utility.databuilder.application;
 
-import com.algaworks.algashop.ordering.application.common.AddressData;
-import com.algaworks.algashop.ordering.application.customer.management.CustomerInput;
-import com.algaworks.algashop.ordering.application.customer.query.CustomerOutput;
+import com.algaworks.algashop.ordering.core.port.in.common.AddressData;
+import com.algaworks.algashop.ordering.core.port.in.customer.CustomerOutput;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

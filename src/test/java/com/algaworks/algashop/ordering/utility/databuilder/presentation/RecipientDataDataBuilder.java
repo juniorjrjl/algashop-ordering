@@ -1,6 +1,6 @@
 package com.algaworks.algashop.ordering.utility.databuilder.presentation;
 
-import com.algaworks.algashop.ordering.application.order.query.RecipientData;
+import com.algaworks.algashop.ordering.core.port.in.order.RecipientData;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

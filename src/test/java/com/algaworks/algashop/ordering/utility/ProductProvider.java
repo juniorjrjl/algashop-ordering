@@ -1,6 +1,6 @@
 package com.algaworks.algashop.ordering.utility;
 
-import com.algaworks.algashop.ordering.domain.model.product.ProductName;
+import com.algaworks.algashop.ordering.core.domain.model.product.ProductName;
 import net.datafaker.providers.base.AbstractProvider;
 
 public class ProductProvider extends AbstractProvider<CustomFaker> {

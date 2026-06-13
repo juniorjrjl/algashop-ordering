@@ -1,6 +1,6 @@
 package com.algaworks.algashop.ordering.utility.databuilder.infrastructure;
 
-import com.algaworks.algashop.ordering.infrastructure.shipping.client.rapidex.DeliveryCostResponse;
+import com.algaworks.algashop.ordering.infrastructure.adapter.out.web.shipping.client.rapidex.DeliveryCostResponse;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

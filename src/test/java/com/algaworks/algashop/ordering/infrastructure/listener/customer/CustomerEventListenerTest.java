@@ -1,13 +1,16 @@
 package com.algaworks.algashop.ordering.infrastructure.listener.customer;
 
-import com.algaworks.algashop.ordering.application.customer.loyaltypoints.CustomerLoyaltyPointsApplicationService;
-import com.algaworks.algashop.ordering.application.customer.notification.CustomerNotificationApplicationService;
-import com.algaworks.algashop.ordering.application.customer.notification.NotifyNewRegistrationInput;
-import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
-import com.algaworks.algashop.ordering.domain.model.customer.CustomerRegisteredEvent;
-import com.algaworks.algashop.ordering.domain.model.order.OrderId;
-import com.algaworks.algashop.ordering.domain.model.order.OrderReadyEvent;
+import com.algaworks.algashop.ordering.core.domain.model.customer.Customers;
+import com.algaworks.algashop.ordering.core.port.in.customer.ForAddingLoyaltyPoints;
+import com.algaworks.algashop.ordering.core.port.out.customer.ForNotifyingCustomer;
+import com.algaworks.algashop.ordering.core.port.out.customer.NotifyNewRegistrationInput;
+import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerId;
+import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerRegisteredEvent;
+import com.algaworks.algashop.ordering.core.domain.model.order.OrderId;
+import com.algaworks.algashop.ordering.core.domain.model.order.OrderReadyEvent;
+import com.algaworks.algashop.ordering.infrastructure.adapter.in.listener.customer.CustomerEventListener;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
+import com.algaworks.algashop.ordering.utility.databuilder.domain.CustomerDataBuilder;
 import com.algaworks.algashop.ordering.utility.extension.PGContainer;
 import com.algaworks.algashop.ordering.utility.extension.PostgreSQLTestContainerExtension;
 import com.algaworks.algashop.ordering.utility.tag.IntegrationTest;
@@ -39,22 +42,25 @@ class CustomerEventListenerTest {
     private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final Customers customers;
 
     @MockitoSpyBean
     private CustomerEventListener customerEventListener;
 
     @MockitoBean
-    private CustomerLoyaltyPointsApplicationService loyaltyPointsApplicationService;
+    private ForAddingLoyaltyPoints loyaltyPointsApplicationService;
 
     @MockitoSpyBean
-    private CustomerNotificationApplicationService notificationApplicationService;
+    private ForNotifyingCustomer notificationApplicationService;
 
     @PGContainer
     private static PostgreSQLContainer postgreSQLContainer;
 
     @Autowired
-    CustomerEventListenerTest(final ApplicationEventPublisher applicationEventPublisher) {
+    CustomerEventListenerTest(final ApplicationEventPublisher applicationEventPublisher,
+                              final Customers customers) {
         this.applicationEventPublisher = applicationEventPublisher;
+        this.customers = customers;
     }
 
     @DynamicPropertySource
@@ -92,9 +98,11 @@ class CustomerEventListenerTest {
 
     @Test
     void shouldListenCustomerRegisteredEvent() {
+        final var customer = CustomerDataBuilder.builder().buildExisting();
+        customers.add(customer);
         applicationEventPublisher.publishEvent(
                 new CustomerRegisteredEvent(
-                        new CustomerId(),
+                        customer.id(),
                         customFaker.common().fullName(),
                         customFaker.common().email(),
                         OffsetDateTime.now()

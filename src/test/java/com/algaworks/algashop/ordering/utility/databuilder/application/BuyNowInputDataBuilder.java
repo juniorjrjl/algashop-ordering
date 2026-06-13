@@ -1,12 +1,10 @@
 package com.algaworks.algashop.ordering.utility.databuilder.application;
 
-import com.algaworks.algashop.ordering.application.order.query.BillingData;
-import com.algaworks.algashop.ordering.application.checkout.BuyNowInput;
-import com.algaworks.algashop.ordering.application.checkout.ShippingInput;
-import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
-import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
+import com.algaworks.algashop.ordering.core.port.in.order.BillingData;
+import com.algaworks.algashop.ordering.core.port.in.checkout.BuyNowInput;
+import com.algaworks.algashop.ordering.core.port.in.order.ShippingInput;
+import com.algaworks.algashop.ordering.core.domain.model.order.PaymentMethod;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
-import com.algaworks.algashop.ordering.utility.databuilder.domain.ShoppingCartDataBuilder;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;

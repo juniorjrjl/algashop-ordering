@@ -1,8 +1,8 @@
 package com.algaworks.algashop.ordering.utility.databuilder.presentation;
 
-import com.algaworks.algashop.ordering.application.order.query.OrderItemDataDetailOutput;
-import com.algaworks.algashop.ordering.domain.model.IdGenerator;
-import com.algaworks.algashop.ordering.domain.model.product.Product;
+import com.algaworks.algashop.ordering.core.port.out.order.OrderItemDataDetailOutput;
+import com.algaworks.algashop.ordering.core.domain.model.IdGenerator;
+import com.algaworks.algashop.ordering.core.domain.model.product.Product;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.domain.ProductDataBuilder;
 import lombok.AllArgsConstructor;

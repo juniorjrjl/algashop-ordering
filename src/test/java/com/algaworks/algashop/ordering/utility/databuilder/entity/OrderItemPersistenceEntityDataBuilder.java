@@ -1,8 +1,8 @@
 package com.algaworks.algashop.ordering.utility.databuilder.entity;
 
 import com.algaworks.algashop.ordering.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.model.IdGenerator;
-import com.algaworks.algashop.ordering.infrastructure.persistence.order.OrderItemPersistenceEntity;
+import com.algaworks.algashop.ordering.core.domain.model.IdGenerator;
+import com.algaworks.algashop.ordering.infrastructure.adapter.out.persistence.order.OrderItemPersistenceEntity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;

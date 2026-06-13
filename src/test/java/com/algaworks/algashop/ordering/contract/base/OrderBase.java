@@ -1,13 +1,13 @@
 package com.algaworks.algashop.ordering.contract.base;
 
-import com.algaworks.algashop.ordering.application.checkout.BuyNowApplicationService;
-import com.algaworks.algashop.ordering.application.checkout.BuyNowInput;
-import com.algaworks.algashop.ordering.application.checkout.CheckoutApplicationService;
-import com.algaworks.algashop.ordering.application.checkout.CheckoutInput;
-import com.algaworks.algashop.ordering.application.order.query.OrderFilter;
-import com.algaworks.algashop.ordering.application.order.query.OrderQueryService;
-import com.algaworks.algashop.ordering.domain.model.order.OrderNotFoundException;
-import com.algaworks.algashop.ordering.presentation.order.OrderController;
+import com.algaworks.algashop.ordering.core.application.checkout.BuyNowApplicationService;
+import com.algaworks.algashop.ordering.core.port.in.checkout.BuyNowInput;
+import com.algaworks.algashop.ordering.core.application.checkout.CheckoutApplicationService;
+import com.algaworks.algashop.ordering.core.port.in.checkout.CheckoutInput;
+import com.algaworks.algashop.ordering.core.port.in.order.OrderFilter;
+import com.algaworks.algashop.ordering.core.port.out.order.ForObtainingOrder;
+import com.algaworks.algashop.ordering.core.domain.model.order.OrderNotFoundException;
+import com.algaworks.algashop.ordering.infrastructure.adapter.in.web.order.OrderController;
 import com.algaworks.algashop.ordering.utility.databuilder.application.OrderSummaryOutputDataBuilder;
 import com.algaworks.algashop.ordering.utility.databuilder.presentation.OrderDetailOutputDataBuilder;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -35,7 +35,7 @@ public class OrderBase {
     protected WebApplicationContext webApplicationContext;
 
     @MockitoBean
-    protected OrderQueryService queryService;
+    protected ForObtainingOrder queryService;
 
     @MockitoBean
     private BuyNowApplicationService buyNowApplicationService;

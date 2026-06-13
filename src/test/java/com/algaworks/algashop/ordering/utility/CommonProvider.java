@@ -1,13 +1,13 @@
 package com.algaworks.algashop.ordering.utility;
 
-import com.algaworks.algashop.ordering.domain.model.commons.Address;
-import com.algaworks.algashop.ordering.domain.model.commons.Document;
-import com.algaworks.algashop.ordering.domain.model.commons.Email;
-import com.algaworks.algashop.ordering.domain.model.commons.FullName;
-import com.algaworks.algashop.ordering.domain.model.commons.Money;
-import com.algaworks.algashop.ordering.domain.model.commons.Phone;
-import com.algaworks.algashop.ordering.domain.model.commons.Quantity;
-import com.algaworks.algashop.ordering.domain.model.commons.ZipCode;
+import com.algaworks.algashop.ordering.core.domain.model.commons.Address;
+import com.algaworks.algashop.ordering.core.domain.model.commons.Document;
+import com.algaworks.algashop.ordering.core.domain.model.commons.Email;
+import com.algaworks.algashop.ordering.core.domain.model.commons.FullName;
+import com.algaworks.algashop.ordering.core.domain.model.commons.Money;
+import com.algaworks.algashop.ordering.core.domain.model.commons.Phone;
+import com.algaworks.algashop.ordering.core.domain.model.commons.Quantity;
+import com.algaworks.algashop.ordering.core.domain.model.commons.ZipCode;
 import net.datafaker.providers.base.AbstractProvider;
 
 public class CommonProvider extends AbstractProvider<CustomFaker> {

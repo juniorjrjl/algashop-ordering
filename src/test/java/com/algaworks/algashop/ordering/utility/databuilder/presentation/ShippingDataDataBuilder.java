@@ -1,14 +1,9 @@
 package com.algaworks.algashop.ordering.utility.databuilder.presentation;
 
-import com.algaworks.algashop.ordering.application.common.AddressData;
-import com.algaworks.algashop.ordering.application.order.query.RecipientData;
-import com.algaworks.algashop.ordering.application.order.query.ShippingData;
-import com.algaworks.algashop.ordering.infrastructure.persistence.common.AddressEmbeddable;
-import com.algaworks.algashop.ordering.infrastructure.persistence.order.RecipientEmbeddable;
-import com.algaworks.algashop.ordering.infrastructure.persistence.order.ShippingEmbeddable;
+import com.algaworks.algashop.ordering.core.port.in.common.AddressData;
+import com.algaworks.algashop.ordering.core.port.in.order.RecipientData;
+import com.algaworks.algashop.ordering.core.port.in.order.ShippingData;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
-import com.algaworks.algashop.ordering.utility.databuilder.embeddable.AddressEmbeddableDataBuilder;
-import com.algaworks.algashop.ordering.utility.databuilder.embeddable.RecipientEmbeddableDataBuilder;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;

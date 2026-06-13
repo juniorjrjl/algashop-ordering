@@ -1,7 +1,7 @@
 package com.algaworks.algashop.ordering.utility;
 
-import com.algaworks.algashop.ordering.domain.model.customer.BirthDate;
-import com.algaworks.algashop.ordering.domain.model.customer.LoyaltyPoints;
+import com.algaworks.algashop.ordering.core.domain.model.customer.BirthDate;
+import com.algaworks.algashop.ordering.core.domain.model.customer.LoyaltyPoints;
 import net.datafaker.providers.base.AbstractProvider;
 
 public class CustomerProvider extends AbstractProvider<CustomFaker> {

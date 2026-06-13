@@ -1,13 +1,13 @@
 package com.algaworks.algashop.ordering.utility.databuilder.presentation;
 
-import com.algaworks.algashop.ordering.application.order.query.BillingData;
-import com.algaworks.algashop.ordering.application.order.query.CustomerMinimalOutput;
-import com.algaworks.algashop.ordering.application.order.query.OrderDetailOutput;
-import com.algaworks.algashop.ordering.application.order.query.OrderItemDataDetailOutput;
-import com.algaworks.algashop.ordering.application.order.query.ShippingData;
-import com.algaworks.algashop.ordering.domain.model.IdGenerator;
-import com.algaworks.algashop.ordering.domain.model.order.OrderStatus;
-import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
+import com.algaworks.algashop.ordering.core.port.in.order.BillingData;
+import com.algaworks.algashop.ordering.core.port.out.order.CustomerMinimalOutput;
+import com.algaworks.algashop.ordering.core.port.out.order.OrderDetailOutput;
+import com.algaworks.algashop.ordering.core.port.out.order.OrderItemDataDetailOutput;
+import com.algaworks.algashop.ordering.core.port.in.order.ShippingData;
+import com.algaworks.algashop.ordering.core.domain.model.IdGenerator;
+import com.algaworks.algashop.ordering.core.domain.model.order.OrderStatus;
+import com.algaworks.algashop.ordering.core.domain.model.order.PaymentMethod;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

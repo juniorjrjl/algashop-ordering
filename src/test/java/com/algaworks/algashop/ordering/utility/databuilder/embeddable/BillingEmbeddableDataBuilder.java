@@ -1,8 +1,8 @@
 package com.algaworks.algashop.ordering.utility.databuilder.embeddable;
 
 import com.algaworks.algashop.ordering.utility.CustomFaker;
-import com.algaworks.algashop.ordering.infrastructure.persistence.common.AddressEmbeddable;
-import com.algaworks.algashop.ordering.infrastructure.persistence.order.BillingEmbeddable;
+import com.algaworks.algashop.ordering.infrastructure.adapter.out.persistence.common.AddressEmbeddable;
+import com.algaworks.algashop.ordering.infrastructure.adapter.out.persistence.order.BillingEmbeddable;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;

@@ -1,6 +1,6 @@
 package com.algaworks.algashop.ordering.utility.databuilder.presentation;
 
-import com.algaworks.algashop.ordering.application.common.AddressData;
+import com.algaworks.algashop.ordering.core.port.in.common.AddressData;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import com.algaworks.algashop.ordering.utility.databuilder.JsonDataBuilder;
 import lombok.AllArgsConstructor;

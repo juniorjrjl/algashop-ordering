@@ -1,11 +1,11 @@
 package com.algaworks.algashop.ordering.utility;
 
-import com.algaworks.algashop.ordering.application.order.query.BillingData;
-import com.algaworks.algashop.ordering.application.checkout.CheckoutInput;
-import com.algaworks.algashop.ordering.application.order.query.RecipientData;
-import com.algaworks.algashop.ordering.application.checkout.ShippingInput;
-import com.algaworks.algashop.ordering.application.common.AddressData;
-import com.algaworks.algashop.ordering.domain.model.order.PaymentMethod;
+import com.algaworks.algashop.ordering.core.port.in.order.BillingData;
+import com.algaworks.algashop.ordering.core.port.in.checkout.CheckoutInput;
+import com.algaworks.algashop.ordering.core.port.in.order.RecipientData;
+import com.algaworks.algashop.ordering.core.port.in.order.ShippingInput;
+import com.algaworks.algashop.ordering.core.port.in.common.AddressData;
+import com.algaworks.algashop.ordering.core.domain.model.order.PaymentMethod;
 import net.datafaker.providers.base.AbstractProvider;
 
 import java.util.UUID;

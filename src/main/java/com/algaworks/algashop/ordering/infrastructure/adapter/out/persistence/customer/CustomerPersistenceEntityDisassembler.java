@@ -1,0 +1,37 @@
+package com.algaworks.algashop.ordering.infrastructure.adapter.out.persistence.customer;
+
+import com.algaworks.algashop.ordering.core.domain.model.customer.BirthDate;
+import com.algaworks.algashop.ordering.core.domain.model.customer.Customer;
+import com.algaworks.algashop.ordering.core.domain.model.customer.LoyaltyPoints;
+import com.algaworks.algashop.ordering.infrastructure.adapter.out.persistence.common.EmbeddableDisassembler;
+import org.jspecify.annotations.NullMarked;
+import org.mapstruct.AnnotateWith;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+
+import java.time.LocalDate;
+
+import static org.mapstruct.InjectionStrategy.CONSTRUCTOR;
+import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
+
+@AnnotateWith(NullMarked.class)
+@Mapper(componentModel = SPRING, uses = EmbeddableDisassembler.class, injectionStrategy = CONSTRUCTOR)
+public interface CustomerPersistenceEntityDisassembler {
+
+    @Mapping(target = "fullName",
+            expression = "java(embeddableDisassembler.toFullName(entity.getFirstName(), entity.getLastName()))"
+    )
+    Customer.ExistingCustomerBuilder toDomain(@MappingTarget final Customer.ExistingCustomerBuilder builder,
+                                              final CustomerPersistenceEntity entity);
+
+    default Customer toDomain(final CustomerPersistenceEntity entity) {
+        return toDomain(Customer.existing(), entity).build();
+    }
+
+    @Mapping(target = "add", ignore = true)
+    LoyaltyPoints toLoyaltyPoints(final Integer value);
+
+    BirthDate toBirthDate(final LocalDate value);
+
+}

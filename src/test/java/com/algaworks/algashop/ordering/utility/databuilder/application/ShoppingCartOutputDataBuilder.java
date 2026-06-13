@@ -1,7 +1,7 @@
 package com.algaworks.algashop.ordering.utility.databuilder.application;
 
-import com.algaworks.algashop.ordering.application.shoppingcart.query.ShoppingCartItemOutput;
-import com.algaworks.algashop.ordering.application.shoppingcart.query.ShoppingCartOutput;
+import com.algaworks.algashop.ordering.core.port.in.shoppingcart.ShoppingCartItemOutput;
+import com.algaworks.algashop.ordering.core.port.in.shoppingcart.ShoppingCartOutput;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

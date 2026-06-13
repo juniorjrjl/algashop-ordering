@@ -1,9 +1,9 @@
 package com.algaworks.algashop.ordering.utility.databuilder.entity;
 
-import com.algaworks.algashop.ordering.domain.model.IdGenerator;
-import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
-import com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartItemPersistenceEntity;
-import com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntity;
+import com.algaworks.algashop.ordering.core.domain.model.IdGenerator;
+import com.algaworks.algashop.ordering.infrastructure.adapter.out.persistence.customer.CustomerPersistenceEntity;
+import com.algaworks.algashop.ordering.infrastructure.adapter.out.persistence.shoppingcart.ShoppingCartItemPersistenceEntity;
+import com.algaworks.algashop.ordering.infrastructure.adapter.out.persistence.shoppingcart.ShoppingCartPersistenceEntity;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

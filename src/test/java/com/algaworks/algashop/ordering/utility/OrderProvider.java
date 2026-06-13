@@ -1,8 +1,8 @@
 package com.algaworks.algashop.ordering.utility;
 
-import com.algaworks.algashop.ordering.domain.model.order.Billing;
-import com.algaworks.algashop.ordering.domain.model.order.Recipient;
-import com.algaworks.algashop.ordering.domain.model.order.Shipping;
+import com.algaworks.algashop.ordering.core.domain.model.order.Billing;
+import com.algaworks.algashop.ordering.core.domain.model.order.Recipient;
+import com.algaworks.algashop.ordering.core.domain.model.order.Shipping;
 import net.datafaker.providers.base.AbstractProvider;
 
 import java.time.LocalDate;

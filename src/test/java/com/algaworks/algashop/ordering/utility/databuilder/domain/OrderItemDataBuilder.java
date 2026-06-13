@@ -1,11 +1,11 @@
 package com.algaworks.algashop.ordering.utility.databuilder.domain;
 
-import com.algaworks.algashop.ordering.domain.model.order.OrderItem;
+import com.algaworks.algashop.ordering.core.domain.model.order.OrderItem;
 import com.algaworks.algashop.ordering.utility.CustomFaker;
-import com.algaworks.algashop.ordering.domain.model.product.Product;
-import com.algaworks.algashop.ordering.domain.model.commons.Quantity;
-import com.algaworks.algashop.ordering.domain.model.order.OrderId;
-import com.algaworks.algashop.ordering.domain.model.order.OrderItemId;
+import com.algaworks.algashop.ordering.core.domain.model.product.Product;
+import com.algaworks.algashop.ordering.core.domain.model.commons.Quantity;
+import com.algaworks.algashop.ordering.core.domain.model.order.OrderId;
+import com.algaworks.algashop.ordering.core.domain.model.order.OrderItemId;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;

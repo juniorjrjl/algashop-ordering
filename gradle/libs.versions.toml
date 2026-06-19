@@ -7,13 +7,13 @@ java-uuid = "5.2.0"
 hypersistence-tsid = "2.1.4"
 lombok-mapstruct = "0.2.0"
 mapstruct = "1.6.3"
-postgresql = "42.7.2"
+postgresql = "42.7.11"
 rest-assured = "6.0.0"
-springBoot = "4.0.6"
-springCloud = "2025.1.0"
-springCloudContract = "5.0.2"
+springBoot = "4.1.0"
+springCloud = "2025.1.2"
+springCloudContract = "5.0.3"
 springDependencyManagement = "1.1.7"
-wiremock-spring = "4.0.9"
+wiremock-spring = "4.2.1"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
